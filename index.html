@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>mbira composition tool</title>
+    <style>
+        body {
+            box-sizing: content-box;
+            font-family: sans-serif;
+            display: flex;
+        }
+
+        body>div {
+            margin-right: 1rem;
+        }
+
+        /* div {
+            border: 1px solid black;
+        } */
+
+        h3 {
+            font-weight: normal;
+        }
+
+        div.song-column>div {
+            text-align: right;
+            font-size: 4rem;
+            font-family: monospace;
+        }
+
+        div.song-column>div>span {
+            background-color: red;
+            padding: 1rem;
+            margin-left: 1rem;
+            display: inline-block;
+        }
+
+        div.dial {
+            background-color: yellow;
+            width: 40rem;
+            height: 40rem;
+        }
+
+        div.slider-container>span {
+            font-size: 2rem;
+        }
+
+        div.slider-container>input[type="range"] {
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="song-column">
+        <h3>Kariga</h3>
+        <div>&gt;<span>135</span></div>
+        <div>&gt;<span>136</span></div>
+        <div>&gt;<span>146</span></div>
+        <div> <span>246</span></div>
+    </div>
+    <div class="song-column">
+        <h3>Mohororo</h3>
+        <div>&gt;<span>135</span></div>
+        <div> <span>136</span></div>
+        <div>&gt;<span>146</span></div>
+        <div> <span>246</span></div>
+    </div>
+    <div class="song-column">
+        <h3>Nayma</h3>
+        <div>&gt;<span>135</span></div>
+        <div> <span>136</span></div>
+        <div> <span>146</span></div>
+        <div> <span>246</span></div>
+    </div>
+    <div>
+        <div class="slider-container">
+            <input type="range" min="1" max="7" step="1" value="1" id="mode_slider">
+            <span>Mode</span>
+        </div>
+        <div class="slider-container">
+            <input type="range" min="1" max="7" step="1" value="1" id="tuning_slider">
+            <span>Tuning</span>
+        </div>
+        <div class="dial"></div>
+    </div>
+</body>
+
+</html>
