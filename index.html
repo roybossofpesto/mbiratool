@@ -38,12 +38,6 @@
             display: inline-block;
         }
 
-        div.dial {
-            background-color: yellow;
-            width: 40rem;
-            height: 40rem;
-        }
-
         div.slider-container>span {
             font-size: 2rem;
         }
@@ -52,6 +46,26 @@
             color: black;
         }
     </style>
+    <script src="jquery.min.js" charset="utf-8"></script>
+    <script src="raphael.min.js" charset="utf-8"></script>
+    <script type="text/javascript">
+        $(document).ready(() => {
+            $('div.dial').each(function() {
+                const paper = Raphael(this, 600, 600)
+                paper.circle(300, 300, 250).attr({
+                    'fill': '#f0f',
+                    'stroke-width': 20,
+                    'stroke': '#0ff',
+                })
+                console.log('coucou')
+            })
+
+            $('#mode_slider').on('input', function() {
+                const value = parseInt($(this).val());
+                console.log(value, value %7)
+            })
+        })
+    </script>
 </head>
 
 <body>
