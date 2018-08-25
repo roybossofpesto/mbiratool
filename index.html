@@ -60,6 +60,10 @@
     <script src="jquery.min.js" charset="utf-8"></script>
     <script src="raphael.min.js" charset="utf-8"></script>
     <script type="text/javascript">
+        const wrap = (xx) => {
+            return (xx+6)%7+1;
+        };
+
         $(document).ready(() => {
             $('div.dial').each(function() {
                 const paper = Raphael(this, 400, 400);
@@ -71,17 +75,24 @@
                 console.log('coucou');
             })
 
+            const first_song_blocks = $('#first-song>div>span');
             $('#mode-slider').on('input', function() {
                 const value = parseInt($(this).val());
-                console.log(value, value %7);
                 $('div.mode-view').text(value);
+
+                first_song_blocks.each(function(index) {
+                    const aa = wrap(value + 0 + (index > 2));
+                    const bb = wrap(value + 2 + (index > 1));
+                    const cc = wrap(value + 4 + (index > 0));
+                    $(this).text(`${aa}${bb}${cc}`)
+                })
             })
         })
     </script>
 </head>
 
 <body>
-    <div class="song-column">
+    <div class="song-column" id="first-song">
         <h3>Kariga</h3>
         <div>&gt;<span>135</span></div>
         <div>&gt;<span>136</span></div>
