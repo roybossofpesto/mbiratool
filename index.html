@@ -38,30 +38,31 @@
             display: inline-block;
         }
 
-        div.slider-container>span {
+        div.input-container>span {
             font-size: 1.5rem;
         }
 
-        div.slider-container>input[type="range"] {
+        div.input-container>input[type="range"] {
             color: black;
         }
-        div.mode-view{
-          background-color: black;
-          color: white;
-          width: 3rem;
-          height: 3rem;
-          font-size: 2rem;
-          font-family: monospace;
-          display: flex;
-          align-items: center;
-          justify-content: center;
+
+        div.mode-view {
+            background-color: black;
+            color: white;
+            width: 3rem;
+            height: 3rem;
+            font-size: 2rem;
+            font-family: monospace;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     </style>
     <script src="jquery.min.js" charset="utf-8"></script>
     <script src="raphael.min.js" charset="utf-8"></script>
     <script type="text/javascript">
         const wrap = (xx) => {
-            return (xx+6)%7+1;
+            return (xx + 6) % 7 + 1;
         };
 
         $(document).ready(() => {
@@ -101,6 +102,8 @@
                     $(this).text(`${aa}${bb}${cc}`)
                 })
             })
+
+
         })
     </script>
 </head>
@@ -128,13 +131,17 @@
         <div> <span>513</span></div>
     </div>
     <div>
-        <div class="slider-container">
+        <div class="input-container">
             <input type="range" min="1" max="7" step="1" value="1" id="mode-slider">
             <span>Mode</span>
         </div>
-        <div class="slider-container">
+        <div class="input-container">
             <input type="range" min="1" max="7" step="1" value="1" id="tuning-slider">
             <span>Tuning</span>
+        </div>
+        <div class="input-container">
+            <input type="checkbox" id="letters-ratio">
+            <span>Numbers / Letters</span>
         </div>
         <div class="mode-view">1</div>
         <div class="dial"></div>
