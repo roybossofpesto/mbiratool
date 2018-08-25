@@ -34,7 +34,7 @@
         div.song-column>div>span {
             background-color: red;
             padding: .5rem;
-            margin-left: 1rem;
+            margin-left: .5rem;
             display: inline-block;
         }
 
@@ -46,11 +46,12 @@
             color: black;
         }
 
-        div.mode-view {
+        div.mode-view,
+        div.tuning-view {
+            margin: .5rem 0;
+            padding: .5rem;
             background-color: black;
             color: white;
-            width: 3rem;
-            height: 3rem;
             font-size: 2rem;
             font-family: monospace;
             display: flex;
@@ -67,6 +68,15 @@
 
         const letters = "ABCDEFG";
         const numbers = "1234567";
+        const tunings = [
+            "Ionian",
+            "Dorian",
+            "Phyrgian",
+            "Lydian",
+            "Myxolydian",
+            "Aeolian",
+            "Locrian",
+        ]
 
         $(document).ready(() => {
             $('div.dial').each(function() {
@@ -103,17 +113,22 @@
                 })
             };
 
+            let current_tuning = 0;
             let current_mode = 0;
             let use_letter_alphabet = false;
+            $('#tuning-slider').on('input', function() {
+                current_tuning = parseInt($(this).val());
+                $('div.tuning-view').text(wrap(current_tuning, tunings));
+                update_songs(current_mode + current_tuning * use_letter_alphabet, use_letter_alphabet ? letters : numbers);
+            })
             $('#mode-slider').on('input', function() {
                 current_mode = parseInt($(this).val());
                 $('div.mode-view').text(wrap(current_mode, numbers));
-                update_songs(current_mode, use_letter_alphabet ? letters : numbers);
+                update_songs(current_mode + current_tuning * use_letter_alphabet, use_letter_alphabet ? letters : numbers);
             })
-
             $('#letters-checkbox').on('change', function() {
                 use_letter_alphabet = this.checked;
-                update_songs(current_mode, use_letter_alphabet ? letters : numbers);
+                update_songs(current_mode + current_tuning * use_letter_alphabet, use_letter_alphabet ? letters : numbers);
             });
 
         })
@@ -156,6 +171,7 @@
             <span>Numbers / Letters</span>
         </div>
         <div class="mode-view">1</div>
+        <div class="tuning-view">Ionian</div>
         <div class="dial"></div>
     </div>
 </body>
