@@ -77,6 +77,7 @@
 
             const first_song_blocks = $('#first-song>div>span');
             const second_song_blocks = $('#second-song>div>span');
+            const third_song_blocks = $('#third-song>div>span');
             $('#mode-slider').on('input', function() {
                 const value = parseInt($(this).val());
                 $('div.mode-view').text(value);
@@ -91,6 +92,12 @@
                     const aa = wrap(value + 2 + (index < 2));
                     const bb = wrap(value + 4 + (index != 2));
                     const cc = wrap(value + 0 + (index == 0));
+                    $(this).text(`${aa}${bb}${cc}`)
+                })
+                third_song_blocks.each(function(index) {
+                    const aa = wrap(value + 4 + (index < 3));
+                    const bb = wrap(value + 0 + (index == 1));
+                    const cc = wrap(value + 2 + (index < 2));
                     $(this).text(`${aa}${bb}${cc}`)
                 })
             })
@@ -113,12 +120,12 @@
         <div>&gt;<span>351</span></div>
         <div> <span>361</span></div>
     </div>
-    <div class="song-column">
+    <div class="song-column" id="third-song">
         <h3>Nayma</h3>
-        <div>&gt;<span>135</span></div>
-        <div> <span>136</span></div>
-        <div> <span>146</span></div>
-        <div> <span>246</span></div>
+        <div>&gt;<span>614</span></div>
+        <div> <span>624</span></div>
+        <div> <span>613</span></div>
+        <div> <span>513</span></div>
     </div>
     <div>
         <div class="slider-container">
