@@ -27,23 +27,34 @@
 
         div.song-column>div {
             text-align: right;
-            font-size: 4rem;
+            font-size: 2rem;
             font-family: monospace;
         }
 
         div.song-column>div>span {
             background-color: red;
-            padding: 1rem;
+            padding: .5rem;
             margin-left: 1rem;
             display: inline-block;
         }
 
         div.slider-container>span {
-            font-size: 2rem;
+            font-size: 1.5rem;
         }
 
         div.slider-container>input[type="range"] {
             color: black;
+        }
+        div.mode-view{
+          background-color: black;
+          color: white;
+          width: 3rem;
+          height: 3rem;
+          font-size: 2rem;
+          font-family: monospace;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
     </style>
     <script src="jquery.min.js" charset="utf-8"></script>
@@ -51,18 +62,19 @@
     <script type="text/javascript">
         $(document).ready(() => {
             $('div.dial').each(function() {
-                const paper = Raphael(this, 600, 600)
-                paper.circle(300, 300, 250).attr({
+                const paper = Raphael(this, 400, 400);
+                paper.circle(200, 200, 150).attr({
                     'fill': '#f0f',
                     'stroke-width': 20,
                     'stroke': '#0ff',
-                })
-                console.log('coucou')
+                });
+                console.log('coucou');
             })
 
-            $('#mode_slider').on('input', function() {
+            $('#mode-slider').on('input', function() {
                 const value = parseInt($(this).val());
-                console.log(value, value %7)
+                console.log(value, value %7);
+                $('div.mode-view').text(value);
             })
         })
     </script>
@@ -92,13 +104,14 @@
     </div>
     <div>
         <div class="slider-container">
-            <input type="range" min="1" max="7" step="1" value="1" id="mode_slider">
+            <input type="range" min="1" max="7" step="1" value="1" id="mode-slider">
             <span>Mode</span>
         </div>
         <div class="slider-container">
-            <input type="range" min="1" max="7" step="1" value="1" id="tuning_slider">
+            <input type="range" min="1" max="7" step="1" value="1" id="tuning-slider">
             <span>Tuning</span>
         </div>
+        <div class="mode-view">1</div>
         <div class="dial"></div>
     </div>
 </body>
