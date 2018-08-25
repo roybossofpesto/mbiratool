@@ -61,9 +61,12 @@
     <script src="jquery.min.js" charset="utf-8"></script>
     <script src="raphael.min.js" charset="utf-8"></script>
     <script type="text/javascript">
-        const wrap = (xx) => {
-            return (xx + 6) % 7 + 1;
+        const wrap = (xx, alphabet) => {
+            return alphabet[xx % 7];
         };
+
+        const letters = "ABCDEFG";
+        const numbers = "1234567";
 
         $(document).ready(() => {
             $('div.dial').each(function() {
@@ -79,30 +82,39 @@
             const first_song_blocks = $('#first-song>div>span');
             const second_song_blocks = $('#second-song>div>span');
             const third_song_blocks = $('#third-song>div>span');
-            $('#mode-slider').on('input', function() {
-                const value = parseInt($(this).val());
-                $('div.mode-view').text(value);
-
+            const update_songs = (value, alphabet) => {
                 first_song_blocks.each(function(index) {
-                    const aa = wrap(value + 0 + (index > 2));
-                    const bb = wrap(value + 2 + (index > 1));
-                    const cc = wrap(value + 4 + (index > 0));
+                    const aa = wrap(value + 0 + (index > 2), alphabet);
+                    const bb = wrap(value + 2 + (index > 1), alphabet);
+                    const cc = wrap(value + 4 + (index > 0), alphabet);
                     $(this).text(`${aa}${bb}${cc}`)
                 })
                 second_song_blocks.each(function(index) {
-                    const aa = wrap(value + 2 + (index < 2));
-                    const bb = wrap(value + 4 + (index != 2));
-                    const cc = wrap(value + 0 + (index == 0));
+                    const aa = wrap(value + 2 + (index < 2), alphabet);
+                    const bb = wrap(value + 4 + (index != 2), alphabet);
+                    const cc = wrap(value + 0 + (index == 0), alphabet);
                     $(this).text(`${aa}${bb}${cc}`)
                 })
                 third_song_blocks.each(function(index) {
-                    const aa = wrap(value + 4 + (index < 3));
-                    const bb = wrap(value + 0 + (index == 1));
-                    const cc = wrap(value + 2 + (index < 2));
+                    const aa = wrap(value + 4 + (index < 3), alphabet);
+                    const bb = wrap(value + 0 + (index == 1), alphabet);
+                    const cc = wrap(value + 2 + (index < 2), alphabet);
                     $(this).text(`${aa}${bb}${cc}`)
                 })
+            };
+
+            let current_mode = 0;
+            let use_letter_alphabet = false;
+            $('#mode-slider').on('input', function() {
+                current_mode = parseInt($(this).val());
+                $('div.mode-view').text(wrap(current_mode, numbers));
+                update_songs(current_mode, use_letter_alphabet ? letters : numbers);
             })
 
+            $('#letters-checkbox').on('change', function() {
+                use_letter_alphabet = this.checked;
+                update_songs(current_mode, use_letter_alphabet ? letters : numbers);
+            });
 
         })
     </script>
@@ -132,15 +144,15 @@
     </div>
     <div>
         <div class="input-container">
-            <input type="range" min="1" max="7" step="1" value="1" id="mode-slider">
+            <input type="range" min="0" max="6" step="1" value="0" id="mode-slider">
             <span>Mode</span>
         </div>
         <div class="input-container">
-            <input type="range" min="1" max="7" step="1" value="1" id="tuning-slider">
+            <input type="range" min="0" max="6" step="1" value="0" id="tuning-slider">
             <span>Tuning</span>
         </div>
         <div class="input-container">
-            <input type="checkbox" id="letters-ratio">
+            <input type="checkbox" id="letters-checkbox">
             <span>Numbers / Letters</span>
         </div>
         <div class="mode-view">1</div>
