@@ -76,6 +76,7 @@
             })
 
             const first_song_blocks = $('#first-song>div>span');
+            const second_song_blocks = $('#second-song>div>span');
             $('#mode-slider').on('input', function() {
                 const value = parseInt($(this).val());
                 $('div.mode-view').text(value);
@@ -84,6 +85,12 @@
                     const aa = wrap(value + 0 + (index > 2));
                     const bb = wrap(value + 2 + (index > 1));
                     const cc = wrap(value + 4 + (index > 0));
+                    $(this).text(`${aa}${bb}${cc}`)
+                })
+                second_song_blocks.each(function(index) {
+                    const aa = wrap(value + 2 + (index < 2));
+                    const bb = wrap(value + 4 + (index != 2));
+                    const cc = wrap(value + 0 + (index == 0));
                     $(this).text(`${aa}${bb}${cc}`)
                 })
             })
@@ -99,12 +106,12 @@
         <div>&gt;<span>146</span></div>
         <div> <span>246</span></div>
     </div>
-    <div class="song-column">
+    <div class="song-column" id="second-song">
         <h3>Mohororo</h3>
-        <div>&gt;<span>135</span></div>
-        <div> <span>136</span></div>
-        <div>&gt;<span>146</span></div>
-        <div> <span>246</span></div>
+        <div>&gt;<span>462</span></div>
+        <div> <span>461</span></div>
+        <div>&gt;<span>351</span></div>
+        <div> <span>361</span></div>
     </div>
     <div class="song-column">
         <h3>Nayma</h3>
