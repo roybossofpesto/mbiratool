@@ -32,6 +32,7 @@ $(document).ready(() => {
     const second_song_blocks = $('#second-song>div>span');
     const third_song_blocks = $('#third-song>div>span');
     const update_songs = (value, alphabet) => {
+        console.log('update', value)
         first_song_blocks.each(function(index) {
             const aa = wrap(value + 0 + (index > 2), alphabet);
             const bb = wrap(value + 2 + (index > 1), alphabet);
@@ -60,11 +61,11 @@ $(document).ready(() => {
         'height': 100,
         'min': 0,
         'max': 7,
-        'value': 0,
         'displayInput': false,
         'cursor': 52,
         'fgColor': 'black',
         'format': function(foo) {
+            console.log(foo)
             current_tuning = foo
             $('div.view.tuning').text(wrap(current_tuning, tunings));
             update_songs(current_mode + current_tuning * use_letter_alphabet, use_letter_alphabet ? letters : numbers);
@@ -76,7 +77,6 @@ $(document).ready(() => {
         'height': 100,
         'min': 0,
         'max': 7,
-        'value': 0,
         'displayInput': false,
         'cursor': 52,
         'fgColor': 'black',
