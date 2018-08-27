@@ -32,7 +32,6 @@ $(document).ready(() => {
     const second_song_blocks = $('#second-song>div>span');
     const third_song_blocks = $('#third-song>div>span');
     const update_songs = (value, alphabet) => {
-        console.log('update', value)
         first_song_blocks.each(function(index) {
             const aa = wrap(value + 0 + (index > 2), alphabet);
             const bb = wrap(value + 2 + (index > 1), alphabet);
@@ -53,9 +52,9 @@ $(document).ready(() => {
         })
     };
 
-    let current_tuning = 0;
-    let current_mode = 0;
-    let use_letter_alphabet = false;
+    let current_tuning = parseInt($('#tuning-slider').val());
+    let current_mode = parseInt($('#mode-slider').val());
+    let use_letter_alphabet = $('#letters-checkbox').prop('checked');
     $('#tuning-slider').knob({
         'width': 100,
         'height': 100,
@@ -65,7 +64,6 @@ $(document).ready(() => {
         'cursor': 52,
         'fgColor': 'black',
         'format': function(foo) {
-            console.log(foo)
             current_tuning = foo
             $('div.view.tuning').text(wrap(current_tuning, tunings));
             update_songs(current_mode + current_tuning * use_letter_alphabet, use_letter_alphabet ? letters : numbers);
@@ -87,7 +85,6 @@ $(document).ready(() => {
             return foo;
         },
     })
-
     $('#letters-checkbox').on('change', function() {
         use_letter_alphabet = this.checked;
         update_songs(current_mode + current_tuning * use_letter_alphabet, use_letter_alphabet ? letters : numbers);
