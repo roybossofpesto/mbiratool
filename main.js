@@ -27,7 +27,7 @@ $(document).ready(() => {
 
     $('div.mbira').each(function() {
         const pen_width = 2;
-        const keys = [0, 1, 2, 3, 4, 5, 6];
+        const keys = [];
         const paper = Raphael(this, base_size, base_size);
 
         paper.rect(pen_width, pen_width, base_size - 2 * pen_width, base_size - 2 * pen_width, 10).attr({
@@ -44,8 +44,8 @@ $(document).ready(() => {
         });
 
         const key_shape = (width, height, key) => {
-            const key_third = (key + 2) % keys.length;
-            const key_fifth = (key + 4) % keys.length;
+            const key_third = (key + 2) % 7;
+            const key_fifth = (key + 4) % 7;
             const key_colors = ["#56b0fd", "#fe6e32", "#aee742", "#b75ac4", "#fff436", "#40534f", "#ffc0d1"];
             const path_string = "M0,0l0," + height + "c0," + width + "," + width + "," + width + "," + width + ",0l0," + (-height) + "z";
             const path_object = paper.path(path_string);
@@ -54,21 +54,18 @@ $(document).ready(() => {
                 "fill": key_colors[key],
             });
             path_object.key = key;
+            keys.push(path_object);
             path_object.hover(function() {
-                console.log('in', this.key + 1)
-                // for (let kk = 0; kk < keys.length; kk++) {
-                //     if (kk == key) continue;
-                //     if (kk == key_third) continue;
-                //     if (kk == key_fifth) continue;
-                //     for (var ll = 0; ll < keys[kk].length; ll++) keys[kk][ll].attr("fill", "#fff");
-                // }
-                // document.body.style.cursor = "pointer";
+                keys.forEach((foo, kk) => {
+                    if (foo.key == key) return;
+                    if (foo.key == key_third) return;
+                    if (foo.key == key_fifth) return;
+                    foo.attr('fill', '#fff');
+                })
             }, function() {
-                console.log('out', this.key + 1)
-                // document.body.style.cursor = "auto";
-                // for (let kk = 0; kk < keys.length; kk++) {
-                //     for (var ll = 0; ll < keys[kk].length; ll++) keys[kk][ll].attr("fill", key_colors[kk]);
-                // }
+                keys.forEach((foo) => {
+                    foo.attr('fill', key_colors[foo.key])
+                })
             });
             return path_object;
         };
@@ -94,6 +91,8 @@ $(document).ready(() => {
             "stroke-width": 2 * pen_width,
             "fill": "#777"
         });
+
+        console.log(keys);
 
     })
 
