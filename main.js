@@ -25,6 +25,9 @@ $(document).ready(() => {
         });
     })
 
+    // demo page http://anthonyterrien.com/demo/knob/
+    $('.knob').knob();
+
     const first_song_blocks = $('#first-song>div>span');
     const second_song_blocks = $('#second-song>div>span');
     const third_song_blocks = $('#third-song>div>span');
