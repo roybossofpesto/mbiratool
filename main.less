@@ -1,0 +1,51 @@
+body {
+    box-sizing: content-box;
+    font-family: 'IBM Plex Sans', sans-serif;
+    display: flex;
+}
+
+body>div {
+    margin-right: 1rem;
+}
+
+/* div {
+    border: 1px solid black;
+} */
+
+h3 {
+    font-weight: normal;
+}
+
+div.song-column>div {
+    text-align: right;
+    font-size: 2rem;
+    font-family: 'IBM Plex Mono', monospace;
+}
+
+div.song-column>div>span {
+    background-color: red;
+    padding: .5rem;
+    margin-left: .5rem;
+    display: inline-block;
+}
+
+div.input-container>span {
+    font-size: 1.5rem;
+}
+
+div.input-container>input[type="range"] {
+    color: black;
+}
+
+div.mode-view,
+div.tuning-view {
+    margin: .5rem 0;
+    padding: .5rem;
+    background-color: black;
+    color: white;
+    font-size: 2rem;
+    font-family: monospace;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
