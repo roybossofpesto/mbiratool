@@ -18,7 +18,7 @@ $(document).ready(() => {
     const dial_size = 360;
     $('div.dial').each(function() {
         const paper = Raphael(this, dial_size, dial_size);
-        paper.circle(dial_size/2, dial_size/2, dial_size/2-10).attr({
+        paper.circle(dial_size / 2, dial_size / 2, dial_size / 2 - 10).attr({
             'fill': '#f0f',
             'stroke-width': 20,
             'stroke': '#0ff',
@@ -55,16 +55,39 @@ $(document).ready(() => {
     let current_tuning = 0;
     let current_mode = 0;
     let use_letter_alphabet = false;
-    $('#tuning-slider').on('input', function() {
-        current_tuning = parseInt($(this).val());
-        $('div.view.tuning').text(wrap(current_tuning, tunings));
-        update_songs(current_mode + current_tuning * use_letter_alphabet, use_letter_alphabet ? letters : numbers);
+    $('#tuning-slider').knob({
+        'width': 100,
+        'height': 100,
+        'min': 0,
+        'max': 7,
+        'value': 0,
+        'displayInput': false,
+        'cursor': 52,
+        'fgColor': 'black',
+        'format': function(foo) {
+            current_tuning = foo
+            $('div.view.tuning').text(wrap(current_tuning, tunings));
+            update_songs(current_mode + current_tuning * use_letter_alphabet, use_letter_alphabet ? letters : numbers);
+            return foo;
+        },
     })
-    $('#mode-slider').on('input', function() {
-        current_mode = parseInt($(this).val());
-        $('div.view.mode').text(wrap(current_mode, numbers));
-        update_songs(current_mode + current_tuning * use_letter_alphabet, use_letter_alphabet ? letters : numbers);
+    $('#mode-slider').knob({
+        'width': 100,
+        'height': 100,
+        'min': 0,
+        'max': 7,
+        'value': 0,
+        'displayInput': false,
+        'cursor': 52,
+        'fgColor': 'black',
+        'format': function(foo) {
+            current_mode = foo
+            $('div.view.mode').text(wrap(current_mode, numbers));
+            update_songs(current_mode + current_tuning * use_letter_alphabet, use_letter_alphabet ? letters : numbers);
+            return foo;
+        },
     })
+
     $('#letters-checkbox').on('change', function() {
         use_letter_alphabet = this.checked;
         update_songs(current_mode + current_tuning * use_letter_alphabet, use_letter_alphabet ? letters : numbers);
