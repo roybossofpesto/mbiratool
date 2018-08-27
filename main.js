@@ -15,9 +15,10 @@ const tunings = [
 ]
 
 $(document).ready(() => {
+    const dial_size = 360;
     $('div.dial').each(function() {
-        const paper = Raphael(this, 400, 400);
-        paper.circle(200, 200, 150).attr({
+        const paper = Raphael(this, dial_size, dial_size);
+        paper.circle(dial_size/2, dial_size/2, dial_size/2-10).attr({
             'fill': '#f0f',
             'stroke-width': 20,
             'stroke': '#0ff',
@@ -53,12 +54,12 @@ $(document).ready(() => {
     let use_letter_alphabet = false;
     $('#tuning-slider').on('input', function() {
         current_tuning = parseInt($(this).val());
-        $('div.tuning-view').text(wrap(current_tuning, tunings));
+        $('div.view.tuning').text(wrap(current_tuning, tunings));
         update_songs(current_mode + current_tuning * use_letter_alphabet, use_letter_alphabet ? letters : numbers);
     })
     $('#mode-slider').on('input', function() {
         current_mode = parseInt($(this).val());
-        $('div.mode-view').text(wrap(current_mode, numbers));
+        $('div.view.mode').text(wrap(current_mode, numbers));
         update_songs(current_mode + current_tuning * use_letter_alphabet, use_letter_alphabet ? letters : numbers);
     })
     $('#letters-checkbox').on('change', function() {

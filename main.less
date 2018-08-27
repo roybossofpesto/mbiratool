@@ -1,51 +1,65 @@
-body {
-    box-sizing: content-box;
-    font-family: 'IBM Plex Sans', sans-serif;
-    display: flex;
-}
-
-body>div {
-    margin-right: 1rem;
-}
-
-/* div {
-    border: 1px solid black;
-} */
-
-h3 {
-    font-weight: normal;
-}
-
-div.song-column>div {
-    text-align: right;
-    font-size: 2rem;
+.pure-g [class *="pure-u"],
+button,
+html,
+input,
+select,
+textarea {
     font-family: 'IBM Plex Mono', monospace;
 }
 
-div.song-column>div>span {
-    background-color: red;
-    padding: .5rem;
-    margin-left: .5rem;
-    display: inline-block;
-}
+body {
+    padding: 1rem;
+    box-sizing: content-box;
+    font-family: 'IBM Plex Mono', monospace;
+    // font-family: 'IBM Plex Sans', sans-serif;
+    > div {
+        max-width: 48rem;
+        margin: auto;
 
-div.input-container>span {
-    font-size: 1.5rem;
-}
+        > div {
+            h3 {
+                margin: 0.5rem;
+                font-size: 1rem;
+                display: inline-block;
+                font-weight: normal;
+            }
 
-div.input-container>input[type="range"] {
-    color: black;
-}
+            &.song-column > div {
+                font-size: 2rem;
 
-div.mode-view,
-div.tuning-view {
-    margin: .5rem 0;
-    padding: .5rem;
-    background-color: black;
-    color: white;
-    font-size: 2rem;
-    font-family: monospace;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+                > span {
+                    background-color: red;
+                    padding: 0.5rem;
+                    margin-left: 0.5rem;
+                    display: inline-block;
+                }
+            }
+
+            &.dial-column {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                > .dial {
+                    margin: .5rem;
+                }
+            }
+
+            > div.input-container {
+                display: flex;
+                align-items: center;
+                justify-content: left;
+                margin: 0.5rem 0;
+            }
+
+            > div.view {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0.5rem 0;
+                padding: 0.5rem;
+                background-color: black;
+                color: white;
+            }
+        }
+    }
 }
