@@ -57,10 +57,7 @@ $(document).ready(() => {
             keys.push(path_object);
             path_object.hover(function() {
                 keys.forEach((foo, kk) => {
-                    if (foo.key == key) return;
-                    if (foo.key == key_third) return;
-                    if (foo.key == key_fifth) return;
-                    foo.attr('fill', '#fff');
+                    foo.attr('fill', `hsl(.33, .5, ${ foo.key == key ? 0 : foo.key == key_third ? .4 : foo.key == key_fifth ? .8 : 1 }, .5)`);
                 })
             }, function() {
                 keys.forEach((foo) => {
