@@ -88,9 +88,6 @@ $(document).ready(() => {
             "stroke-width": 2 * pen_width,
             "fill": "#777"
         });
-
-        console.log(keys);
-
     })
 
     const first_song_blocks = $('#first-song>div>span');
@@ -117,12 +114,12 @@ $(document).ready(() => {
         })
     };
 
-    let current_tuning = parseInt($('#tuning-slider').val());
-    let current_mode = parseInt($('#mode-slider').val());
+    let current_tuning = parseInt($('#tuning-knob').val());
+    let current_mode = parseInt($('#mode-knob').val());
     let use_letter_alphabet = $('#letters-checkbox').prop('checked');
 
     // knob demo page http://anthonyterrien.com/demo/knob/
-    $('#tuning-slider').knob({
+    $('#tuning-knob').knob({
         'width': 100,
         'height': 100,
         'min': 0,
@@ -130,14 +127,15 @@ $(document).ready(() => {
         'displayInput': false,
         'cursor': 52,
         'fgColor': 'black',
-        'format': function(foo) {
+        'thickness': .5,
+        'format': (foo) => {
             current_tuning = foo
             $('div.view.tuning').text(wrap(current_tuning, tunings));
             update_songs(current_mode + current_tuning * use_letter_alphabet, use_letter_alphabet ? letters : numbers);
             return foo;
         },
     })
-    $('#mode-slider').knob({
+    $('#mode-knob').knob({
         'width': 100,
         'height': 100,
         'min': 0,
@@ -145,7 +143,8 @@ $(document).ready(() => {
         'displayInput': false,
         'cursor': 52,
         'fgColor': 'black',
-        'format': function(foo) {
+        'thickness': .5,
+        'format': (foo) => {
             current_mode = foo
             $('div.view.mode').text(wrap(current_mode, numbers));
             update_songs(current_mode + current_tuning * use_letter_alphabet, use_letter_alphabet ? letters : numbers);
