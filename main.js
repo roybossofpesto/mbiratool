@@ -12,7 +12,7 @@ const tunings = [
     "Myxolydian",
     "Aeolian",
     "Locrian",
-]
+];
 
 const root_key_colors = ["#1c96fe", "#fe6e32", "#aee742", "#b75ac4", "#fbed00", "#d73535", "#ff5986"]
     .map((color) => {
@@ -20,9 +20,8 @@ const root_key_colors = ["#1c96fe", "#fe6e32", "#aee742", "#b75ac4", "#fbed00", 
     });
 
 $(document).ready(() => {
-
-
     const base_size = 360;
+
     $('div.dial').each(function() {
         const paper = Raphael(this, base_size, base_size);
         const thickness = 20;
@@ -116,34 +115,41 @@ $(document).ready(() => {
     const first_song_blocks = $('#first-song>div>span');
     const second_song_blocks = $('#second-song>div>span');
     const third_song_blocks = $('#third-song>div>span');
-    const update_songs = (value, alphabet) => {
+    let tuning = parseInt($('#tuning-knob').val());
+    let mode = parseInt($('#mode-knob').val());
+    let use_letter_alphabet = $('#letters-checkbox').prop('checked');
+    const update_songs = () => {
+        const alphabet = use_letter_alphabet ? letters : numbers;
+        const value = mode + use_letter_alphabet * tuning;
+        const value_ = mode + tuning;
         first_song_blocks.each(function(index) {
             const aa = wrap(value + 0 + (index > 2));
             const bb = wrap(value + 2 + (index > 1));
             const cc = wrap(value + 4 + (index > 0));
+            const aa_ = wrap(value_ + 0 + (index > 2));
             $(this)
                 .text(`${alphabet[aa]}${alphabet[bb]}${alphabet[cc]}`)
-                .css('background-color', root_key_colors[aa]);
+                .css('background-color', root_key_colors[aa_]);
         })
         second_song_blocks.each(function(index) {
             const aa = wrap(value + 2 + (index < 2));
             const bb = wrap(value + 4 + (index != 2));
             const cc = wrap(value + 0 + (index == 0));
+            const aa_ = wrap(value_ + 2 + (index < 2));
             $(this)
                 .text(`${alphabet[aa]}${alphabet[bb]}${alphabet[cc]}`)
-                .css('background-color', root_key_colors[aa]);        })
+                .css('background-color', root_key_colors[aa_]);
+        })
         third_song_blocks.each(function(index) {
             const aa = wrap(value + 4 + (index < 3));
             const bb = wrap(value + 0 + (index == 1));
             const cc = wrap(value + 2 + (index < 2));
+            const aa_ = wrap(value_ + 4 + (index < 3));
             $(this)
                 .text(`${alphabet[aa]}${alphabet[bb]}${alphabet[cc]}`)
-                .css('background-color', root_key_colors[aa]);        })
+                .css('background-color', root_key_colors[aa_]);
+        })
     };
-
-    let current_tuning = parseInt($('#tuning-knob').val());
-    let current_mode = parseInt($('#mode-knob').val());
-    let use_letter_alphabet = $('#letters-checkbox').prop('checked');
 
     // knob demo page http://anthonyterrien.com/demo/knob/
     $('#tuning-knob').knob({
@@ -156,9 +162,9 @@ $(document).ready(() => {
         'fgColor': 'black',
         'thickness': .5,
         'format': (foo) => {
-            current_tuning = foo
-            $('div.view.tuning').text(tunings[wrap(current_tuning)]);
-            update_songs(current_mode + current_tuning * use_letter_alphabet, use_letter_alphabet ? letters : numbers);
+            tuning = foo
+            $('div.view.tuning').text(tunings[wrap(tuning)]);
+            update_songs();
             return foo;
         },
     })
@@ -172,15 +178,15 @@ $(document).ready(() => {
         'fgColor': 'black',
         'thickness': .5,
         'format': (foo) => {
-            current_mode = foo
-            $('div.view.mode').text(numbers[wrap(current_mode)]);
-            update_songs(current_mode + current_tuning * use_letter_alphabet, use_letter_alphabet ? letters : numbers);
+            mode = foo
+            $('div.view.mode').text(numbers[wrap(mode)]);
+            update_songs();
             return foo;
         },
     })
     $('#letters-checkbox').on('change', function() {
         use_letter_alphabet = this.checked;
-        update_songs(current_mode + current_tuning * use_letter_alphabet, use_letter_alphabet ? letters : numbers);
+        update_songs();
     });
 
 })
