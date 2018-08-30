@@ -1,0 +1,4 @@
+{
+    "ext": "less",
+    "exec": "lessc main.less main.css"
+}
