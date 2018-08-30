@@ -13,6 +13,7 @@ const tunings = [
     "Aeolian",
     "Locrian",
 ];
+const song_names = []
 
 const root_key_colors = ["#1c96fe", "#fe6e32", "#aee742", "#b75ac4", "#fbed00", "#d73535", "#ff5986"]
     .map((color) => {
@@ -35,10 +36,9 @@ $(document).ready(() => {
         root_key_colors.forEach((color, kk) => {
             paper.circle(base_size / 2, base_size / 2 - radius, thickness / 2)
                 .rotate(360 * kk / 7, base_size / 2, base_size / 2)
-                .attr({
-                    'fill': color,
-                    'class': 'coucou',
-                })
+                    .attr({
+                        'fill': color,
+                    })
         })
     })
 
