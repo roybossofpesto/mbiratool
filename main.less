@@ -32,6 +32,20 @@ body {
                     padding: 0.5rem;
                     margin-left: 0.5rem;
                     display: inline-block;
+                    border-style: solid;
+                    border-color: black;
+                    border-width: 0 4px;
+                }
+
+                &:first-of-type > span {
+                    border-top-width: 4px;
+                    border-top-left-radius: 10px;
+                    border-top-right-radius: 10px;
+                }
+                &:last-of-type > span {
+                    border-bottom-width: 4px;
+                    border-bottom-left-radius: 10px;
+                    border-bottom-right-radius: 10px;
                 }
             }
 
