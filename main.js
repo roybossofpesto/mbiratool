@@ -14,15 +14,33 @@ const tunings = [
     "Locrian",
 ]
 
+const root_key_colors = ["#1c96fe", "#fe6e32", "#aee742", "#b75ac4", "#fbed00", "#d73535", "#ff5986"]
+    .map((color) => {
+        return chroma(color);
+    });
+
 $(document).ready(() => {
+
+
     const base_size = 360;
     $('div.dial').each(function() {
         const paper = Raphael(this, base_size, base_size);
-        paper.circle(base_size / 2, base_size / 2, base_size / 2 - 10).attr({
-            'fill': '#f0f',
-            'stroke-width': 20,
-            'stroke': '#0ff',
+        const thickness = 20;
+        const radius = base_size / 2 - thickness / 2;
+        paper.circle(base_size / 2, base_size / 2, radius).attr({
+            'fill': 'transparent',
+            'stroke-width': thickness,
+            'stroke': 'black',
         });
+
+        root_key_colors.forEach((color, kk) => {
+            paper.circle(base_size / 2, base_size / 2 - radius, thickness / 2)
+                .rotate(360 * kk / 7, base_size / 2, base_size / 2)
+                .attr({
+                    'fill': color,
+                    'class': 'coucou',
+                })
+        })
     })
 
     $('div.mbira').each(function() {
@@ -46,22 +64,27 @@ $(document).ready(() => {
         const create_key = (width, height, key) => {
             const key_third = (key + 2) % 7;
             const key_fifth = (key + 4) % 7;
-            const key_colors = ["#56b0fd", "#fe6e32", "#aee742", "#b75ac4", "#fff436", "#40534f", "#ffc0d1"];
             const path_string = "M0,0l0," + height + "c0," + width + "," + width + "," + width + "," + width + ",0l0," + (-height) + "z";
             const path_object = paper.path(path_string);
             path_object.attr({
                 "stroke-width": 2 * pen_width,
-                "fill": key_colors[key],
+                "fill": root_key_colors[key],
             });
             path_object.key = key;
             keys.push(path_object);
-            path_object.hover(function() {
+            path_object.hover(() => {
                 keys.forEach((foo, kk) => {
-                    foo.attr('fill', `hsl(.33, .5, ${ foo.key == key ? 0 : foo.key == key_third ? .4 : foo.key == key_fifth ? .8 : 1 }, .5)`);
+                    const base_color = root_key_colors[key];
+                    const color =
+                        foo.key == key ? base_color :
+                        foo.key == key_third ? base_color.brighten(2.5) :
+                        foo.key == key_fifth ? base_color.brighten(1) :
+                        "white";
+                    foo.attr('fill', color);
                 })
-            }, function() {
+            }, () => {
                 keys.forEach((foo) => {
-                    foo.attr('fill', key_colors[foo.key])
+                    foo.attr('fill', root_key_colors[foo.key])
                 })
             });
             return path_object;
