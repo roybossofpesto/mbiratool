@@ -2,7 +2,7 @@ const wrap = (xx, alphabet) => {
     return alphabet[xx % 7];
 };
 
-const letters = "ABCDEFG";
+const letters = "CDEFGAB";
 const numbers = "1234567";
 const tunings = [
     "Ionian",
@@ -27,7 +27,6 @@ $(document).ready(() => {
 
     $('div.mbira').each(function() {
         const pen_width = 2;
-        const keys = [];
         const paper = Raphael(this, base_size, base_size);
 
         paper.rect(pen_width, pen_width, base_size - 2 * pen_width, base_size - 2 * pen_width, 10).attr({
@@ -43,7 +42,8 @@ $(document).ready(() => {
             "fill": "#fff"
         });
 
-        const key_shape = (width, height, key) => {
+        const keys = [];
+        const create_key = (width, height, key) => {
             const key_third = (key + 2) % 7;
             const key_fifth = (key + 4) % 7;
             const key_colors = ["#56b0fd", "#fe6e32", "#aee742", "#b75ac4", "#fff436", "#40534f", "#ffc0d1"];
@@ -74,14 +74,14 @@ $(document).ready(() => {
         const upper_left_keys = [1, 0, 6, 5, 3, 4, 0];
         const right_keys = [0, 1, 2, 3, 4, 5, 6, 0, 1];
         lower_left_keys.forEach((key, kk) => {
-            key_shape(big_key_width, 210 + 10 * kk, key).translate(key_offset + big_key_width * (kk + .5), key_offset);
+            create_key(big_key_width, 210 + 10 * kk, key).translate(key_offset + big_key_width * (kk + .5), key_offset);
         })
         upper_left_keys.forEach((key, kk) => {
-            key_shape(big_key_width, 150 + 8 * kk, key).translate(key_offset + big_key_width * kk, key_offset);
+            create_key(big_key_width, 150 + 8 * kk, key).translate(key_offset + big_key_width * kk, key_offset);
         })
-        key_shape(big_key_width, 170, 2).translate(key_offset + big_key_width * upper_left_keys.length, key_offset);
+        create_key(big_key_width, 170, 2).translate(key_offset + big_key_width * upper_left_keys.length, key_offset);
         right_keys.forEach((key, kk) => {
-            key_shape(small_key_width, 150 - 5 * kk, key).translate(base_size - key_offset + small_key_width * (kk - right_keys.length), key_offset);
+            create_key(small_key_width, 150 - 5 * kk, key).translate(base_size - key_offset + small_key_width * (kk - right_keys.length), key_offset);
         })
 
         paper.rect(pen_width, 35, base_size - 2 * pen_width, 20, 0).attr({
