@@ -25,20 +25,43 @@ $(document).ready(() => {
 
     $('div.dial').each(function() {
         const paper = Raphael(this, base_size, base_size);
-        const thickness = 20;
-        const radius = base_size / 2 - thickness / 2;
+        const thickness = 4;
+        const large_dot_radius = 10;
+        const small_dot_radius = 5;
+        const radius = base_size / 2 - thickness / 2 - large_dot_radius;
         paper.circle(base_size / 2, base_size / 2, radius).attr({
             'fill': 'transparent',
             'stroke-width': thickness,
             'stroke': 'black',
         });
 
-        root_key_colors.forEach((color, kk) => {
-            paper.circle(base_size / 2, base_size / 2 - radius, thickness / 2)
-                .rotate(360 * kk / 7, base_size / 2, base_size / 2)
-                    .attr({
-                        'fill': color,
-                    })
+        let hosho = 0;
+        const dots = [];
+        for (let kk = 0; kk < 48; kk++) {
+            const is_large = (kk % 3 == hosho % 3);
+            const color = root_key_colors[wrap(Math.floor(kk / 4))];
+            const dot = paper
+                .circle(base_size / 2, base_size / 2 - radius, is_large ? large_dot_radius : small_dot_radius)
+                .rotate(360 * kk / 48, base_size / 2, base_size / 2)
+                .attr({
+                    'fill': color,
+                    'stroke': 'black',
+                    'stroke-width': thickness,
+                })
+            dots.push(dot);
+        }
+
+        $(this).click((evt) => {
+            hosho += 1;
+            dots.forEach((dot, kk) => {
+                const is_large = (kk % 3 == hosho % 3);
+                console.log(dot, kk, hosho, is_large);
+                dot.animate({
+                    'r': is_large ? large_dot_radius : small_dot_radius
+                }, 200, '<>')
+            })
+            evt.stopPropagation();
+            evt.preventDefault();
         })
     })
 
