@@ -1,5 +1,5 @@
-const wrap = (xx, alphabet) => {
-    return alphabet[xx % 7];
+const wrap = (xx) => {
+    return xx % 7;
 };
 
 const letters = "CDEFGAB";
@@ -118,23 +118,27 @@ $(document).ready(() => {
     const third_song_blocks = $('#third-song>div>span');
     const update_songs = (value, alphabet) => {
         first_song_blocks.each(function(index) {
-            const aa = wrap(value + 0 + (index > 2), alphabet);
-            const bb = wrap(value + 2 + (index > 1), alphabet);
-            const cc = wrap(value + 4 + (index > 0), alphabet);
-            $(this).text(`${aa}${bb}${cc}`)
+            const aa = wrap(value + 0 + (index > 2));
+            const bb = wrap(value + 2 + (index > 1));
+            const cc = wrap(value + 4 + (index > 0));
+            $(this)
+                .text(`${alphabet[aa]}${alphabet[bb]}${alphabet[cc]}`)
+                .css('background-color', root_key_colors[aa]);
         })
         second_song_blocks.each(function(index) {
-            const aa = wrap(value + 2 + (index < 2), alphabet);
-            const bb = wrap(value + 4 + (index != 2), alphabet);
-            const cc = wrap(value + 0 + (index == 0), alphabet);
-            $(this).text(`${aa}${bb}${cc}`)
-        })
+            const aa = wrap(value + 2 + (index < 2));
+            const bb = wrap(value + 4 + (index != 2));
+            const cc = wrap(value + 0 + (index == 0));
+            $(this)
+                .text(`${alphabet[aa]}${alphabet[bb]}${alphabet[cc]}`)
+                .css('background-color', root_key_colors[aa]);        })
         third_song_blocks.each(function(index) {
-            const aa = wrap(value + 4 + (index < 3), alphabet);
-            const bb = wrap(value + 0 + (index == 1), alphabet);
-            const cc = wrap(value + 2 + (index < 2), alphabet);
-            $(this).text(`${aa}${bb}${cc}`)
-        })
+            const aa = wrap(value + 4 + (index < 3));
+            const bb = wrap(value + 0 + (index == 1));
+            const cc = wrap(value + 2 + (index < 2));
+            $(this)
+                .text(`${alphabet[aa]}${alphabet[bb]}${alphabet[cc]}`)
+                .css('background-color', root_key_colors[aa]);        })
     };
 
     let current_tuning = parseInt($('#tuning-knob').val());
@@ -153,7 +157,7 @@ $(document).ready(() => {
         'thickness': .5,
         'format': (foo) => {
             current_tuning = foo
-            $('div.view.tuning').text(wrap(current_tuning, tunings));
+            $('div.view.tuning').text(tunings[wrap(current_tuning)]);
             update_songs(current_mode + current_tuning * use_letter_alphabet, use_letter_alphabet ? letters : numbers);
             return foo;
         },
@@ -169,7 +173,7 @@ $(document).ready(() => {
         'thickness': .5,
         'format': (foo) => {
             current_mode = foo
-            $('div.view.mode').text(wrap(current_mode, numbers));
+            $('div.view.mode').text(numbers[wrap(current_mode)]);
             update_songs(current_mode + current_tuning * use_letter_alphabet, use_letter_alphabet ? letters : numbers);
             return foo;
         },
