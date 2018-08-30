@@ -55,10 +55,9 @@ $(document).ready(() => {
             hosho += 1;
             dots.forEach((dot, kk) => {
                 const is_large = (kk % 3 == hosho % 3);
-                console.log(dot, kk, hosho, is_large);
                 dot.animate({
                     'r': is_large ? large_dot_radius : small_dot_radius
-                }, 200, '<>')
+                }, 100, '>')
             })
             evt.stopPropagation();
             evt.preventDefault();
