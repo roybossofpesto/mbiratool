@@ -75,13 +75,13 @@ $(document).ready(() => {
             const path_object = paper.path(path_string);
             path_object.attr({
                 "stroke-width": 2 * pen_width,
-                "fill": root_key_colors[key],
+                "fill": root_key_colors[wrap(key + tuning)],
             });
             path_object.key = key;
             keys.push(path_object);
             path_object.hover(() => {
                 keys.forEach((foo, kk) => {
-                    const base_color = root_key_colors[key];
+                    const base_color = root_key_colors[wrap(key + tuning)];
                     const color =
                         foo.key == key ? base_color :
                         foo.key == key_third ? base_color.brighten(2.5) :
