@@ -1,17 +1,29 @@
+.sans-serif() {
+    font-family: 'IBM Plex Sans', sans-serif;
+}
+
+.monospace() {
+    font-family: 'IBM Plex Mono', monospace;
+}
+
 .pure-g [class *="pure-u"],
 button,
 html,
 input,
 select,
 textarea {
-    font-family: 'IBM Plex Mono', monospace;
+    .sans-serif();
 }
+@md_and_up: ~"screen and (min-width: 48em)";
+@sm_and_up: ~"screen and (min-width: 35.5em)";
 
 body {
-    padding: 1rem;
+    padding: 0;
     box-sizing: content-box;
-    font-family: 'IBM Plex Mono', monospace;
-    // font-family: 'IBM Plex Sans', sans-serif;
+    @media not @sm_and_up {
+        font-size: .8rem;
+    }
+
     > div {
         max-width: 48rem;
         margin: auto;
@@ -19,13 +31,15 @@ body {
         > div {
             h3 {
                 margin: 0.5rem;
-                font-size: 1rem;
-                display: inline-block;
+                display: block;
                 font-weight: normal;
+                text-align: center;
             }
 
             &.song-column > div {
-                font-size: 2rem;
+                .monospace();
+                font-size: 150%;
+                text-align: center;
 
                 > span {
                     background-color: #f0f;
@@ -42,10 +56,19 @@ body {
                     border-top-left-radius: 10px;
                     border-top-right-radius: 10px;
                 }
+
                 &:last-of-type > span {
                     border-bottom-width: 4px;
                     border-bottom-left-radius: 10px;
                     border-bottom-right-radius: 10px;
+                }
+            }
+
+            &.input-column {
+                display: flex;
+                flex-flow: row wrap;
+                @media @md_and_up {
+                    flex-flow: column nowrap;
                 }
             }
 
@@ -92,9 +115,10 @@ body {
 
             div.input-container {
                 display: flex;
+                flex-direction: row;
                 align-items: center;
-                justify-content: left;
-                margin: 0.5rem 0;
+                justify-content: flex-start;
+                margin: 0.5rem;
             }
 
             div.view {

@@ -22,6 +22,7 @@ const root_key_colors = ["#1c96fe", "#fe6e32", "#aee742", "#b75ac4", "#fbed00", 
 
 $(document).ready(() => {
     const base_size = 360;
+    const knob_size = 90;
 
     $('div.dial').each(function() {
         const paper = Raphael(this, base_size, base_size);
@@ -182,13 +183,14 @@ $(document).ready(() => {
     }
 
     // knob demo page http://anthonyterrien.com/demo/knob/
+
     $('#tuning-knob').knob({
-        'width': 100,
-        'height': 100,
+        'width': knob_size,
+        'height': knob_size,
         'min': 0,
         'max': 7,
         'displayInput': false,
-        'cursor': 52,
+        'cursor': 360/7,
         'fgColor': 'black',
         'thickness': .5,
         'format': (foo) => {
@@ -199,12 +201,12 @@ $(document).ready(() => {
         },
     })
     $('#mode-knob').knob({
-        'width': 100,
-        'height': 100,
+        'width': knob_size,
+        'height': knob_size,
         'min': 0,
         'max': 7,
         'displayInput': false,
-        'cursor': 52,
+        'cursor': 360/7,
         'fgColor': 'black',
         'thickness': .5,
         'format': (foo) => {
