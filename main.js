@@ -253,6 +253,7 @@ $(document).ready(() => {
             sectors.forEach((sector, index) => {
                 const chord = chords[index];
                 sector.note = chord.note;
+                sector.chord = chord.chord;
                 sector.attr('fill', root_key_colors[chord.chord].brighten(chord.delta == 5 ? 1 : 0))
             })
         }
