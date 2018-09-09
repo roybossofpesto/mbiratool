@@ -103,23 +103,36 @@ $(document).ready(() => {
             'stroke-width': 0,
             'stroke': '#f0f',
         });
-        for (let kk = 0; kk < 48; kk++) {
-            const sector = paper
+
+        const sectors = []
+        for (let kk = 0; kk < 48; kk++)
+            sectors.push(paper
                 .path()
                 .attr({
                     "stroke-width": 0,
                     'stroke': "#f0f",
-                    'fill': root_key_colors[Math.floor(kk/4)%7],
-                    'arc': [base_size / 2, base_size / 2, 0, 360/48+.5, 50, 160],
+                    'fill': root_key_colors[Math.floor(kk / 4) % 7],
+                    'arc': [base_size / 2, base_size / 2, 0, 360 / 48 + .5, 50, 160],
                 })
-                .rotate(360 * kk / 48, base_size / 2, base_size / 2)
-        }
+                .rotate(360 * kk / 48, base_size / 2, base_size / 2))
 
-        return () => {
-            console.log('update dial')
+
+        const update = () => {
+            const chords = [];
+            const value = mode + tuning;
+            first_song_blocks.each(function(index) {
+                const aa = wrap(value + 0 + (index > 2));
+                const bb = wrap(value + 2 + (index > 1));
+                const cc = wrap(value + 4 + (index > 0));
+                chords.push(aa, aa, aa, aa, bb, bb, bb, bb, cc, cc, cc, cc)
+            })
+            console.log('update dial', chords, sectors)
+            sectors.forEach((sector, index) => {
+                sector.attr('fill', root_key_colors[chords[index]].brighten(index % 2 == 0 ? 0 : 1))
+            })
         }
+        return update;
     }).get();
-
 
     const update_mbiras = $('div.mbira').map(function() {
         const pen_width = 2;
