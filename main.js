@@ -23,14 +23,14 @@ const root_key_colors = ["#1c96fe", "#fe6e32", "#aee742", "#b75ac4", "#fbed00", 
 $(document).ready(() => {
 
     // const synth = new Tone.Synth().toMaster()
-    const synth = new Tone.FMSynth().toMaster();
-    synth.triggerAttackRelease("C5", "4n");
+    // const synth = new Tone.FMSynth().toMaster();
+    // synth.triggerAttackRelease("C5", "4n");
+    var synth = new Tone.PolySynth(6, Tone.Synth).toMaster();
+    //set the attributes using the set interface
+    synth.set("detune", -1200);
+    //play a chord
+    synth.triggerAttackRelease(["C4", "E4", "A4"], "4n");
 
-    $(document).keydown((evt) => {
-        synth.triggerAttack('C4', '8n')
-    }).keyup(() => {
-        synth.triggerRelease();
-    })
     const base_size = 360;
     const knob_size = 70;
 
