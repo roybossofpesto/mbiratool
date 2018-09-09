@@ -27,7 +27,7 @@ $(document).ready(() => {
     synth.triggerAttackRelease('C4', 0.5, 0)
     synth.triggerAttackRelease('E4', 0.5, 1)
     synth.triggerAttackRelease('G4', 0.5, 2)
-    synth.triggerAttackRelease('B4', 0.5, 3)    // var synth = new Tone.PolySynth(6, Tone.Synth).toMaster();
+    synth.triggerAttackRelease('B4', 0.5, 3) // var synth = new Tone.PolySynth(6, Tone.Synth).toMaster();
     // synth.set("detune", -1200);
     // synth.triggerAttackRelease(["C4", "E4", "A4"], "4n");
 
@@ -159,12 +159,28 @@ $(document).ready(() => {
                 path: path
             };
         };
-        const radius = base_size / 2;
-        paper.circle(base_size / 2, base_size / 2, radius).attr({
+        paper.circle(base_size / 2, base_size / 2, base_size / 2).attr({
             'fill': 'black',
             'stroke-width': 0,
             'stroke': '#f0f',
         });
+
+        const center_back = paper.circle(base_size / 2, base_size / 2, 46).attr({
+            'fill': '#eee',
+            'stroke-width': 0,
+        })
+        const center_symbol = paper.path("M30,0L-15,-26L-15,26z").attr({
+            'fill': 'black',
+            'stroke-width': 0,
+        }).translate(base_size / 2, base_size / 2)
+
+        let playback = false;
+        const toggle_playback = () => {
+            playback = !playback;
+            center_symbol.attr('path', playback ? "M15,26l0,-52l-10,0l0,52zM-15,26l0,-52l10,0l0,52z" : "M30,0L-15,-26L-15,26z")
+        };
+        center_back.click(toggle_playback);
+        center_symbol.click(toggle_playback)
 
         const sectors = []
         for (let kk = 0; kk < 48; kk++) {
