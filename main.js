@@ -24,10 +24,11 @@ $(document).ready(() => {
 
     // const synth = new Tone.Synth().toMaster()
     const synth = new Tone.FMSynth().toMaster();
-    synth.triggerAttackRelease('C4', 0.5, 0)
-    synth.triggerAttackRelease('E4', 0.5, 1)
-    synth.triggerAttackRelease('G4', 0.5, 2)
-    synth.triggerAttackRelease('B4', 0.5, 3) // var synth = new Tone.PolySynth(6, Tone.Synth).toMaster();
+    // synth.triggerAttackRelease('C4', 0.5, 0)
+    // synth.triggerAttackRelease('E4', 0.5, 1)
+    // synth.triggerAttackRelease('G4', 0.5, 2)
+    // synth.triggerAttackRelease('B4', 0.5, 3)
+    // var synth = new Tone.PolySynth(6, Tone.Synth).toMaster();
     // synth.set("detune", -1200);
     // synth.triggerAttackRelease(["C4", "E4", "A4"], "4n");
 
@@ -46,13 +47,13 @@ $(document).ready(() => {
     //     })
     const base_size = 360;
     const knob_size = 70;
+    const pen_width = 2;
 
     let tuning = parseInt($('#tuning-knob').val());
     let mode = parseInt($('#mode-knob').val());
     let use_letter_alphabet = $('#letters-checkbox').prop('checked');
 
     const mbira_callbacks = $('div.mbira').map(function() {
-        const pen_width = 2;
         const paper = Raphael(this, base_size, base_size);
 
         paper.rect(pen_width, pen_width, base_size - 2 * pen_width, base_size - 2 * pen_width, 10).attr({
@@ -159,28 +160,11 @@ $(document).ready(() => {
                 path: path
             };
         };
-        paper.circle(base_size / 2, base_size / 2, base_size / 2).attr({
-            'fill': 'black',
-            'stroke-width': 0,
-            'stroke': '#f0f',
-        });
-
-        const center_back = paper.circle(base_size / 2, base_size / 2, 46).attr({
+        paper.circle(base_size / 2, base_size / 2, base_size / 2 - pen_width).attr({
             'fill': '#eee',
-            'stroke-width': 0,
-        })
-        const center_symbol = paper.path("M30,0L-15,-26L-15,26z").attr({
-            'fill': 'black',
-            'stroke-width': 0,
-        }).translate(base_size / 2, base_size / 2)
-
-        let playback = false;
-        const toggle_playback = () => {
-            playback = !playback;
-            center_symbol.attr('path', playback ? "M15,26l0,-52l-10,0l0,52zM-15,26l0,-52l10,0l0,52z" : "M30,0L-15,-26L-15,26z")
-        };
-        center_back.click(toggle_playback);
-        center_symbol.click(toggle_playback)
+            'stroke-width': 2 * pen_width,
+            'stroke': 'black',
+        });
 
         const sectors = []
         for (let kk = 0; kk < 48; kk++) {
@@ -199,6 +183,45 @@ $(document).ready(() => {
                 }));
             }, () => mbira_callbacks.forEach((foo) => foo.reset()));
             sectors.push(sector);
+        }
+
+        const loop = new Tone.Pattern(function(time, sector) {
+            const note = `${letters[sector.chord]}4`
+            synth.triggerAttackRelease(note, "16n", time);
+            Tone.Draw.schedule(function() {
+                sector.attr({
+                    opacity: 0
+                }).animate({
+                    opacity: 1
+                }, 500)
+            }, time);
+        }, sectors).start(0);
+        loop.interval = '8n';
+        Tone.Transport.lookAhead = 0.5;
+
+        {
+            const center_back = paper.circle(base_size / 2, base_size / 2, 50-pen_width).attr({
+                'fill': '#eee',
+                'stroke-width': 2*pen_width,
+                'stroke': "black"
+            })
+            const center_symbol = paper.path("M30,0L-15,-26L-15,26z").attr({
+                'fill': 'black',
+                'stroke-width': 0,
+            }).translate(base_size / 2, base_size / 2)
+            let playback = false;
+            const toggle_playback = () => {
+                playback = !playback;
+                if (playback) {
+                    center_symbol.attr('path', "M15,26l0,-52l-10,0l0,52zM-15,26l0,-52l10,0l0,52z");
+                    Tone.Transport.start();
+                } else {
+                    center_symbol.attr('path', "M30,0L-15,-26L-15,26z");
+                    Tone.Transport.stop();
+                }
+            };
+            center_back.click(toggle_playback);
+            center_symbol.click(toggle_playback);
         }
 
         const update = () => {
