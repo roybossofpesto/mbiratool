@@ -22,7 +22,9 @@ const root_key_colors = ["#1c96fe", "#fe6e32", "#aee742", "#b75ac4", "#fbed00", 
 
 $(document).ready(() => {
 
-    const synth = new Tone.Synth().toMaster()
+    // const synth = new Tone.Synth().toMaster()
+    const synth = new Tone.FMSynth().toMaster();
+    synth.triggerAttackRelease("C5", "4n");
 
     $(document).keydown((evt) => {
         synth.triggerAttack('C4', '8n')
