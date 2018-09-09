@@ -221,6 +221,10 @@ $(document).ready(() => {
             };
             center_back.click(toggle_playback);
             center_symbol.click(toggle_playback);
+            $(document).keydown((evt) => {
+                if (evt.key != ' ') return;
+                toggle_playback();
+            })
         }
 
         const expand_chord = (aa, bb, cc) => {
