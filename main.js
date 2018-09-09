@@ -23,57 +23,29 @@ const root_key_colors = ["#1c96fe", "#fe6e32", "#aee742", "#b75ac4", "#fbed00", 
 $(document).ready(() => {
 
     // const synth = new Tone.Synth().toMaster()
-    // const synth = new Tone.FMSynth().toMaster();
-    // synth.triggerAttackRelease("C5", "4n");
-    var synth = new Tone.PolySynth(6, Tone.Synth).toMaster();
-    //set the attributes using the set interface
-    synth.set("detune", -1200);
-    //play a chord
-    synth.triggerAttackRelease(["C4", "E4", "A4"], "4n");
+    const synth = new Tone.FMSynth().toMaster();
+    synth.triggerAttackRelease('C4', 0.5, 0)
+    synth.triggerAttackRelease('E4', 0.5, 1)
+    synth.triggerAttackRelease('G4', 0.5, 2)
+    synth.triggerAttackRelease('B4', 0.5, 3)    // var synth = new Tone.PolySynth(6, Tone.Synth).toMaster();
+    // synth.set("detune", -1200);
+    // synth.triggerAttackRelease(["C4", "E4", "A4"], "4n");
 
+    // $(document)
+    //     .keydown((evt) => {
+    //         Tone.context.resume().then(() => {
+    //             console.log('down', evt.key)
+    //             synth.triggerAttack('C5', )
+    //         })
+    //     })
+    //     .keyup((evt) => {
+    //         Tone.context.resume().then(() => {
+    //             console.log('up', evt.key)
+    //             synth.triggerRelease();
+    //         })
+    //     })
     const base_size = 360;
     const knob_size = 70;
-
-    $('div.dial-old').each(function() {
-        const paper = Raphael(this, base_size, base_size);
-        const thickness = 4;
-        const large_dot_radius = 10;
-        const small_dot_radius = 5;
-        const radius = base_size / 2 - thickness / 2 - large_dot_radius;
-        paper.circle(base_size / 2, base_size / 2, radius).attr({
-            'fill': 'transparent',
-            'stroke-width': thickness,
-            'stroke': 'black',
-        });
-
-        let hosho = 0;
-        const dots = [];
-        for (let kk = 0; kk < 48; kk++) {
-            const is_large = (kk % 3 == hosho % 3);
-            const color = root_key_colors[wrap(Math.floor(kk / 4))];
-            const dot = paper
-                .circle(base_size / 2, base_size / 2 - radius, is_large ? large_dot_radius : small_dot_radius)
-                .rotate(360 * kk / 48, base_size / 2, base_size / 2)
-                .attr({
-                    'fill': color,
-                    'stroke': 'black',
-                    'stroke-width': thickness,
-                })
-            dots.push(dot);
-        }
-
-        $(this).click((evt) => {
-            hosho += 1;
-            dots.forEach((dot, kk) => {
-                const is_large = (kk % 3 == hosho % 3);
-                dot.animate({
-                    'r': is_large ? large_dot_radius : small_dot_radius
-                }, 100, '>')
-            })
-            evt.stopPropagation();
-            evt.preventDefault();
-        })
-    })
 
     let tuning = parseInt($('#tuning-knob').val());
     let mode = parseInt($('#mode-knob').val());
