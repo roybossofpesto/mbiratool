@@ -24,7 +24,7 @@ $(document).ready(() => {
     const base_size = 360;
     const knob_size = 70;
 
-    $('div.dial').each(function() {
+    $('div.dial-old').each(function() {
         const paper = Raphael(this, base_size, base_size);
         const thickness = 4;
         const large_dot_radius = 10;
@@ -68,6 +68,59 @@ $(document).ready(() => {
     let tuning = parseInt($('#tuning-knob').val());
     let mode = parseInt($('#mode-knob').val());
     let use_letter_alphabet = $('#letters-checkbox').prop('checked');
+
+    const update_dials = $('div.dial').map(function() {
+        const paper = Raphael(this, base_size, base_size);
+        paper.customAttributes.arc = function(centerX, centerY, startAngle, endAngle, innerR, outerR) {
+            var radians = Math.PI / 180,
+                largeArc = +(endAngle - startAngle > 180);
+            // calculate the start and end points for both inner and outer edges of the arc segment
+            // the -90s are about starting the angle measurement from the top get rid of these if this doesn't suit your needs
+            outerX1 = centerX + outerR * Math.cos((startAngle - 90) * radians),
+                outerY1 = centerY + outerR * Math.sin((startAngle - 90) * radians),
+                outerX2 = centerX + outerR * Math.cos((endAngle - 90) * radians),
+                outerY2 = centerY + outerR * Math.sin((endAngle - 90) * radians),
+                innerX1 = centerX + innerR * Math.cos((endAngle - 90) * radians),
+                innerY1 = centerY + innerR * Math.sin((endAngle - 90) * radians),
+                innerX2 = centerX + innerR * Math.cos((startAngle - 90) * radians),
+                innerY2 = centerY + innerR * Math.sin((startAngle - 90) * radians);
+
+            // build the path array
+            var path = [
+                ["M", outerX1, outerY1], //move to the start point
+                ["A", outerR, outerR, 0, largeArc, 1, outerX2, outerY2], //draw the outer edge of the arc
+                ["L", innerX1, innerY1], //draw a line inwards to the start of the inner edge of the arc
+                ["A", innerR, innerR, 0, largeArc, 0, innerX2, innerY2], //draw the inner arc
+                ["z"] //close the path
+            ];
+            return {
+                path: path
+            };
+        };
+        const radius = base_size / 2;
+        paper.circle(base_size / 2, base_size / 2, radius).attr({
+            'fill': 'black',
+            'stroke-width': 0,
+            'stroke': '#f0f',
+        });
+        for (let kk = 0; kk < 48; kk++) {
+            const sector = paper
+                .path()
+                .attr({
+                    "stroke-width": 0,
+                    'stroke': "#f0f",
+                    'fill': root_key_colors[Math.floor(kk/4)%7],
+                    'arc': [base_size / 2, base_size / 2, 0, 360/48+.5, 50, 160],
+                })
+                .rotate(360 * kk / 48, base_size / 2, base_size / 2)
+        }
+
+        return () => {
+            console.log('update dial')
+        }
+    }).get();
+
+
     const update_mbiras = $('div.mbira').map(function() {
         const pen_width = 2;
         const paper = Raphael(this, base_size, base_size);
@@ -180,6 +233,7 @@ $(document).ready(() => {
     const update_all = () => {
         update_songs();
         update_mbiras.forEach((foo) => foo());
+        update_dials.forEach((foo) => foo());
     }
 
     // knob demo page http://anthonyterrien.com/demo/knob/
@@ -190,7 +244,7 @@ $(document).ready(() => {
         'min': 0,
         'max': 7,
         'displayInput': false,
-        'cursor': 360/7,
+        'cursor': 360 / 7,
         'fgColor': 'black',
         'thickness': .5,
         'format': (foo) => {
@@ -206,7 +260,7 @@ $(document).ready(() => {
         'min': 0,
         'max': 7,
         'displayInput': false,
-        'cursor': 360/7,
+        'cursor': 360 / 7,
         'fgColor': 'black',
         'thickness': .5,
         'format': (foo) => {
