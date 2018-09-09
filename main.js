@@ -21,6 +21,14 @@ const root_key_colors = ["#1c96fe", "#fe6e32", "#aee742", "#b75ac4", "#fbed00", 
     });
 
 $(document).ready(() => {
+
+    const synth = new Tone.Synth().toMaster()
+
+    $(document).keydown((evt) => {
+        synth.triggerAttack('C4', '8n')
+    }).keyup(() => {
+        synth.triggerRelease();
+    })
     const base_size = 360;
     const knob_size = 70;
 
