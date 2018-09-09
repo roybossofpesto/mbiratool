@@ -15,7 +15,7 @@ const tunings = [
 ];
 const song_names = []
 
-const root_key_colors = ["#1c96fe", "#fe6e32", "#aee742", "#b75ac4", "#fbed00", "#d73535", "#ff5986"]
+const root_key_colors = ["#1c96fe", "#feb831", "#aee742", "#b75ac4", "#fbed00", "#d73535", "#ff5986"]
     .map((color) => {
         return chroma(color);
     });
@@ -186,8 +186,7 @@ $(document).ready(() => {
         }
 
         const loop = new Tone.Pattern(function(time, sector) {
-            const note = `${letters[sector.chord]}4`
-            synth.triggerAttackRelease(note, "16n", time);
+            synth.triggerAttackRelease(sector.note, "16n", time);
             Tone.Draw.schedule(function() {
                 sector.attr({
                     opacity: 0
@@ -200,9 +199,9 @@ $(document).ready(() => {
         Tone.Transport.lookAhead = 0.5;
 
         {
-            const center_back = paper.circle(base_size / 2, base_size / 2, 50-pen_width).attr({
+            const center_back = paper.circle(base_size / 2, base_size / 2, 50 - pen_width).attr({
                 'fill': '#eee',
-                'stroke-width': 2*pen_width,
+                'stroke-width': 2 * pen_width,
                 'stroke': "black"
             })
             const center_symbol = paper.path("M30,0L-15,-26L-15,26z").attr({
@@ -224,19 +223,33 @@ $(document).ready(() => {
             center_symbol.click(toggle_playback);
         }
 
+        const expand_chord = (aa, bb, cc) => {
+            const helper = (chord, delta, octave) => ({
+                note: `${letters[wrap(chord+delta)]}${octave}`,
+                chord: wrap(chord),
+                octave: octave,
+                delta: delta,
+            });
+            return [
+                helper(aa, 0, 4), helper(aa, 0, 5), helper(aa, 5, 3), helper(aa, 5, 5),
+                helper(bb, 0, 4), helper(bb, 0, 5), helper(bb, 5, 3), helper(bb, 5, 5),
+                helper(cc, 0, 4), helper(cc, 0, 5), helper(cc, 5, 3), helper(cc, 5, 5),
+            ];
+        }
+
         const update = () => {
-            const chords = [];
+            let chords = [];
             const value = mode + tuning;
             first_song_blocks.each(function(index) {
                 const aa = wrap(value + 0 + (index > 2));
                 const bb = wrap(value + 2 + (index > 1));
                 const cc = wrap(value + 4 + (index > 0));
-                chords.push(aa, aa, aa, aa, bb, bb, bb, bb, cc, cc, cc, cc)
+                chords = chords.concat(expand_chord(aa, bb, cc));
             })
             sectors.forEach((sector, index) => {
                 const chord = chords[index];
-                sector.chord = chord;
-                sector.attr('fill', root_key_colors[chord].brighten(index % 2 == 0 ? 0 : 1))
+                sector.note = chord.note;
+                sector.attr('fill', root_key_colors[chord.chord].brighten(chord.delta == 5 ? 1 : 0))
             })
         }
         return {
