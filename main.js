@@ -191,7 +191,7 @@ $(document).ready(() => {
                     "stroke-width": 0,
                     'stroke': "#f0f",
                     'fill': root_key_colors[Math.floor(kk / 4) % 7],
-                    'arc': [base_size / 2, base_size / 2, 0, 360 / 48 + .5, 50, 160],
+                    'arc': [base_size / 2, base_size / 2, 0, 360 / 48 + .5, 50, 176],
                 })
                 .rotate(360 * kk / 48, base_size / 2, base_size / 2);
             sector.hover(function() {
