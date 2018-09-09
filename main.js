@@ -22,7 +22,7 @@ const root_key_colors = ["#1c96fe", "#fe6e32", "#aee742", "#b75ac4", "#fbed00", 
 
 $(document).ready(() => {
     const base_size = 360;
-    const knob_size = 90;
+    const knob_size = 70;
 
     $('div.dial').each(function() {
         const paper = Raphael(this, base_size, base_size);

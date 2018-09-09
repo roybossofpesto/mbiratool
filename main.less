@@ -16,6 +16,7 @@ textarea {
 }
 @md_and_up: ~"screen and (min-width: 48em)";
 @sm_and_up: ~"screen and (min-width: 35.5em)";
+@separation: .35rem;
 
 body {
     padding: 0;
@@ -30,7 +31,7 @@ body {
 
         > div {
             h3 {
-                margin: 0.5rem;
+                margin: @separation;
                 display: block;
                 font-weight: normal;
                 text-align: center;
@@ -61,27 +62,16 @@ body {
                     border-bottom-width: 4px;
                     border-bottom-left-radius: 10px;
                     border-bottom-right-radius: 10px;
+margin-bottom: @separation;
                 }
             }
 
-            &.input-column {
+            &.input-column { 
                 display: flex;
                 flex-flow: row wrap;
                 @media @md_and_up {
                     flex-flow: column nowrap;
                 }
-            }
-
-            &.center-column {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-
-                > div {
-                    margin: 0.5rem;
-                    user-select: none;
-                }
-            }
 
             div.checkbox-container {
                 background-color: #eee;
@@ -118,18 +108,30 @@ body {
                 flex-direction: row;
                 align-items: center;
                 justify-content: flex-start;
-                margin: 0.5rem;
+                    margin: @separation;
             }
 
             div.view {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                margin: 0.5rem 0;
+                    margin: @separation;
                 padding: 0.5rem;
                 background-color: black;
                 color: white;
                 border-radius: 10px;
+            }
+            }
+
+            &.center-column {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                div {
+                    margin: @separation;
+                    user-select: none;
+                }
             }
         }
     }
