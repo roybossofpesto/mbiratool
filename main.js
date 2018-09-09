@@ -51,7 +51,7 @@ $(document).ready(() => {
     let mode = parseInt($('#mode-knob').val());
     let use_letter_alphabet = $('#letters-checkbox').prop('checked');
 
-    const update_mbiras = $('div.mbira').map(function() {
+    const mbira_callbacks = $('div.mbira').map(function() {
         const pen_width = 2;
         const paper = Raphael(this, base_size, base_size);
 
@@ -127,10 +127,11 @@ $(document).ready(() => {
         return {
             highlight: highlight_colors,
             reset: reset_colors,
+            update: reset_colors,
         };
     }).get();
 
-    const update_dials = $('div.dial').map(function() {
+    const dial_callbacks = $('div.dial').map(function() {
         const paper = Raphael(this, base_size, base_size);
         paper.customAttributes.arc = function(centerX, centerY, startAngle, endAngle, innerR, outerR) {
             var radians = Math.PI / 180,
@@ -177,10 +178,10 @@ $(document).ready(() => {
                 })
                 .rotate(360 * kk / 48, base_size / 2, base_size / 2);
             sector.hover(function() {
-                update_mbiras.forEach((foo) => foo.highlight.call({
+                mbira_callbacks.forEach((foo) => foo.highlight.call({
                     key: this.chord - tuning,
                 }));
-            }, () => update_mbiras.forEach((foo) => foo.reset()));
+            }, () => mbira_callbacks.forEach((foo) => foo.reset()));
             sectors.push(sector);
         }
 
@@ -199,7 +200,9 @@ $(document).ready(() => {
                 sector.attr('fill', root_key_colors[chord].brighten(index % 2 == 0 ? 0 : 1))
             })
         }
-        return update;
+        return {
+            update: update,
+        };
     }).get();
 
     const first_song_blocks = $('#first-song>div>span');
@@ -240,8 +243,8 @@ $(document).ready(() => {
 
     const update_all = () => {
         update_songs();
-        update_mbiras.forEach((foo) => foo.reset());
-        update_dials.forEach((foo) => foo());
+        mbira_callbacks.forEach((foo) => foo.update());
+        dial_callbacks.forEach((foo) => foo.update());
     }
 
     // knob demo page http://anthonyterrien.com/demo/knob/
