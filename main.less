@@ -16,13 +16,13 @@ textarea {
 }
 @md_and_up: ~"screen and (min-width: 48em)";
 @sm_and_up: ~"screen and (min-width: 35.5em)";
-@separation: .35rem;
+@separation: 0.35rem;
 
 body {
     padding: 0;
     box-sizing: content-box;
     @media not @sm_and_up {
-        font-size: .8rem;
+        font-size: 0.8rem;
     }
 
     > div {
@@ -62,65 +62,65 @@ body {
                     border-bottom-width: 4px;
                     border-bottom-left-radius: 10px;
                     border-bottom-right-radius: 10px;
-margin-bottom: @separation;
+                    margin-bottom: @separation;
                 }
             }
 
-            &.input-column { 
+            &.input-column {
                 display: flex;
                 flex-flow: row wrap;
                 @media @md_and_up {
                     flex-flow: column nowrap;
                 }
 
-            div.checkbox-container {
-                background-color: #eee;
-                position: relative;
-                display: inline-block;
-                cursor: pointer;
-                height: 25px;
-                width: 25px;
+                div.checkbox-container {
+                    background-color: #eee;
+                    position: relative;
+                    display: inline-block;
+                    cursor: pointer;
+                    height: 25px;
+                    width: 25px;
 
-                > input {
-                    height: 100%;
-                    width: 100%;
-                    position: absolute;
-                    opacity: 0;
-                    cursor: inherit;
-                    z-index: 1;
+                    > input {
+                        height: 100%;
+                        width: 100%;
+                        position: absolute;
+                        opacity: 0;
+                        cursor: inherit;
+                        z-index: 1;
+                    }
+
+                    > span {
+                        height: 15px;
+                        width: 15px;
+                        left: 5px;
+                        top: 5px;
+                        position: absolute;
+                    }
+
+                    > input:checked ~ span {
+                        background-color: black !important;
+                    }
                 }
 
-                > span {
-                    height: 15px;
-                    width: 15px;
-                    left: 5px;
-                    top: 5px;
-                    position: absolute;
-                }
-
-                > input:checked ~ span {
-                    background-color: black !important;
-                }
-            }
-
-            div.input-container {
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                justify-content: flex-start;
+                div.input-container {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: flex-start;
                     margin: @separation;
-            }
+                }
 
-            div.view {
-                display: flex;
-                align-items: center;
-                justify-content: center;
+                div.view {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
                     margin: @separation;
-                padding: 0.5rem;
-                background-color: black;
-                color: white;
-                border-radius: 10px;
-            }
+                    padding: 0.5rem;
+                    background-color: black;
+                    color: white;
+                    border-radius: 10px;
+                }
             }
 
             &.center-column {
