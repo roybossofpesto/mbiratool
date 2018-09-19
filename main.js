@@ -214,6 +214,7 @@ $(document).ready(() => {
             const sector = paper
                 .path()
                 .attr({
+                    'cursor': 'pointer',
                     "stroke-width": 0,
                     'stroke': "#f0f",
                     'fill': kk % 3 == hosho_position % 3 ? 'white' : 'black',
@@ -257,11 +258,13 @@ $(document).ready(() => {
             const center_back = paper.circle(base_size / 2, base_size / 2, radius_inside - pen_width).attr({
                 'fill': '#eee',
                 'stroke-width': 2 * pen_width,
-                'stroke': "black"
+                'stroke': "black",
+                'cursor': 'pointer',
             })
             const center_symbol = paper.path("M30,0L-15,-26L-15,26z").attr({
                 'fill': 'black',
                 'stroke-width': 0,
+                'cursor': 'pointer',
             }).translate(base_size / 2, base_size / 2)
             let playback = false;
             const toggle_playback = () => {
