@@ -177,8 +177,8 @@ $(document).ready(() => {
         };
 
         const center = base_size / 2;
-        const radius_inside = 40;
-        const hosho_thickness = 16;
+        const radius_inside = 50;
+        const hosho_thickness = 14;
         const radius_outside = center - hosho_thickness - 4 * pen_width;
 
         paper.circle(center, center, radius_outside + 2 * pen_width + hosho_thickness / 2).attr({
@@ -271,7 +271,7 @@ $(document).ready(() => {
             const toggle_playback = () => {
                 playback = !playback;
                 if (playback) {
-                    center_symbol.attr('path', "M15,26l0,-52l-10,0l0,52zM-15,26l0,-52l10,0l0,52z");
+                    center_symbol.attr('path', "M18,26l0,-52l-14,0l0,52zM-18,26l0,-52l14,0l0,52z");
                     Tone.Transport.start();
                 } else {
                     center_symbol.attr('path', "M30,0L-15,-26L-15,26z");
