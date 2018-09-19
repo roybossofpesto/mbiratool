@@ -209,7 +209,7 @@ $(document).ready(() => {
         let hosho_position = 0;
         const hosho_sectors = [];
         const update_hosho = () => hosho_sectors.forEach((sector, index) => sector.animate({
-            'fill': index % 3 == hosho_position % 3 ? 'white' : 'black',
+            'fill': index % 3 == hosho_position % 4 ? 'white' : 'black',
         }, 100))
         for (let kk = 0; kk < 48; kk++) {
             const sector = paper
@@ -218,7 +218,7 @@ $(document).ready(() => {
                     'cursor': 'pointer',
                     "stroke-width": 0,
                     'stroke': "#f0f",
-                    'fill': kk % 3 == hosho_position % 3 ? 'white' : 'black',
+                    'fill': kk % 3 == hosho_position % 4 ? 'white' : 'black',
                     'arc': [center, center, 0, 360 / 48 + .5, radius_outside + 2 * pen_width, radius_outside + 2 * pen_width + hosho_thickness],
                 })
                 .rotate(360 * kk / 48, center, center);
@@ -242,7 +242,7 @@ $(document).ready(() => {
         }, mbira_sectors).start(0);
         mbira_loop.interval = '8n';
         const hosho_loop = new Tone.Pattern(function(time, sector) {
-            if (sector.index % 3 == hosho_position % 3)
+            if (sector.index % 3 == hosho_position % 4)
                 hosho_synth.triggerAttackRelease("16n", time);
             Tone.Draw.schedule(function() {
                 sector.attr({
