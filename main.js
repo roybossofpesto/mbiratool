@@ -22,8 +22,6 @@ const root_key_colors = ["#1c96fe", "#feb831", "#aee742", "#b75ac4", "#fbed00", 
 
 $(document).ready(() => {
 
-    // const synth = new Tone.Synth().toMaster()
-    const synth = new Tone.FMSynth().toMaster();
     // synth.triggerAttackRelease('C4', 0.5, 0)
     // synth.triggerAttackRelease('E4', 0.5, 1)
     // synth.triggerAttackRelease('G4', 0.5, 2)
@@ -45,6 +43,23 @@ $(document).ready(() => {
     //             synth.triggerRelease();
     //         })
     //     })
+
+    const mbira_synth = new Tone.Synth().toMaster()
+    // const mbira_synth = new Tone.FMSynth().toMaster();
+
+    const hosho_synth = new Tone.NoiseSynth({
+        noise: {
+            type: 'pink',
+        },
+        envelope: {
+            attack: 0.05,
+            decay: 0.1,
+            sustain: .05,
+            release: .1,
+        },
+    }).toMaster();
+    hosho_synth.volume.value = -9;
+
     const base_size = 360;
     const knob_size = 70;
     const pen_width = 2;
@@ -192,11 +207,9 @@ $(document).ready(() => {
 
         let hosho_position = 0;
         const hosho_sectors = [];
-
         const update_hosho = () => hosho_sectors.forEach((sector, index) => sector.animate({
             'fill': index % 3 == hosho_position % 3 ? 'white' : 'black',
         }, 100))
-
         for (let kk = 0; kk < 48; kk++) {
             const sector = paper
                 .path()
@@ -207,6 +220,7 @@ $(document).ready(() => {
                     'arc': [base_size / 2, base_size / 2, 0, 360 / 48 + .5, radius_outside + 2 * pen_width, radius_outside + 2 * pen_width + hosho_thickness],
                 })
                 .rotate(360 * kk / 48, base_size / 2, base_size / 2);
+            sector.index = kk;
             sector.click(() => {
                 hosho_position += 1;
                 update_hosho();
@@ -214,8 +228,8 @@ $(document).ready(() => {
             hosho_sectors.push(sector);
         }
 
-        const loop = new Tone.Pattern(function(time, sector) {
-            synth.triggerAttackRelease(sector.note, "16n", time);
+        const mbira_loop = new Tone.Pattern(function(time, sector) {
+            mbira_synth.triggerAttackRelease(sector.note, "16n", time);
             Tone.Draw.schedule(function() {
                 sector.attr({
                     opacity: 0
@@ -224,7 +238,19 @@ $(document).ready(() => {
                 }, 500)
             }, time);
         }, mbira_sectors).start(0);
-        loop.interval = '8n';
+        mbira_loop.interval = '8n';
+        const hosho_loop = new Tone.Pattern(function(time, sector) {
+            if (sector.index % 3 == hosho_position % 3)
+                hosho_synth.triggerAttackRelease("16n", time);
+            Tone.Draw.schedule(function() {
+                sector.attr({
+                    opacity: 0
+                }).animate({
+                    opacity: 1
+                }, 100)
+            }, time);
+        }, hosho_sectors).start(0);
+        hosho_loop.interval = '8n';
         Tone.Transport.lookAhead = 0.5;
 
         {
