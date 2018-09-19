@@ -162,22 +162,22 @@ $(document).ready(() => {
         };
 
         const radius_inside = 40;
-        const oshoo_thickness = 10;
-        const radius_outside = base_size / 2 - oshoo_thickness - 4 * pen_width;
+        const hosho_thickness = 10;
+        const radius_outside = base_size / 2 - hosho_thickness - 4 * pen_width;
 
-        paper.circle(base_size / 2, base_size / 2, radius_outside + 2 * pen_width + oshoo_thickness / 2).attr({
+        paper.circle(base_size / 2, base_size / 2, radius_outside + 2 * pen_width + hosho_thickness / 2).attr({
             'fill': '#eee',
-            'stroke-width': 4 * pen_width + oshoo_thickness,
+            'stroke-width': 4 * pen_width + hosho_thickness,
             'stroke': 'black',
         });
 
-        paper.circle(base_size/2, base_size/2, radius_outside + 2 * pen_width + oshoo_thickness / 2).attr({
+        paper.circle(base_size/2, base_size/2, radius_outside + 2 * pen_width + hosho_thickness / 2).attr({
             'fill': 'none',
-            'stroke-width': oshoo_thickness,
+            'stroke-width': hosho_thickness,
             'stroke': 'white',
         })
 
-        const sectors = []
+        const mbira_sectors = []
         for (let kk = 0; kk < 48; kk++) {
             const sector = paper
                 .path()
@@ -193,7 +193,7 @@ $(document).ready(() => {
                     key: this.chord - tuning,
                 }));
             }, () => mbira_callbacks.forEach((foo) => foo.reset()));
-            sectors.push(sector);
+            mbira_sectors.push(sector);
         }
 
         const loop = new Tone.Pattern(function(time, sector) {
@@ -205,7 +205,7 @@ $(document).ready(() => {
                     opacity: 1
                 }, 500)
             }, time);
-        }, sectors).start(0);
+        }, mbira_sectors).start(0);
         loop.interval = '8n';
         Tone.Transport.lookAhead = 0.5;
 
@@ -261,7 +261,7 @@ $(document).ready(() => {
                 const cc = wrap(value + 4 + (index > 0));
                 chords = chords.concat(expand_chord(aa, bb, cc));
             })
-            sectors.forEach((sector, index) => {
+            mbira_sectors.forEach((sector, index) => {
                 const chord = chords[index];
                 sector.note = chord.note;
                 sector.chord = chord.chord;
