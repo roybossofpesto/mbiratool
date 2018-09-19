@@ -176,11 +176,12 @@ $(document).ready(() => {
             };
         };
 
+        const center = base_size / 2;
         const radius_inside = 40;
         const hosho_thickness = 16;
-        const radius_outside = base_size / 2 - hosho_thickness - 4 * pen_width;
+        const radius_outside = center - hosho_thickness - 4 * pen_width;
 
-        paper.circle(base_size / 2, base_size / 2, radius_outside + 2 * pen_width + hosho_thickness / 2).attr({
+        paper.circle(center, center, radius_outside + 2 * pen_width + hosho_thickness / 2).attr({
             'fill': '#eee',
             'stroke-width': 4 * pen_width + hosho_thickness,
             'stroke': 'black',
@@ -194,9 +195,9 @@ $(document).ready(() => {
                     "stroke-width": 0,
                     'stroke': "#f0f",
                     'fill': root_key_colors[Math.floor(kk / 4) % 7],
-                    'arc': [base_size / 2, base_size / 2, 0, 360 / 48 + .5, radius_inside, radius_outside],
+                    'arc': [center, center, 0, 360 / 48 + .5, radius_inside, radius_outside],
                 })
-                .rotate(360 * kk / 48, base_size / 2, base_size / 2);
+                .rotate(360 * kk / 48, center, center);
             sector.hover(function() {
                 mbira_callbacks.forEach((foo) => foo.highlight.call({
                     key: this.chord - tuning,
@@ -218,9 +219,9 @@ $(document).ready(() => {
                     "stroke-width": 0,
                     'stroke': "#f0f",
                     'fill': kk % 3 == hosho_position % 3 ? 'white' : 'black',
-                    'arc': [base_size / 2, base_size / 2, 0, 360 / 48 + .5, radius_outside + 2 * pen_width, radius_outside + 2 * pen_width + hosho_thickness],
+                    'arc': [center, center, 0, 360 / 48 + .5, radius_outside + 2 * pen_width, radius_outside + 2 * pen_width + hosho_thickness],
                 })
-                .rotate(360 * kk / 48, base_size / 2, base_size / 2);
+                .rotate(360 * kk / 48, center, center);
             sector.index = kk;
             sector.click(() => {
                 hosho_position += 1;
@@ -255,7 +256,7 @@ $(document).ready(() => {
         Tone.Transport.lookAhead = 0.5;
 
         {
-            const center_back = paper.circle(base_size / 2, base_size / 2, radius_inside - pen_width).attr({
+            const center_back = paper.circle(center, center, radius_inside - pen_width).attr({
                 'fill': '#eee',
                 'stroke-width': 2 * pen_width,
                 'stroke': "black",
@@ -265,7 +266,7 @@ $(document).ready(() => {
                 'fill': 'black',
                 'stroke-width': 0,
                 'cursor': 'pointer',
-            }).translate(base_size / 2, base_size / 2)
+            }).translate(center, center)
             let playback = false;
             const toggle_playback = () => {
                 playback = !playback;
