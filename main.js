@@ -160,11 +160,22 @@ $(document).ready(() => {
                 path: path
             };
         };
-        paper.circle(base_size / 2, base_size / 2, base_size / 2 - pen_width).attr({
+
+        const radius_inside = 40;
+        const oshoo_thickness = 10;
+        const radius_outside = base_size / 2 - oshoo_thickness - 4 * pen_width;
+
+        paper.circle(base_size / 2, base_size / 2, radius_outside + 2 * pen_width + oshoo_thickness / 2).attr({
             'fill': '#eee',
-            'stroke-width': 2 * pen_width,
+            'stroke-width': 4 * pen_width + oshoo_thickness,
             'stroke': 'black',
         });
+
+        paper.circle(base_size/2, base_size/2, radius_outside + 2 * pen_width + oshoo_thickness / 2).attr({
+            'fill': 'none',
+            'stroke-width': oshoo_thickness,
+            'stroke': 'white',
+        })
 
         const sectors = []
         for (let kk = 0; kk < 48; kk++) {
@@ -174,7 +185,7 @@ $(document).ready(() => {
                     "stroke-width": 0,
                     'stroke': "#f0f",
                     'fill': root_key_colors[Math.floor(kk / 4) % 7],
-                    'arc': [base_size / 2, base_size / 2, 0, 360 / 48 + .5, 50, 176],
+                    'arc': [base_size / 2, base_size / 2, 0, 360 / 48 + .5, radius_inside, radius_outside],
                 })
                 .rotate(360 * kk / 48, base_size / 2, base_size / 2);
             sector.hover(function() {
@@ -199,7 +210,7 @@ $(document).ready(() => {
         Tone.Transport.lookAhead = 0.5;
 
         {
-            const center_back = paper.circle(base_size / 2, base_size / 2, 50 - pen_width).attr({
+            const center_back = paper.circle(base_size / 2, base_size / 2, radius_inside - pen_width).attr({
                 'fill': '#eee',
                 'stroke-width': 2 * pen_width,
                 'stroke': "black"
@@ -254,7 +265,8 @@ $(document).ready(() => {
                 const chord = chords[index];
                 sector.note = chord.note;
                 sector.chord = chord.chord;
-                sector.attr('fill', root_key_colors[chord.chord].brighten(chord.delta == 5 ? 1 : 0))
+                sector.attr('fill', root_key_colors[chord.chord]
+                    .brighten(chord.delta == 5 ? 1 : chord.delta == 3 ? 2.5 : 0))
             })
         }
         return {
