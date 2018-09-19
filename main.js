@@ -15,7 +15,7 @@ const tunings = [
 ];
 const song_names = []
 
-const root_key_colors = ["#1c96fe", "#feb831", "#aee742", "#b75ac4", "#fbed00", "#d73535", "#ff5986"]
+const root_key_colors = ["#1c96fe", "#feb831", "#aee742", "#b75ac4", "#15cdc2", "#fa2424", "#ff5986"]
     .map((color) => {
         return chroma(color);
     });
@@ -200,7 +200,7 @@ $(document).ready(() => {
                 .rotate(360 * kk / 48, center, center);
             sector.hover(function() {
                 mbira_callbacks.forEach((foo) => foo.highlight.call({
-                    key: this.chord - tuning,
+                    key: wrap(this.chord + 7 - tuning),
                 }));
             }, () => mbira_callbacks.forEach((foo) => foo.reset()));
             mbira_sectors.push(sector);
