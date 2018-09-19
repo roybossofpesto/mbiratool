@@ -162,7 +162,7 @@ $(document).ready(() => {
         };
 
         const radius_inside = 40;
-        const hosho_thickness = 10;
+        const hosho_thickness = 16;
         const radius_outside = base_size / 2 - hosho_thickness - 4 * pen_width;
 
         paper.circle(base_size / 2, base_size / 2, radius_outside + 2 * pen_width + hosho_thickness / 2).attr({
@@ -171,13 +171,7 @@ $(document).ready(() => {
             'stroke': 'black',
         });
 
-        paper.circle(base_size/2, base_size/2, radius_outside + 2 * pen_width + hosho_thickness / 2).attr({
-            'fill': 'none',
-            'stroke-width': hosho_thickness,
-            'stroke': 'white',
-        })
-
-        const mbira_sectors = []
+        const mbira_sectors = [];
         for (let kk = 0; kk < 48; kk++) {
             const sector = paper
                 .path()
@@ -194,6 +188,30 @@ $(document).ready(() => {
                 }));
             }, () => mbira_callbacks.forEach((foo) => foo.reset()));
             mbira_sectors.push(sector);
+        }
+
+        let hosho_position = 0;
+        const hosho_sectors = [];
+
+        const update_hosho = () => hosho_sectors.forEach((sector, index) => sector.animate({
+            'fill': index % 3 == hosho_position % 3 ? 'white' : 'black',
+        }, 100))
+
+        for (let kk = 0; kk < 48; kk++) {
+            const sector = paper
+                .path()
+                .attr({
+                    "stroke-width": 0,
+                    'stroke': "#f0f",
+                    'fill': kk % 3 == hosho_position % 3 ? 'white' : 'black',
+                    'arc': [base_size / 2, base_size / 2, 0, 360 / 48 + .5, radius_outside + 2 * pen_width, radius_outside + 2 * pen_width + hosho_thickness],
+                })
+                .rotate(360 * kk / 48, base_size / 2, base_size / 2);
+            sector.click(() => {
+                hosho_position += 1;
+                update_hosho();
+            })
+            hosho_sectors.push(sector);
         }
 
         const loop = new Tone.Pattern(function(time, sector) {
@@ -252,7 +270,7 @@ $(document).ready(() => {
             ];
         }
 
-        const update = () => {
+        const update_chords = () => {
             let chords = [];
             const value = mode + tuning;
             first_song_blocks.each(function(index) {
@@ -270,7 +288,8 @@ $(document).ready(() => {
             })
         }
         return {
-            update: update,
+            update_chords: update_chords,
+            update_hosho: update_hosho,
         };
     }).get();
 
@@ -313,7 +332,7 @@ $(document).ready(() => {
     const update_all = () => {
         update_songs();
         mbira_callbacks.forEach((foo) => foo.update());
-        dial_callbacks.forEach((foo) => foo.update());
+        dial_callbacks.forEach((foo) => foo.update_chords());
     }
 
     // knob demo page http://anthonyterrien.com/demo/knob/
