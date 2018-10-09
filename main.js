@@ -29,7 +29,26 @@ const helper = (chord, delta, octave) => ({
     delta: delta,
 });
 
+const helper_standard = (chord, octave=4) => {
+
+    return [{
+        note: `${letters[wrap(chord)]}${octave}`,
+        chord: wrap(chord),
+        octave: octave,
+        delta: 0,
+    }, null, null, null];
+};
+
 const expands_chord = [
+    (aa, bb, cc) => {
+        const foo =  [
+            helper_standard(aa),
+            helper_standard(bb),
+            helper_standard(cc),
+        ].flat();
+        console.log(foo)
+        return foo;
+    },
     (aa, bb, cc) => {
         return [
             helper(aa, 0, 4), helper(aa, 0, 5), helper(aa, 0, 3), helper(aa, 4, 5),
@@ -329,19 +348,18 @@ $(document).ready(() => {
             })
         }
 
-        let current_expand_chord_index = 0;
-        { //
+        let current_expand_chord_index = 0; { //
             const button = paper.circle(button_radius, button_radius, button_radius).attr({
                 'fill': 'black',
                 'stroke-width': 0,
                 'cursor': 'pointer',
             })
-            const label = paper.text(button_radius, button_radius, 1).attr({
+            const label = paper.text(button_radius, button_radius, '0').attr({
                 'fill': 'white',
                 'cursor': 'pointer',
             })
             const callback = () => {
-                current_expand_chord_index ++;
+                current_expand_chord_index++;
                 current_expand_chord_index %= expands_chord.length;
                 label.attr('text', current_expand_chord_index);
                 update_chords();
