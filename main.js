@@ -20,6 +20,8 @@ const root_key_colors = ["#1c96fe", "#feb831", "#aee742", "#b75ac4", "#15cdc2", 
         return chroma(color);
     });
 
+let mbira_synth = undefined;
+
 $(document).ready(() => {
 
     // synth.triggerAttackRelease('C4', 0.5, 0)
@@ -44,15 +46,20 @@ $(document).ready(() => {
     //         })
     //     })
 
-    const mbira_synth = new Tone.Synth().toMaster()
+    // const mbira_synth = new Tone.Synth().toMaster()
     // const mbira_synth = new Tone.FMSynth().toMaster();
+    mbira_synth = new Tone.PolySynth(12, Tone.Synth).toMaster();
+    mbira_synth.voices.forEach((voice) => {
+        voice.envelope.attack = 0.0005;
+        voice.envelope.release = 10;
+    })
 
     const hosho_synth = new Tone.NoiseSynth({
         noise: {
             type: 'pink',
         },
         envelope: {
-            attack: 0.05,
+            attack: 0.0005,
             decay: 0.1,
             sustain: .05,
             release: .1,
@@ -61,7 +68,7 @@ $(document).ready(() => {
     hosho_synth.volume.value = -20;
 
     const base_size = 360;
-    const knob_size = 70;
+    const knob_size = 50;
     const pen_width = 2;
 
     let tuning = parseInt($('#tuning-knob').val());
@@ -255,7 +262,7 @@ $(document).ready(() => {
         }, hosho_sectors).start(0);
         hosho_loop.interval = '8n';
 
-        Tone.Transport.lookAhead = 0.5;
+        // Tone.Transport.lookAhead = .5;
 
         {
             const center_back = paper.circle(center, center, radius_inside - pen_width).attr({
@@ -398,6 +405,20 @@ $(document).ready(() => {
             mode = foo
             $('div.view.mode').text(numbers[wrap(mode)]);
             update_all();
+            return foo;
+        },
+    })
+    $('#bpm-knob').knob({
+        'width': knob_size,
+        'height': knob_size,
+        'min': 60,
+        'max': 360,
+        'fgColor': 'black',
+        'thickness': .5,
+        'displayInput': false,
+        'format': (foo) => {
+            Tone.Transport.bpm.value = foo;
+            $('div.view.bpm').text(foo);
             return foo;
         },
     })
