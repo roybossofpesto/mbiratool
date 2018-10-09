@@ -29,13 +29,13 @@ const helper = (chord, delta, octave) => ({
     delta: delta,
 });
 
-const helper_single = (chord, nn = 4, octave = 4) => {
-    const foo = [{
+const helper_single = (chords, nn = 4, octave = 4) => {
+    const foo = chords.map((chord) => ({
         note: `${letters[wrap(chord)]}${octave}`,
         chord: wrap(chord),
         octave: octave,
         delta: 0,
-    }];
+    }));
     while (foo.length < nn)
         foo.push(null);
     return foo;
@@ -43,31 +43,31 @@ const helper_single = (chord, nn = 4, octave = 4) => {
 
 const expands_chord = [
     (aa, bb, cc) => [
-        helper_single(aa, 3),
-        helper_single(aa, 3),
-        helper_single(bb, 3),
-        helper_single(cc, 3),
+        helper_single([aa], 3),
+        helper_single([aa], 3),
+        helper_single([bb], 3),
+        helper_single([cc], 3),
     ].flat(),
     (aa, bb, cc) => {
         const foo = [
-            helper_single(aa, 6),
-            helper_single(bb, 3),
-            helper_single(cc, 3),
+            helper_single([aa], 6),
+            helper_single([bb], 3),
+            helper_single([cc], 3),
         ].flat();
         return foo;
     },
     (aa, bb, cc) => [
-        helper_single(aa, 3),
-        helper_single(aa, 3),
-        helper_single(bb, 3),
-        helper_single(cc, 3),
+        helper_single([aa], 3),
+        helper_single([aa], 3),
+        helper_single([bb], 3),
+        helper_single([cc], 3),
     ].flat(),
     (aa, bb, cc) => {
         const foo = [
-            helper_single(aa, 3),
-            helper_single(bb, 3),
-            helper_single(aa, 3),
-            helper_single(cc, 3),
+            helper_single([aa], 3),
+            helper_single([bb], 3),
+            helper_single([aa], 3),
+            helper_single([cc], 3),
         ].flat();
         return foo;
     },
