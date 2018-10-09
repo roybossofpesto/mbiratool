@@ -319,23 +319,27 @@ $(document).ready(() => {
 
         let hosho_position = 0;
         const hosho_sectors = [];
-        const update_hosho = () => hosho_sectors.forEach((sector, index) => sector.animate({
-            'fill': index % 3 == hosho_position % 4 ? 'white' : 'black',
-        }, 100))
+        const color_mibra = (index) => ({
+            'fill':
+                hosho_position < 3 ? index % 3 == hosho_position ? 'red' : 'yellow' :
+                hosho_position == 4 ? 'blue' :
+                'green'
+        });
+        const update_hosho = () => hosho_sectors.forEach((sector, index) => sector.animate(color_mibra(index), 100))
         for (let kk = 0; kk < 48; kk++) {
             const sector = paper
                 .path()
-                .attr({
+                .attr(Object.assign({
                     'cursor': 'pointer',
                     "stroke-width": 0,
                     'stroke': "#f0f",
-                    'fill': kk % 3 == hosho_position % 4 ? 'white' : 'black',
                     'arc': [center, center, 0, 360 / 48 + .5, radius_outside + 2 * pen_width, radius_outside + 2 * pen_width + hosho_thickness],
-                })
+                }, color_mibra(kk)))
                 .rotate(360 * kk / 48, center, center);
             sector.index = kk;
             sector.click(() => {
                 hosho_position += 1;
+                hosho_position %= 5;
                 update_hosho();
             })
             hosho_sectors.push(sector);
