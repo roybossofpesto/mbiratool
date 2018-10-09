@@ -29,24 +29,54 @@ const helper = (chord, delta, octave) => ({
     delta: delta,
 });
 
-const helper_standard = (chord, octave=4) => {
-
-    return [{
+const helper_single = (chord, nn = 4, octave = 4) => {
+    const foo = [{
         note: `${letters[wrap(chord)]}${octave}`,
         chord: wrap(chord),
         octave: octave,
         delta: 0,
-    }, null, null, null];
+    }];
+    while (foo.length < nn)
+        foo.push(null);
+    return foo;
 };
 
 const expands_chord = [
+    (aa, bb, cc) => [
+        helper_single(aa, 3),
+        helper_single(aa, 3),
+        helper_single(bb, 3),
+        helper_single(cc, 3),
+    ].flat(),
     (aa, bb, cc) => {
-        const foo =  [
-            helper_standard(aa),
-            helper_standard(bb),
-            helper_standard(cc),
+        const foo = [
+            helper_single(aa, 6),
+            helper_single(bb, 3),
+            helper_single(cc, 3),
         ].flat();
-        console.log(foo)
+        return foo;
+    },
+    (aa, bb, cc) => [
+        helper_single(aa, 3),
+        helper_single(aa, 3),
+        helper_single(bb, 3),
+        helper_single(cc, 3),
+    ].flat(),
+    (aa, bb, cc) => {
+        const foo = [
+            helper_single(aa, 3),
+            helper_single(bb, 3),
+            helper_single(aa, 3),
+            helper_single(cc, 3),
+        ].flat();
+        return foo;
+    },
+    (aa, bb, cc) => {
+        const foo = [
+            helper_single(aa),
+            helper_single(bb),
+            helper_single(cc),
+        ].flat();
         return foo;
     },
     (aa, bb, cc) => {
@@ -380,7 +410,6 @@ $(document).ready(() => {
             mbira_sectors.forEach((sector, index) => {
                 const chord = chords[index];
                 if (chord == null) {
-                    console.log('null')
                     sector.attr('fill', 'black')
                     sector.note = null;
                     sector.chord = null;
