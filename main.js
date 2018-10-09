@@ -319,7 +319,7 @@ $(document).ready(() => {
 
         const grow = (arr, nn, vv = 'yellow') => {
             while (arr.length < nn)
-                arr.push(vv)
+                arr.push(vv);
             return arr;
         }
 
