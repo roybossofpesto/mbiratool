@@ -307,6 +307,7 @@ $(document).ready(() => {
                     'stroke': "#f0f",
                     'fill': root_key_colors[Math.floor(kk / 4) % 7],
                     'arc': [center, center, 0, 360 / 48 + .5, radius_inside, radius_outside],
+                    'cursor': 'pointer',
                 })
                 .rotate(360 * kk / 48, center, center);
             sector.hover(function() {
@@ -326,17 +327,11 @@ $(document).ready(() => {
         let hosho_position = 0;
         const hosho_sectors = [];
         const color_hosho = (index) => {
-            const bar =  {
-            'checked':
-                hosho_position < 3 ? index % 3 == hosho_position ? true : false :
-                hosho_position == 3 ? false :
-                hosho_position == 4 ? grow([true, false, true, false, false, true], 12)[index % 12] :
-                hosho_position < 6 ? index % 12 == hosho_position ? true : false :
-                hosho_position < 12 ? index % 12 < hosho_position ? true : false :
-                false,
-            'stroke-width':
-                //(index %3 )* pen_width,
-                0,
+            const bar = {
+                'checked': hosho_position < 3 ? index % 3 == hosho_position ? true : false : hosho_position == 3 ? false : hosho_position == 4 ? grow([true, false, true, false, false, true], 12)[index % 12] : hosho_position < 6 ? index % 12 == hosho_position ? true : false : hosho_position < 12 ? index % 12 < hosho_position ? true : false : false,
+                'stroke-width':
+                    //(index %3 )* pen_width,
+                    0,
             };
             bar.fill = bar.checked ? 'red' : 'yellow';
             return bar;
@@ -375,7 +370,6 @@ $(document).ready(() => {
         mbira_loop.interval = '8n';
 
         const hosho_loop = new Tone.Pattern(function(time, sector) {
-
             if (sector.attr('fill') == 'red')
                 hosho_synth.triggerAttackRelease("16n", time);
             Tone.Draw.schedule(function() {
@@ -422,7 +416,10 @@ $(document).ready(() => {
             })
         }
 
-        let current_expand_chord_index = 0; { //
+
+        let current_expand_chord_index = 0;
+
+        { // expands_chord
             const button = paper.circle(button_radius, button_radius, button_radius).attr({
                 'fill': 'black',
                 'stroke-width': 0,
@@ -438,6 +435,7 @@ $(document).ready(() => {
                 label.attr('text', current_expand_chord_index);
                 update_chords();
             }
+            mbira_sectors.forEach((sector) => sector.click(callback))
             button.click(callback);
             label.click(callback);
         }
