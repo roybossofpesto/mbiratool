@@ -375,10 +375,10 @@ $(document).ready(() => {
         mbira_loop.interval = '8n';
 
         const hosho_loop = new Tone.Pattern(function(time, sector) {
-            if (sector.index % 3 == hosho_position % 4)
+
+            if (sector.attr('fill') == 'red')
                 hosho_synth.triggerAttackRelease("16n", time);
             Tone.Draw.schedule(function() {
-                console.log(sector.attr('fill'), sector)
                 sector.attr({
                     opacity: 0
                 }).animate({
