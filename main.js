@@ -22,6 +22,30 @@ const root_key_colors = ["#1c96fe", "#feb831", "#aee742", "#b75ac4", "#15cdc2", 
 
 let mbira_synth = undefined;
 
+const helper = (chord, delta, octave) => ({
+    note: `${letters[wrap(chord+delta)]}${octave}`,
+    chord: wrap(chord),
+    octave: octave,
+    delta: delta,
+});
+
+const expands_chord = [
+    (aa, bb, cc) => {
+        return [
+            helper(aa, 0, 4), helper(aa, 0, 5), helper(aa, 0, 3), helper(aa, 4, 5),
+            helper(bb, 0, 4), helper(bb, 0, 5), helper(bb, 0, 3), helper(bb, 4, 5),
+            helper(cc, 0, 4), helper(cc, 0, 5), helper(cc, 0, 3), helper(cc, 4, 5),
+        ];
+    },
+    (aa, bb, cc) => {
+        return [
+            helper(aa, 0, 4), helper(aa, 2, 5), helper(aa, 0, 3), helper(aa, 4, 5),
+            helper(bb, 0, 4), helper(bb, 2, 5), helper(bb, 0, 3), helper(bb, 4, 5),
+            helper(cc, 0, 4), helper(cc, 2, 5), helper(cc, 0, 3), helper(cc, 4, 5),
+        ];
+    },
+]
+
 $(document).ready(() => {
 
     // synth.triggerAttackRelease('C4', 0.5, 0)
@@ -298,18 +322,25 @@ $(document).ready(() => {
             })
         }
 
-        const expand_chord = (aa, bb, cc) => {
-            const helper = (chord, delta, octave) => ({
-                note: `${letters[wrap(chord+delta)]}${octave}`,
-                chord: wrap(chord),
-                octave: octave,
-                delta: delta,
-            });
-            return [
-                helper(aa, 0, 4), helper(aa, 0, 5), helper(aa, 0, 3), helper(aa, 4, 5),
-                helper(bb, 0, 4), helper(bb, 0, 5), helper(bb, 0, 3), helper(bb, 4, 5),
-                helper(cc, 0, 4), helper(cc, 0, 5), helper(cc, 0, 3), helper(cc, 4, 5),
-            ];
+        let current_expand_chord_index = 0;
+        { //
+            const button = paper.circle(button_radius, button_radius, button_radius).attr({
+                'fill': 'black',
+                'stroke-width': 0,
+                'cursor': 'pointer',
+            })
+            const label = paper.text(button_radius, button_radius, 1).attr({
+                'fill': 'white',
+                'cursor': 'pointer',
+            })
+            const callback = () => {
+                current_expand_chord_index ++;
+                current_expand_chord_index %= expands_chord.length;
+                label.attr('text', current_expand_chord_index);
+                update_chords();
+            }
+            button.click(callback);
+            label.click(callback);
         }
 
         const update_chords = () => {
@@ -319,7 +350,7 @@ $(document).ready(() => {
                 const aa = wrap(value + 0 + (index > 2));
                 const bb = wrap(value + 2 + (index > 1));
                 const cc = wrap(value + 4 + (index > 0));
-                chords = chords.concat(expand_chord(aa, bb, cc));
+                chords = chords.concat(expands_chord[current_expand_chord_index](aa, bb, cc));
             })
             mbira_sectors.forEach((sector, index) => {
                 const chord = chords[index];
