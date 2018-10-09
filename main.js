@@ -317,15 +317,25 @@ $(document).ready(() => {
             mbira_sectors.push(sector);
         }
 
+        const grow = (arr, nn, vv = 'yellow') => {
+            while (arr.length < nn)
+                arr.push(vv)
+            return arr;
+        }
+
         let hosho_position = 0;
         const hosho_sectors = [];
         const color_hosho = (index) => ({
             'fill':
                 hosho_position < 3 ? index % 3 == hosho_position ? 'red' : 'yellow' :
-                hosho_position == 4 ? 'blue' :
-                'green',
+                hosho_position == 3 ? 'yellow' :
+                hosho_position == 4 ? grow(['red', 'yellow', 'red', 'yellow', 'yellow', 'red'], 12)[index % 12] :
+                hosho_position < 6 ? index % 12 == hosho_position ? 'red' : 'yellow' :
+                hosho_position < 12 ? index % 12 < hosho_position ? 'red' : 'yellow' :
+                'yellow',
             'stroke-width':
-                (index %3 )* pen_width,
+                //(index %3 )* pen_width,
+                0,
         });
         const update_hosho = () => hosho_sectors.forEach((sector, index) => sector.animate(color_hosho(index), 100))
         for (let kk = 0; kk < 48; kk++) {
@@ -341,7 +351,7 @@ $(document).ready(() => {
             sector.index = kk;
             sector.click(() => {
                 hosho_position += 1;
-                hosho_position %= 5;
+                hosho_position %= 12;
                 update_hosho();
             })
             hosho_sectors.push(sector);
