@@ -54,9 +54,9 @@ const helper_standard = (chords, octaves, nn = 4) => {
 const expands_chord = [
     (aa, bb, cc) => [
         helper_standard([aa, aa], [5, 4], 3),
-        helper_standard([aa], [4], 3),
-        helper_standard([bb], [4], 3),
-        helper_standard([cc], [4], 3),
+        helper_standard([aa, aa], [5, 4], 3),
+        helper_standard([bb, bb], [5, 4], 3),
+        helper_standard([cc, cc], [5, 4], 3),
     ].flat(),
     (aa, bb, cc) => [
         helper_single([aa], 3, 5),
