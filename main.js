@@ -58,7 +58,7 @@ $(document).ready(() => {
             release: .1,
         },
     }).toMaster();
-    hosho_synth.volume.value = -9;
+    hosho_synth.volume.value = -20;
 
     const base_size = 360;
     const knob_size = 70;
@@ -241,6 +241,7 @@ $(document).ready(() => {
             }, time);
         }, mbira_sectors).start(0);
         mbira_loop.interval = '8n';
+
         const hosho_loop = new Tone.Pattern(function(time, sector) {
             if (sector.index % 3 == hosho_position % 4)
                 hosho_synth.triggerAttackRelease("16n", time);
@@ -253,6 +254,7 @@ $(document).ready(() => {
             }, time);
         }, hosho_sectors).start(0);
         hosho_loop.interval = '8n';
+
         Tone.Transport.lookAhead = 0.5;
 
         {
@@ -294,9 +296,9 @@ $(document).ready(() => {
                 delta: delta,
             });
             return [
-                helper(aa, 0, 4), helper(aa, 0, 5), helper(aa, 5, 3), helper(aa, 5, 5),
-                helper(bb, 0, 4), helper(bb, 0, 5), helper(bb, 5, 3), helper(bb, 5, 5),
-                helper(cc, 0, 4), helper(cc, 0, 5), helper(cc, 5, 3), helper(cc, 5, 5),
+                helper(aa, 0, 4), helper(aa, 0, 5), helper(aa, 0, 3), helper(aa, 4, 5),
+                helper(bb, 0, 4), helper(bb, 0, 5), helper(bb, 0, 3), helper(bb, 4, 5),
+                helper(cc, 0, 4), helper(cc, 0, 5), helper(cc, 0, 3), helper(cc, 4, 5),
             ];
         }
 
@@ -314,7 +316,7 @@ $(document).ready(() => {
                 sector.note = chord.note;
                 sector.chord = chord.chord;
                 sector.attr('fill', root_key_colors[chord.chord]
-                    .brighten(chord.delta == 5 ? 1 : chord.delta == 3 ? 2.5 : 0))
+                    .brighten(chord.delta == 4 ? 1 : chord.delta == 2 ? 2.5 : 0))
             })
         }
         return {
