@@ -317,7 +317,7 @@ $(document).ready(() => {
             mbira_sectors.push(sector);
         }
 
-        const grow = (arr, nn, vv = 'yellow') => {
+        const grow = (arr, nn, vv = false) => {
             while (arr.length < nn)
                 arr.push(vv);
             return arr;
@@ -325,18 +325,23 @@ $(document).ready(() => {
 
         let hosho_position = 0;
         const hosho_sectors = [];
-        const color_hosho = (index) => ({
-            'fill':
-                hosho_position < 3 ? index % 3 == hosho_position ? 'red' : 'yellow' :
-                hosho_position == 3 ? 'yellow' :
-                hosho_position == 4 ? grow(['red', 'yellow', 'red', 'yellow', 'yellow', 'red'], 12)[index % 12] :
-                hosho_position < 6 ? index % 12 == hosho_position ? 'red' : 'yellow' :
-                hosho_position < 12 ? index % 12 < hosho_position ? 'red' : 'yellow' :
-                'yellow',
+        const color_hosho = (index) => {
+            const bar =  {
+            'checked':
+                hosho_position < 3 ? index % 3 == hosho_position ? true : false :
+                hosho_position == 3 ? false :
+                hosho_position == 4 ? grow([true, false, true, false, false, true], 12)[index % 12] :
+                hosho_position < 6 ? index % 12 == hosho_position ? true : false :
+                hosho_position < 12 ? index % 12 < hosho_position ? true : false :
+                false,
             'stroke-width':
                 //(index %3 )* pen_width,
                 0,
-        });
+            };
+            bar.fill = bar.checked ? 'red' : 'yellow';
+            return bar;
+        };
+
         const update_hosho = () => hosho_sectors.forEach((sector, index) => sector.animate(color_hosho(index), 100))
         for (let kk = 0; kk < 48; kk++) {
             const sector = paper
@@ -373,6 +378,7 @@ $(document).ready(() => {
             if (sector.index % 3 == hosho_position % 4)
                 hosho_synth.triggerAttackRelease("16n", time);
             Tone.Draw.schedule(function() {
+                console.log(sector.attr('fill'), sector)
                 sector.attr({
                     opacity: 0
                 }).animate({
