@@ -74,6 +74,7 @@ $(document).ready(() => {
     let tuning = parseInt($('#tuning-knob').val());
     let mode = parseInt($('#mode-knob').val());
     let use_letter_alphabet = $('#letters-checkbox').prop('checked');
+    let transpose = parseInt($('#transpose-knob').val())
 
     const mbira_callbacks = $('div.mbira').map(function() {
         const paper = Raphael(this, base_size, base_size);
@@ -186,6 +187,7 @@ $(document).ready(() => {
         const center = base_size / 2;
         const radius_inside = 50;
         const hosho_thickness = 14;
+        const button_radius = 20;
         const radius_outside = center - hosho_thickness - 4 * pen_width;
 
         paper.circle(center, center, radius_outside + 2 * pen_width + hosho_thickness / 2).attr({
@@ -238,7 +240,7 @@ $(document).ready(() => {
         }
 
         const mbira_loop = new Tone.Pattern(function(time, sector) {
-            mbira_synth.triggerAttackRelease(sector.note, "16n", time);
+            mbira_synth.triggerAttackRelease(Tone.Frequency(sector.note).transpose(transpose).toNote(), "16n", time);
             Tone.Draw.schedule(function() {
                 sector.attr({
                     opacity: 0
@@ -392,7 +394,8 @@ $(document).ready(() => {
             update_all();
             return foo;
         },
-    })
+    });
+
     $('#mode-knob').knob({
         'width': knob_size,
         'height': knob_size,
@@ -408,7 +411,8 @@ $(document).ready(() => {
             update_all();
             return foo;
         },
-    })
+    });
+
     $('#bpm-knob').knob({
         'width': knob_size,
         'height': knob_size,
@@ -422,7 +426,23 @@ $(document).ready(() => {
             $('div.view.bpm').text(foo);
             return foo;
         },
-    })
+    });
+
+    $('#transpose-knob').knob({
+        'width': knob_size,
+        'height': knob_size,
+        'min': -12,
+        'max': 0,
+        'fgColor': 'black',
+        'thickness': .5,
+        'displayInput': false,
+        'format': (foo) => {
+            transpose = foo;
+            $('div.view.transpose').text(foo);
+            return foo;
+        },
+    });
+
     $('#letters-checkbox').on('change', function() {
         use_letter_alphabet = this.checked;
         update_all();
