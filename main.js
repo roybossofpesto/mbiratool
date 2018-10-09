@@ -30,18 +30,40 @@ const helper = (chord, delta, octave) => ({
 });
 
 const helper_single = (chords, nn = 4, octave = 4) => {
-    const foo = chords.map((chord) => ({
-        note: `${letters[wrap(chord)]}${octave}`,
-        chord: wrap(chord),
-        octave: octave,
-        delta: 0,
-    }));
+    const octaves = [];
+    while (octaves.length < chords.length)
+        octaves.push(octave);
+    return helper_standard(chords, octaves, nn);
+}
+
+const helper_standard = (chords, octaves, nn = 4) => {
+    const foo = chords.map((chord, index) => {
+        const octave = octaves[index];
+        return {
+            note: `${letters[wrap(chord)]}${octave}`,
+            chord: wrap(chord),
+            octave: octave,
+            delta: 0,
+        };
+    })
     while (foo.length < nn)
         foo.push(null);
     return foo;
-};
+}
 
 const expands_chord = [
+    (aa, bb, cc) => [
+        helper_standard([aa, aa], [5, 4], 3),
+        helper_standard([aa], [4], 3),
+        helper_standard([bb], [4], 3),
+        helper_standard([cc], [4], 3),
+    ].flat(),
+    (aa, bb, cc) => [
+        helper_single([aa], 3, 5),
+        helper_single([aa], 3),
+        helper_single([bb], 3),
+        helper_single([cc], 3),
+    ].flat(),
     (aa, bb, cc) => [
         helper_single([aa], 3),
         helper_single([aa], 3),
@@ -73,9 +95,9 @@ const expands_chord = [
     },
     (aa, bb, cc) => {
         const foo = [
-            helper_single(aa),
-            helper_single(bb),
-            helper_single(cc),
+            helper_single([aa]),
+            helper_single([bb]),
+            helper_single([cc]),
         ].flat();
         return foo;
     },
