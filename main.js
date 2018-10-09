@@ -292,6 +292,7 @@ $(document).ready(() => {
             $(document).keydown((evt) => {
                 if (evt.key != ' ') return;
                 toggle_playback();
+                evt.preventDefault();
             })
         }
 
