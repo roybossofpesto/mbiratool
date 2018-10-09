@@ -44,6 +44,13 @@ const expands_chord = [
             helper(cc, 0, 4), helper(cc, 2, 5), helper(cc, 0, 3), helper(cc, 4, 5),
         ];
     },
+    (aa, bb, cc) => {
+        return [
+            helper(aa, 0, 5), null, helper(aa, 0, 5), null,
+            helper(bb, 0, 5), null, helper(bb, 0, 5), null,
+            helper(cc, 0, 5), null, helper(cc, 0, 5), null,
+        ];
+    },
 ]
 
 $(document).ready(() => {
@@ -72,7 +79,7 @@ $(document).ready(() => {
 
     // const mbira_synth = new Tone.Synth().toMaster()
     // const mbira_synth = new Tone.FMSynth().toMaster();
-    mbira_synth = new Tone.PolySynth(12, Tone.Synth).toMaster();
+    mbira_synth = new Tone.PolySynth(24, Tone.Synth).toMaster();
     mbira_synth.voices.forEach((voice) => {
         voice.envelope.attack = 0.0005;
         voice.envelope.release = 10;
@@ -264,7 +271,7 @@ $(document).ready(() => {
         }
 
         const mbira_loop = new Tone.Pattern(function(time, sector) {
-            mbira_synth.triggerAttackRelease(Tone.Frequency(sector.note).transpose(transpose).toNote(), "16n", time);
+            if (sector.note) mbira_synth.triggerAttackRelease(Tone.Frequency(sector.note).transpose(transpose).toNote(), "16n", time);
             Tone.Draw.schedule(function() {
                 sector.attr({
                     opacity: 0
@@ -354,6 +361,13 @@ $(document).ready(() => {
             })
             mbira_sectors.forEach((sector, index) => {
                 const chord = chords[index];
+                if (chord == null) {
+                    console.log('null')
+                    sector.attr('fill', 'black')
+                    sector.note = null;
+                    sector.chord = null;
+                    return;
+                }
                 sector.note = chord.note;
                 sector.chord = chord.chord;
                 sector.attr('fill', root_key_colors[chord.chord]
