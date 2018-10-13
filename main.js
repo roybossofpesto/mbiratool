@@ -260,11 +260,11 @@ $(document).ready(() => {
     const dial_callbacks = $('div.dial').map(function() {
         const paper = Raphael(this, base_size, base_size);
         paper.customAttributes.arc = function(centerX, centerY, startAngle, endAngle, innerR, outerR) {
-            var radians = Math.PI / 180,
-                largeArc = +(endAngle - startAngle > 180);
             // calculate the start and end points for both inner and outer edges of the arc segment
             // the -90s are about starting the angle measurement from the top get rid of these if this doesn't suit your needs
-            outerX1 = centerX + outerR * Math.cos((startAngle - 90) * radians),
+            const radians = Math.PI / 180,
+                largeArc = +(endAngle - startAngle > 180);
+                outerX1 = centerX + outerR * Math.cos((startAngle - 90) * radians),
                 outerY1 = centerY + outerR * Math.sin((startAngle - 90) * radians),
                 outerX2 = centerX + outerR * Math.cos((endAngle - 90) * radians),
                 outerY2 = centerY + outerR * Math.sin((endAngle - 90) * radians),
@@ -274,7 +274,7 @@ $(document).ready(() => {
                 innerY2 = centerY + innerR * Math.sin((startAngle - 90) * radians);
 
             // build the path array
-            var path = [
+            const path = [
                 ["M", outerX1, outerY1], //move to the start point
                 ["A", outerR, outerR, 0, largeArc, 1, outerX2, outerY2], //draw the outer edge of the arc
                 ["L", innerX1, innerY1], //draw a line inwards to the start of the inner edge of the arc

@@ -16,25 +16,31 @@
     <script type="text/javascript">
         $(() => {
             $('div.shape').each(function() {
-                const paper = Raphael(this, 100, 100);
-                const square_path = 'M20,80L20,20L80,20L80,80z'
-                const diamond_path = 'M50,70L30,50,L50,30L70,50z'
-                const triangle_path = 'M20,80L50,20L80,80z'
-                const shape = paper
-                    .path()
-                    .attr({
-                        'stroke-width': 0,
-                        path: diamond_path,
-                        fill: 'red',
-                    })
-                    .hover(() => shape.animate({
-                        path: square_path
-                    }, 100), () => shape.animate({
-                        path: diamond_path
-                    }, 100))
-                    .click(() => shape.animate({
-                        path: triangle_path
-                    }, 100))
+                const paper = Raphael(this, 800, 800);
+                const square_path = (size) => `M${-size/2},${-size/2}l${size},0l0,${size}l${-size},0z`
+                const diamond_path = (size) => `M${-size/Math.sqrt(2)},0L0,${-size/Math.sqrt(2)}L${size/Math.sqrt(2)},0L0,${size/Math.sqrt(2)}z`
+                const triangle_path = (size) => `M${-Math.cos(Math.PI/6)*size},${Math.sin(Math.PI/6)*size}L0,-${size}L${Math.cos(Math.PI/6)*size},${Math.sin(Math.PI/6)*size}z`
+
+                paper.circle(400, 400, 300)
+                for (let kk = 0; kk < 48; kk++) {
+                    const shape = paper
+                        .path()
+                        .attr({
+                            'stroke-width': 1,
+                            path: diamond_path(20),
+                            fill: 'red',
+                        })
+                        .rotate(360 * kk / 48, 400, 400)
+                        .translate(400, 100)
+                        .hover(() => shape.animate({
+                            path: square_path(40)
+                        }, 100), () => shape.animate({
+                            path: diamond_path(20),
+                        }, 100))
+                        .click(() => shape.animate({
+                            path: triangle_path(30)
+                        }, 100));
+                }
 
             })
         })
@@ -42,45 +48,6 @@
 </head>
 
 <body>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
     <div class="shape"></div>
 </body>
 
