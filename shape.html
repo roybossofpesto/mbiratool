@@ -18,7 +18,8 @@
             $('div.shape').each(function() {
                 const paper = Raphael(this, 100, 100);
                 const square_path = 'M20,80L20,20L80,20L80,80z'
-                const diamond_path = 'M30,50,L50,30L70,50L50,70z'
+                const diamond_path = 'M50,70L30,50,L50,30L70,50z'
+                const triangle_path = 'M20,80L50,20L80,80z'
                 const shape = paper
                     .path()
                     .attr({
@@ -26,14 +27,15 @@
                         path: diamond_path,
                         fill: 'red',
                     })
+                    .hover(() => shape.animate({
+                        path: square_path
+                    }, 100), () => shape.animate({
+                        path: diamond_path
+                    }, 100))
+                    .click(() => shape.animate({
+                        path: triangle_path
+                    }, 100))
 
-                $(this).hover(() => shape.animate({
-                    path: square_path
-                }, 100), () => shape.animate({
-                    path: diamond_path
-                }, 100))
-
-                console.log('hello', shape.attr('path'))
             })
         })
     </script>
