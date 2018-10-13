@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="jquery.min.js" charset="utf-8"></script>
+    <script src="raphael.min.js" charset="utf-8"></script>
+    <style media="screen">
+        div.shape {
+            display: inline-block;
+        }
+    </style>
+    <title>shape interpolation</title>
+    <script type="text/javascript">
+        $(() => {
+            $('div.shape').each(function() {
+                const paper = Raphael(this, 100, 100);
+                const square_path = 'M20,80L20,20L80,20L80,80z'
+                const diamond_path = 'M30,50,L50,30L70,50L50,70z'
+                const shape = paper
+                    .path()
+                    .attr({
+                        'stroke-width': 0,
+                        path: diamond_path,
+                        fill: 'red',
+                    })
+
+                $(this).hover(() => shape.animate({
+                    path: square_path
+                }, 100), () => shape.animate({
+                    path: diamond_path
+                }, 100))
+
+                console.log('hello', shape.attr('path'))
+            })
+        })
+    </script>
+</head>
+
+<body>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+</body>
+
+</html>
