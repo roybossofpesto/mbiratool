@@ -264,7 +264,7 @@ $(document).ready(() => {
             // calculate the start and end points for both inner and outer edges of the arc segment
             // the -90s are about starting the angle measurement from the top get rid of these if this doesn't suit your needs
             const radians = Math.PI / 180,
-                largeArc = +(endAngle - startAngle > 180);
+                largeArc = +(endAngle - startAngle > 180),
                 outerX1 = centerX + outerR * Math.cos((startAngle - 90) * radians),
                 outerY1 = centerY + outerR * Math.sin((startAngle - 90) * radians),
                 outerX2 = centerX + outerR * Math.cos((endAngle - 90) * radians),
@@ -354,7 +354,7 @@ $(document).ready(() => {
                     path: diamond_path(12),
                 }, color_hosho(kk)))
                 .rotate(360 * kk / 48, center, center)
-                .translate(center + 11, 1+ center-radius_outside-hosho_thickness/2 - 5);
+                .translate(center + 11, 1 + center - radius_outside - hosho_thickness / 2 - 5);
             sector.index = kk;
             sector.click(() => {
                 hosho_position += 1;
@@ -365,7 +365,7 @@ $(document).ready(() => {
         }
 
         const mbira_loop = new Tone.Pattern(function(time, sector) {
-            const transpose = transpose_coarse + transpose_fine/100.;
+            const transpose = transpose_coarse + transpose_fine / 100.;
             if (sector.note) mbira_synth.triggerAttackRelease(Tone.Frequency(sector.note).transpose(transpose), "16n", time);
             Tone.Draw.schedule(function() {
                 sector.attr({
@@ -382,11 +382,11 @@ $(document).ready(() => {
                 hosho_synth.triggerAttackRelease("16n", time);
             Tone.Draw.schedule(function() {
                 sector.attr({
-                    path: square_path(12),
-                })
-                .animate({
-                    path: diamond_path(12),
-                }, 300)
+                        path: square_path(12),
+                    })
+                    .animate({
+                        path: diamond_path(12),
+                    }, 300)
             }, time);
         }, hosho_sectors).start(0);
         hosho_loop.interval = '8n';
@@ -445,6 +445,28 @@ $(document).ready(() => {
                 update_chords();
             }
             mbira_sectors.forEach((sector) => sector.click(callback))
+            button.click(callback);
+            label.click(callback);
+        }
+
+        { // hosho_volume
+            let volume = 0;
+            const button = paper.circle(button_radius, base_size - button_radius, button_radius).attr({
+                'fill': 'black',
+                'stroke-width': 0,
+                'cursor': 'pointer',
+            })
+            const label = paper.text(button_radius, base_size - button_radius, '0').attr({
+                'fill': 'white',
+                'cursor': 'pointer',
+            })
+            const callback = () => {
+                volume += 10;
+                if (volume > 20) volume = -20;
+                hosho_synth.volume.value = volume - 20;
+                console.log(volume)
+                label.attr('text', volume);
+            }
             button.click(callback);
             label.click(callback);
         }
