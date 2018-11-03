@@ -11,6 +11,9 @@
         div.shape {
             display: inline-block;
         }
+        body {
+            background-color: black;
+        }
     </style>
     <title>shape interpolation</title>
     <script type="text/javascript">
@@ -21,11 +24,12 @@
                 const diamond_path = (size) => `M${-size/Math.sqrt(2)},0L0,${-size/Math.sqrt(2)}L${size/Math.sqrt(2)},0L0,${size/Math.sqrt(2)}z`
                 const triangle_path = (size) => `M${-Math.cos(Math.PI/6)*size},${Math.sin(Math.PI/6)*size}L0,-${size}L${Math.cos(Math.PI/6)*size},${Math.sin(Math.PI/6)*size}z`
 
-                const off_color = '#777';
-                const on_color = 'white';
+                const off_color = '#eee';
+                const on_color = '#777';
 
                 paper.circle(400, 400, 300).attr({
                     'stroke-width': 40,
+                    'stroke': '#eee',
                 })
                 const shapes = [];
                 for (let kk = 0; kk < 48; kk++) {
