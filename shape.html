@@ -21,6 +21,9 @@
                 const diamond_path = (size) => `M${-size/Math.sqrt(2)},0L0,${-size/Math.sqrt(2)}L${size/Math.sqrt(2)},0L0,${size/Math.sqrt(2)}z`
                 const triangle_path = (size) => `M${-Math.cos(Math.PI/6)*size},${Math.sin(Math.PI/6)*size}L0,-${size}L${Math.cos(Math.PI/6)*size},${Math.sin(Math.PI/6)*size}z`
 
+                const off_color = 'white';
+                const on_color = 'black';
+
                 paper.circle(400, 400, 300)
                 for (let kk = 0; kk < 48; kk++) {
                     const shape = paper
@@ -28,12 +31,12 @@
                         .attr({
                             'stroke-width': 1,
                             path: diamond_path(20),
-                            fill: 'red',
+                            fill: kk % 3 == 0 ? on_color : off_color,
                         })
                         .rotate(360 * kk / 48, 400, 400)
                         .translate(400, 100)
                         .hover(() => shape.animate({
-                            path: square_path(40)
+                            path: square_path(40),
                         }, 100), () => shape.animate({
                             path: diamond_path(20),
                         }, 100))
