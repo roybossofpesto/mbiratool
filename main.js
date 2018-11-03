@@ -176,7 +176,8 @@ $(document).ready(() => {
     let tuning = parseInt($('#tuning-knob').val());
     let mode = parseInt($('#mode-knob').val());
     let use_letter_alphabet = $('#letters-checkbox').prop('checked');
-    let transpose = parseInt($('#transpose-knob').val())
+    let transpose_coarse = parseInt($('#transpose-knob-coarse').val())
+    let transpose_fine = parseInt($('#transpose-knob-fine').val())
 
     const mbira_callbacks = $('div.mbira').map(function() {
         const paper = Raphael(this, base_size, base_size);
@@ -364,7 +365,8 @@ $(document).ready(() => {
         }
 
         const mbira_loop = new Tone.Pattern(function(time, sector) {
-            if (sector.note) mbira_synth.triggerAttackRelease(Tone.Frequency(sector.note).transpose(transpose).toNote(), "16n", time);
+            const transpose = transpose_coarse + transpose_fine/100.;
+            if (sector.note) mbira_synth.triggerAttackRelease(Tone.Frequency(sector.note).transpose(transpose), "16n", time);
             Tone.Draw.schedule(function() {
                 sector.attr({
                     opacity: 0
@@ -379,7 +381,6 @@ $(document).ready(() => {
             if (sector.attr('fill') == on_color)
                 hosho_synth.triggerAttackRelease("16n", time);
             Tone.Draw.schedule(function() {
-                console.log(sector.attr('fill'))
                 sector.attr({
                     path: square_path(12),
                 })
@@ -570,17 +571,34 @@ $(document).ready(() => {
         },
     });
 
-    $('#transpose-knob').knob({
+    $('#transpose-knob-coarse').knob({
         'width': knob_size,
         'height': knob_size,
         'min': -12,
-        'max': 0,
+        'max': 12,
         'fgColor': 'black',
         'thickness': .5,
         'displayInput': false,
         'format': (foo) => {
-            transpose = foo;
-            $('div.view.transpose').text(foo);
+            transpose_coarse = foo;
+            const transpose = transpose_coarse + transpose_fine / 100.;
+            $('div.view.transpose').text(transpose);
+            return foo;
+        },
+    });
+
+    $('#transpose-knob-fine').knob({
+        'width': knob_size,
+        'height': knob_size,
+        'min': -100,
+        'max': 100,
+        'fgColor': 'black',
+        'thickness': .5,
+        'displayInput': false,
+        'format': (foo) => {
+            transpose_fine = foo;
+            const transpose = transpose_coarse + transpose_fine / 100.;
+            $('div.view.transpose').text(transpose);
             return foo;
         },
     });
