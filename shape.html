@@ -21,10 +21,13 @@
                 const diamond_path = (size) => `M${-size/Math.sqrt(2)},0L0,${-size/Math.sqrt(2)}L${size/Math.sqrt(2)},0L0,${size/Math.sqrt(2)}z`
                 const triangle_path = (size) => `M${-Math.cos(Math.PI/6)*size},${Math.sin(Math.PI/6)*size}L0,-${size}L${Math.cos(Math.PI/6)*size},${Math.sin(Math.PI/6)*size}z`
 
-                const off_color = 'white';
-                const on_color = 'black';
+                const off_color = '#777';
+                const on_color = 'white';
 
-                paper.circle(400, 400, 300)
+                paper.circle(400, 400, 300).attr({
+                    'stroke-width': 40,
+                })
+                const shapes = [];
                 for (let kk = 0; kk < 48; kk++) {
                     const shape = paper
                         .path()
@@ -43,7 +46,23 @@
                         .click(() => shape.animate({
                             path: triangle_path(30)
                         }, 100));
+                    shapes.push(shape);
                 }
+
+                let current = 0;
+                const iterate = () => {
+                    current += 1;
+                    current %= 48;
+                    shapes[current]
+                        .attr({
+                            path: square_path(25),
+                        })
+                        .animate({
+                            path: diamond_path(20),
+                        }, 200);
+                    setTimeout(iterate, 200);
+                };
+                iterate();
 
             })
         })
