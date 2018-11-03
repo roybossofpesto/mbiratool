@@ -327,8 +327,9 @@ $(document).ready(() => {
 
         let hosho_position = 0;
         const hosho_sectors = [];
-        const on_color = '#eee';
-        const off_color = '#555';
+        const hosho_on_color = '#eee';
+        const hosho_off_color = '#555';
+        const hosho_size = 12;
         const color_hosho = (index) => {
             const bar = {
                 'checked': hosho_position < 3 ? index % 3 == hosho_position ? true : false : hosho_position == 3 ? false : hosho_position == 4 ? grow([true, false, true, false, false, true], 12)[index % 12] : hosho_position < 6 ? index % 12 == hosho_position ? true : false : hosho_position < 12 ? index % 12 < hosho_position ? true : false : false,
@@ -336,26 +337,37 @@ $(document).ready(() => {
                     //(index %3 )* pen_width,
                     0,
             };
-            bar.fill = bar.checked ? on_color : off_color;
+            bar.fill = bar.checked ? hosho_on_color : hosho_off_color;
             return bar;
         };
 
+        // hosho sectors init
+        const hosho_ring = paper.circle(center, center, radius_outside + 2 * pen_width + hosho_thickness / 2).attr({
+            'fill': null,
+            'stroke-width': pen_width + hosho_thickness,
+            'stroke': hosho_off_color,
+            'cursor': 'pointer',
+        });
+        hosho_ring.click(() => {
+            hosho_position += 1;
+            hosho_position %= 12;
+            update_hosho();
+        })
+
         const square_path = (size) => `M${-size/2},${-size/2}l${size},0l0,${size}l${-size},0z`
         const diamond_path = (size) => `M${-size/Math.sqrt(2)},0L0,${-size/Math.sqrt(2)}L${size/Math.sqrt(2)},0L0,${size/Math.sqrt(2)}z`
-        const triangle_path = (size) => `M${-Math.cos(Math.PI/6)*size},${Math.sin(Math.PI/6)*size}L0,-${size}L${Math.cos(Math.PI/6)*size},${Math.sin(Math.PI/6)*size}z`
-
+        // const triangle_path = (size) => `M${-Math.cos(Math.PI/6)*size},${Math.sin(Math.PI/6)*size}L0,-${size}L${Math.cos(Math.PI/6)*size},${Math.sin(Math.PI/6)*size}z`
         const update_hosho = () => hosho_sectors.forEach((sector, index) => sector.attr(color_hosho(index)));
-
         for (let kk = 0; kk < 48; kk++) {
             const sector = paper
                 .path()
                 .attr(Object.assign({
                     'stroke-width': 1,
-                    path: diamond_path(12),
+                    path: square_path(hosho_size),
                     cursor: 'pointer',
                 }, color_hosho(kk)))
-                .rotate(360 * kk / 48, center, center)
-                .translate(center + 11, 1 + center - radius_outside - hosho_thickness / 2 - 5);
+                .rotate(360 * (kk+.5) / 48, center, center)
+                .translate(center, center - radius_outside - hosho_thickness /2 - 2*pen_width );
             sector.index = kk;
             sector.click(() => {
                 hosho_position += 1;
@@ -365,6 +377,7 @@ $(document).ready(() => {
             hosho_sectors.push(sector);
         }
 
+        // Tone.js patterns -- loops
         const mbira_loop = new Tone.Pattern(function(time, sector) {
             const transpose = transpose_coarse + transpose_fine / 100.;
             if (sector.note) mbira_synth.triggerAttackRelease(Tone.Frequency(sector.note).transpose(transpose), "16n", time);
@@ -379,14 +392,14 @@ $(document).ready(() => {
         mbira_loop.interval = '8n';
 
         const hosho_loop = new Tone.Pattern(function(time, sector) {
-            if (sector.attr('fill') == on_color)
+            if (sector.attr('fill') == hosho_on_color)
                 hosho_synth.triggerAttackRelease("16n", time);
             Tone.Draw.schedule(function() {
                 sector.attr({
-                        path: square_path(12),
+                        path: diamond_path(hosho_size),
                     })
                     .animate({
-                        path: diamond_path(12),
+                        path: square_path(hosho_size),
                     }, 300)
             }, time);
         }, hosho_sectors).start(0);
