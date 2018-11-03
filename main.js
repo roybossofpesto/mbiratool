@@ -326,8 +326,8 @@ $(document).ready(() => {
 
         let hosho_position = 0;
         const hosho_sectors = [];
-        const on_color = 'white';
-        const off_color = '#333';
+        const on_color = '#eee';
+        const off_color = '#555';
         const color_hosho = (index) => {
             const bar = {
                 'checked': hosho_position < 3 ? index % 3 == hosho_position ? true : false : hosho_position == 3 ? false : hosho_position == 4 ? grow([true, false, true, false, false, true], 12)[index % 12] : hosho_position < 6 ? index % 12 == hosho_position ? true : false : hosho_position < 12 ? index % 12 < hosho_position ? true : false : false,
@@ -343,23 +343,17 @@ $(document).ready(() => {
         const diamond_path = (size) => `M${-size/Math.sqrt(2)},0L0,${-size/Math.sqrt(2)}L${size/Math.sqrt(2)},0L0,${size/Math.sqrt(2)}z`
         const triangle_path = (size) => `M${-Math.cos(Math.PI/6)*size},${Math.sin(Math.PI/6)*size}L0,-${size}L${Math.cos(Math.PI/6)*size},${Math.sin(Math.PI/6)*size}z`
 
-        const update_hosho = () => hosho_sectors.forEach((sector, index) => sector
-            .attr({
-                path: square_path(25),
-            })
-            .animate({
-                path: diamond_path(20),
-            }, 200));
+        const update_hosho = () => hosho_sectors.forEach((sector, index) => sector.attr(color_hosho(index)));
 
         for (let kk = 0; kk < 48; kk++) {
             const sector = paper
                 .path()
                 .attr(Object.assign({
                     'stroke-width': 1,
-                    path: diamond_path(20),
+                    path: diamond_path(12),
                 }, color_hosho(kk)))
                 .rotate(360 * kk / 48, center, center)
-                .translate(radius_outside, 0);
+                .translate(center + 11, 1+ center-radius_outside-hosho_thickness/2 - 5);
             sector.index = kk;
             sector.click(() => {
                 hosho_position += 1;
@@ -382,15 +376,16 @@ $(document).ready(() => {
         mbira_loop.interval = '8n';
 
         const hosho_loop = new Tone.Pattern(function(time, sector) {
-            if (sector.attr('fill') == 'red')
+            if (sector.attr('fill') == on_color)
                 hosho_synth.triggerAttackRelease("16n", time);
             Tone.Draw.schedule(function() {
+                console.log(sector.attr('fill'))
                 sector.attr({
-                    path: square_path(25),
+                    path: square_path(12),
                 })
                 .animate({
-                    path: diamond_path(20),
-                }, 200)
+                    path: diamond_path(12),
+                }, 300)
             }, time);
         }, hosho_sectors).start(0);
         hosho_loop.interval = '8n';
