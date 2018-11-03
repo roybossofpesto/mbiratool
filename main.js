@@ -352,6 +352,7 @@ $(document).ready(() => {
                 .attr(Object.assign({
                     'stroke-width': 1,
                     path: diamond_path(12),
+                    cursor: 'pointer',
                 }, color_hosho(kk)))
                 .rotate(360 * kk / 48, center, center)
                 .translate(center + 11, 1 + center - radius_outside - hosho_thickness / 2 - 5);
