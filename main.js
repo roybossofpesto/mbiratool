@@ -326,6 +326,8 @@ $(document).ready(() => {
 
         let hosho_position = 0;
         const hosho_sectors = [];
+        const on_color = 'white';
+        const off_color = '#333';
         const color_hosho = (index) => {
             const bar = {
                 'checked': hosho_position < 3 ? index % 3 == hosho_position ? true : false : hosho_position == 3 ? false : hosho_position == 4 ? grow([true, false, true, false, false, true], 12)[index % 12] : hosho_position < 6 ? index % 12 == hosho_position ? true : false : hosho_position < 12 ? index % 12 < hosho_position ? true : false : false,
@@ -333,21 +335,31 @@ $(document).ready(() => {
                     //(index %3 )* pen_width,
                     0,
             };
-            bar.fill = bar.checked ? 'red' : 'yellow';
+            bar.fill = bar.checked ? on_color : off_color;
             return bar;
         };
 
-        const update_hosho = () => hosho_sectors.forEach((sector, index) => sector.animate(color_hosho(index), 100))
+        const square_path = (size) => `M${-size/2},${-size/2}l${size},0l0,${size}l${-size},0z`
+        const diamond_path = (size) => `M${-size/Math.sqrt(2)},0L0,${-size/Math.sqrt(2)}L${size/Math.sqrt(2)},0L0,${size/Math.sqrt(2)}z`
+        const triangle_path = (size) => `M${-Math.cos(Math.PI/6)*size},${Math.sin(Math.PI/6)*size}L0,-${size}L${Math.cos(Math.PI/6)*size},${Math.sin(Math.PI/6)*size}z`
+
+        const update_hosho = () => hosho_sectors.forEach((sector, index) => sector
+            .attr({
+                path: square_path(25),
+            })
+            .animate({
+                path: diamond_path(20),
+            }, 200));
+
         for (let kk = 0; kk < 48; kk++) {
             const sector = paper
                 .path()
                 .attr(Object.assign({
-                    'cursor': 'pointer',
-                    "stroke-width": 0,
-                    'stroke': "#f0f",
-                    'arc': [center, center, 0, 360 / 48 + .5, radius_outside + 2 * pen_width, radius_outside + 2 * pen_width + hosho_thickness],
+                    'stroke-width': 1,
+                    path: diamond_path(20),
                 }, color_hosho(kk)))
-                .rotate(360 * kk / 48, center, center);
+                .rotate(360 * kk / 48, center, center)
+                .translate(radius_outside, 0);
             sector.index = kk;
             sector.click(() => {
                 hosho_position += 1;
@@ -374,10 +386,11 @@ $(document).ready(() => {
                 hosho_synth.triggerAttackRelease("16n", time);
             Tone.Draw.schedule(function() {
                 sector.attr({
-                    opacity: 0
-                }).animate({
-                    opacity: 1
-                }, 100)
+                    path: square_path(25),
+                })
+                .animate({
+                    path: diamond_path(20),
+                }, 200)
             }, time);
         }, hosho_sectors).start(0);
         hosho_loop.interval = '8n';
