@@ -370,11 +370,19 @@ $(document).ready(() => {
             'stroke': hosho_off_color,
             'cursor': 'pointer',
         });
-        hosho_ring.click(() => {
+
+        const inc_hosho_pattern = () => {
             hosho_position += 1;
             hosho_position %= 12;
             update_hosho();
-        })
+        };
+        const dec_hosho_pattern = () => {
+            hosho_position += 11;
+            hosho_position %= 12;
+            update_hosho();
+        };
+
+        hosho_ring.click(inc_hosho_pattern)
 
         const square_path = (size) => `M${-size/2},${-size/2}l${size},0l0,${size}l${-size},0z`
         const diamond_path = (size) => `M${-size/Math.sqrt(2)},0L0,${-size/Math.sqrt(2)}L${size/Math.sqrt(2)},0L0,${size/Math.sqrt(2)}z`
@@ -495,17 +503,10 @@ $(document).ready(() => {
         }
 
         { // hosho_pattern
-            createButton(paper, -1, 0, 'HP+', () => {
-                hosho_position += 1;
-                hosho_position %= 12;
-                update_hosho();
-            })
-            createButton(paper, -1, 1, 'HP-', () => {
-                hosho_position += 11;
-                hosho_position %= 12;
-                update_hosho();
-            })
+            createButton(paper, -1, 0, 'HP+', inc_hosho_pattern)
+            createButton(paper, -1, 1, 'HP-', dec_hosho_pattern)
         }
+
         const update_chords = () => {
             let chords = [];
             const value = mode + tuning;
