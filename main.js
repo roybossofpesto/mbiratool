@@ -1,3 +1,5 @@
+'use strict';
+
 const wrap = (xx) => {
     return xx % 7;
 };
@@ -179,8 +181,29 @@ $(document).ready(() => {
     let transpose_coarse = parseInt($('#transpose-knob-coarse').val())
     let transpose_fine = parseInt($('#transpose-knob-fine').val())
 
+    const createButton = (paper, row, col, label_str, callback, button_radius = 18, button_separation = 2) => {
+        const step = 2 * button_radius + button_separation
+        const cx = step > 0 ? col * step + button_radius : base_size + col * step - button_radius;
+        const cy = row * step + button_radius;
+        const cursor = callback ? "pointer" : "default";
+        const button = paper.circle(cx, cy, button_radius).attr({
+            'fill': 'black',
+            'stroke-width': 0,
+            'cursor': cursor,
+        })
+        const label = paper.text(cx, cy, label_str).attr({
+            'fill': 'white',
+            'cursor': cursor,
+        })
+        button.click(callback);
+        label.click(callback);
+        return label;
+    }
+
     const mbira_callbacks = $('div.mbira').map(function() {
         const paper = Raphael(this, base_size, base_size);
+
+
 
         paper.rect(pen_width, pen_width, base_size - 2 * pen_width, base_size - 2 * pen_width, 10).attr({
             "stroke-width": 2 * pen_width,
@@ -290,7 +313,6 @@ $(document).ready(() => {
         const center = base_size / 2;
         const radius_inside = 50;
         const hosho_thickness = 14;
-        const button_radius = 20;
         const radius_outside = center - hosho_thickness - 4 * pen_width;
 
         paper.circle(center, center, radius_outside + 2 * pen_width + hosho_thickness / 2).attr({
@@ -366,8 +388,8 @@ $(document).ready(() => {
                     path: square_path(hosho_size),
                     cursor: 'pointer',
                 }, color_hosho(kk)))
-                .rotate(360 * (kk+.5) / 48, center, center)
-                .translate(center, center - radius_outside - hosho_thickness /2 - 2*pen_width );
+                .rotate(360 * (kk + .5) / 48, center, center)
+                .translate(center, center - radius_outside - hosho_thickness / 2 - 2 * pen_width);
             sector.index = kk;
             sector.click(() => {
                 hosho_position += 1;
@@ -443,46 +465,34 @@ $(document).ready(() => {
         let current_expand_chord_index = 0;
 
         { // expands_chord
-            const button = paper.circle(button_radius, button_radius, button_radius).attr({
-                'fill': 'black',
-                'stroke-width': 0,
-                'cursor': 'pointer',
-            })
-            const label = paper.text(button_radius, button_radius, '0').attr({
-                'fill': 'white',
-                'cursor': 'pointer',
-            })
-            const callback = () => {
+            const label = createButton(paper, 1, 0, '0')
+            const inc_callback = () => {
                 current_expand_chord_index++;
                 current_expand_chord_index %= expands_chord.length;
                 label.attr('text', current_expand_chord_index);
                 update_chords();
             }
-            mbira_sectors.forEach((sector) => sector.click(callback))
-            button.click(callback);
-            label.click(callback);
+            const dec_callback = () => {
+                current_expand_chord_index += expands_chord.length - 1;
+                current_expand_chord_index %= expands_chord.length;
+                label.attr('text', current_expand_chord_index);
+                update_chords();
+            }
+            createButton(paper, 0, 0, 'EC+', inc_callback);
+            createButton(paper, 0, 1, 'EC-', dec_callback);
+            mbira_sectors.forEach(sector => sector.click(inc_callback))
         }
 
         { // hosho_volume
             let volume = 0;
-            const button = paper.circle(button_radius, base_size - button_radius, button_radius).attr({
-                'fill': 'black',
-                'stroke-width': 0,
-                'cursor': 'pointer',
-            })
-            const label = paper.text(button_radius, base_size - button_radius, '0').attr({
-                'fill': 'white',
-                'cursor': 'pointer',
-            })
             const callback = () => {
                 volume += 10;
                 if (volume > 20) volume = -20;
                 hosho_synth.volume.value = volume - 20;
                 console.log(volume)
-                label.attr('text', volume);
+                label.attr('text', `V ${volume}`);
             }
-            button.click(callback);
-            label.click(callback);
+            createButton(paper, 0, -1, 'VV')
         }
 
         const update_chords = () => {
