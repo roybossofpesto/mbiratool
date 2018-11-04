@@ -183,8 +183,8 @@ $(document).ready(() => {
 
     const createButton = (paper, row, col, label_str, callback, button_radius = 18, button_separation = 2) => {
         const step = 2 * button_radius + button_separation
-        const cx = step > 0 ? col * step + button_radius : base_size + col * step - button_radius;
-        const cy = row * step + button_radius;
+        const cx = col >= 0 ? col * step + button_radius : base_size + col * step + step - button_radius;
+        const cy = row >= 0 ? row * step + button_radius : base_size + row * step + step - button_radius;
         const cursor = callback ? "pointer" : "default";
         const button = paper.circle(cx, cy, button_radius).attr({
             'fill': 'black',
@@ -489,12 +489,23 @@ $(document).ready(() => {
                 volume += 10;
                 if (volume > 20) volume = -20;
                 hosho_synth.volume.value = volume - 20;
-                console.log(volume)
-                label.attr('text', `V ${volume}`);
+                label.attr('text', `HV ${volume}`);
             }
-            createButton(paper, 0, -1, 'VV')
+            const label = createButton(paper, -2, 0, `HV ${volume}`, callback)
         }
 
+        { // hosho_pattern
+            createButton(paper, -1, 0, 'HP+', () => {
+                hosho_position += 1;
+                hosho_position %= 12;
+                update_hosho();
+            })
+            createButton(paper, -1, 1, 'HP-', () => {
+                hosho_position += 11;
+                hosho_position %= 12;
+                update_hosho();
+            })
+        }
         const update_chords = () => {
             let chords = [];
             const value = mode + tuning;
