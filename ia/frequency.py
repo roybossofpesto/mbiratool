@@ -1,6 +1,27 @@
 #!/usr/bin/env python3
 # coding: utf-8
 
+import argparse
+
+parser = argparse.ArgumentParser(description='mbira autochord.')
+parser.add_argument('--nepoch', metavar='E', type=int, default=4,
+                    help='number of training epoch')
+parser.add_argument('--ntraining', metavar='M', type=int, default=25,
+                    help='training set size')
+parser.add_argument('--nclass_in', metavar='C', type=int, default=5,
+                    help='number of input class')
+parser.add_argument('--nclass_out', metavar='C', type=int, default=5,
+                    help='number of outpu class')
+parser.add_argument('--ntest', metavar='N', type=int, default=2000,
+                    help='test set size')
+parser.add_argument('--sum', dest='accumulate', action='store_const',
+                    const=sum, default=max,
+                    help='sum the integers (default: find the max)')
+
+args = parser.parse_args()
+args.nclass_out = max(args.nclass_out, args.nclass_in)
+print(args)
+
 from pylab import *
 
 def serie(freq, factor=None, phase=None):
@@ -12,30 +33,12 @@ def serie(freq, factor=None, phase=None):
     return abs(fft(ys, 256))
     #return abs(fft(ys, 512)[256:][::-1])
 
-import argparse
-
-parser = argparse.ArgumentParser(description='mbira autochord.')
-parser.add_argument('--nepoch', metavar='E', type=int, default=4,
-                    help='number of training epoch')
-parser.add_argument('--ntraining', metavar='M', type=int, default=25,
-                    help='training set size')
-parser.add_argument('--nclass', metavar='C', type=int, default=5,
-                    help='number of training class')
-parser.add_argument('--ntest', metavar='N', type=int, default=2000,
-                    help='test set size')
-parser.add_argument('--sum', dest='accumulate', action='store_const',
-                    const=sum, default=max,
-                    help='sum the integers (default: find the max)')
-
 ts = arange(0, 25e-3, 1./44100, dtype=float)
-freqs = logspace(2.5, 4, 5)
+freqs = logspace(2.5, 4, args.nclass_in)
 #freqs = array([400])
 print("time", ts.shape)
 print("freqs", freqs.shape)
 
-args = parser.parse_args()
-args.nclass = max(args.nclass, freqs.shape[0])
-print(args)
 
 samples = []
 targets = []
@@ -62,7 +65,7 @@ class Net(nn.Module):
         self.conv1 = nn.Conv1d(1, 1, 128)
         #self.pool = nn.MaxPool1d(2)
         self.fc1 = nn.Linear(129, 64)
-        self.fc2 = nn.Linear(64, args.nclass)
+        self.fc2 = nn.Linear(64, args.nclass_out)
     def forward(self, x):
         x = F.relu(self.conv1(x))
         #print('forward', x.size())
@@ -115,7 +118,7 @@ semilogy(losses)
 corr = []
 for index, freq in enumerate(freqs):
     print("#", index, freq, end=' ')
-    accum = torch.zeros(args.nclass)
+    accum = torch.zeros(args.nclass_out)
     for kk in range(args.ntest):
         tensor = torch.from_numpy(serie(freq)).type(torch.float).unsqueeze(0).unsqueeze(1)
         prediction = net(tensor)
