@@ -6,9 +6,9 @@ import numpy.fft as fft
 ts = np.arange(0, 25e-3, 1./44100, dtype=float)
 
 def serie(size, freq, factor=None, phase=None):
-    noise = .1 * random.randn(ts.shape[0])
+    noise = .01 * random.randn(ts.shape[0])
     if freq is None: return np.abs(fft.fft(noise, size))
-    if factor is None: factor = 1 + .1 * (random.rand() - .5)
+    if factor is None: factor = 1 + .02 * (random.rand() - .5)
     if phase is None: phase = 2j * np.pi * random.rand()
     freq_ = factor * freq
     ys = np.exp(2j * np.pi * freq_ * ts - phase) + noise

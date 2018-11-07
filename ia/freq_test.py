@@ -6,13 +6,10 @@ import argparse
 parser = argparse.ArgumentParser(description='mbira autochord.')
 parser.add_argument('--ntest', metavar='N', type=int, default=2000,
                     help='test set size')
-parser.add_argument('--state_filename', metavar='perfect.state', type=str, default="perfect.state",
+parser.add_argument('state_filename', metavar='perfect.state', type=str, default="perfect.state",
                     help='input state filename')
 parser.add_argument('--batch', type=bool, default=False,
                     help='batch mode')
-parser.add_argument('--sum', dest='accumulate', action='store_const',
-                    const=sum, default=max,
-                    help='sum the integers (default: find the max)')
 
 args = parser.parse_args()
 print(args)
@@ -21,10 +18,11 @@ import torch
 import model
 
 state = torch.load(args.state_filename)
-net = model.Net(state['nclass_out'])
+net = model.Net(state['nsample'], state['nclass_out'])
 net.load_state_dict(state['net_state_dict'])
 freqs = state['freqs']
 nclass_out = state['nclass_out']
+nsample = state['nsample']
 
 import data
 import numpy as np
@@ -34,7 +32,7 @@ for index, freq in enumerate(freqs):
     print("#", index, freq, end=' ')
     accum = torch.zeros(nclass_out)
     for kk in range(args.ntest):
-        tensor = torch.from_numpy(data.serie(freq)).type(torch.float).unsqueeze(0).unsqueeze(1)
+        tensor = torch.from_numpy(data.serie(nsample, freq)).type(torch.float).unsqueeze(0).unsqueeze(1)
         prediction = net(tensor)
         #print(tensor.shape, prediction.shape, prediction.min())
         #print(prediction.shape)
