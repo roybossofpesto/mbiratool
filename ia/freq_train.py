@@ -18,106 +18,36 @@ parser.add_argument('--learning_rate', metavar='LR', type=float, default=1,
                     help='learning rate')
 parser.add_argument('--batch', type=bool, default=False,
                     help='batch mode')
-parser.add_argument('--sum', dest='accumulate', action='store_const',
-                    const=sum, default=max,
-                    help='sum the integers (default: find the max)')
 
 args = parser.parse_args()
 args.nclass_out = max(args.nclass_out, args.nclass_in+1)
 print(args)
 
-from pylab import *
+import numpy as np
+import matplotlib.pyplot as plt
 
-def serie(freq, factor=None, phase=None):
-    noise = .1 * randn(ts.shape[0])
-    if freq is None: return abs(fft(noise, 256))
-    if factor is None: factor = 1 + .1 * (rand() - .5)
-    if phase is None: phase = 2j * pi * rand()
-    freq_ = factor * freq
-    ys = exp(2j * pi * freq_ * ts - phase) + noise
-    return abs(fft(ys, 256))
-    #return abs(fft(ys, 512)[256:][::-1])
-
-ts = arange(0, 25e-3, 1./44100, dtype=float)
-freqs = list(logspace(2.5, 4, args.nclass_in))
+freqs = list(np.logspace(2.5, 4, args.nclass_in))
 freqs.append(None)
 #freqs = array([400])
-print("time", ts.shape)
 print("freqs", len(freqs))
 
-
-# single class batch
-def init_single_class_batch():
-    samples = []
-    targets = []
-    for index, freq in enumerate(freqs):
-        foo = [serie(freq, 1)]
-        bar = [index]
-        for kk in range(args.ntraining - 1):
-            foo.append(serie(freq))
-            bar.append(index)
-        samples.append(foo)
-        targets.append(bar)
-    return samples, targets
-
-# multi label batch:
-def init_multi_class_batch():
-    samples = []
-    targets = []
-    for _ in enumerate(freqs):
-        foo = []
-        bar = []
-        for kk in range(args.ntraining):
-            index = np.random.choice(len(freqs))
-            signal = serie(freqs[index])
-            foo.append(signal)
-            bar.append(index)
-        samples.append(foo)
-        targets.append(bar)
-    return samples, targets
-
+import data
 #samples, targets = init_single_class_batch()
-samples, targets = init_multi_class_batch()
-
+samples, targets = data.init_multi_class_batch(freqs, args.ntraining)
 print("samples", len(samples))
 print("targets", len(targets))
 
-show()
-
+import model
 import torch
-import torch.nn as nn
-import torch.optim as optim
-import torch.nn.functional as F
 
-class Net(nn.Module):
-    def __init__(self, nclass_out):
-        super(Net, self).__init__()
-        self.conv1 = nn.Conv1d(1, 1, 128)
-        #self.pool = nn.MaxPool1d(2)
-        self.fc1 = nn.Linear(129, 64)
-        self.fc2 = nn.Linear(64, nclass_out)
-        self.fc3 = nn.Linear(nclass_out, nclass_out)
-    def forward(self, x):
-        x = F.relu(self.conv1(x))
-        #print('forward', x.size())
-        x = x.view(-1, 129)
-        #x = self.pool(x, 2)
-        x = F.relu(self.fc1(x))
-        x = F.relu(self.fc2(x))
-        x = F.relu(self.fc3(x))
-        return x
-
-net = Net(args.nclass_out)
-print(net)
+net = model.Net(args.nclass_out)
+print("net", net)
 params = list(net.parameters())
 print("params", len(params))
 print("input_shape", params[0].size())
 
-
-#optimizer = optim.SGD(net.parameters(), lr=args.learning_rate, momentum=.1)
-optimizer = optim.Adadelta(net.parameters(), lr=args.learning_rate)
-criterion = nn.CrossEntropyLoss()
-#criterion = nn.MSELoss()
+optimizer = model.Optimizer(net.parameters(), lr=args.learning_rate)
+criterion = model.Criterion()
 
 losses = []
 for epoch in range(args.nepoch):
@@ -144,17 +74,17 @@ for epoch in range(args.nepoch):
     losses.append(loss_accum)
 
 if not args.batch:
-    figure()
-    ylabel("loss")
-    xlabel("epoch")
-    semilogy(losses)
+    plt.figure()
+    plt.ylabel("loss")
+    plt.xlabel("epoch")
+    plt.semilogy(losses)
 
 corr = []
 for index, freq in enumerate(freqs):
     print("#", index, freq, end=' ')
     accum = torch.zeros(args.nclass_out)
     for kk in range(args.ntest):
-        tensor = torch.from_numpy(serie(freq)).type(torch.float).unsqueeze(0).unsqueeze(1)
+        tensor = torch.from_numpy(data.serie(freq)).type(torch.float).unsqueeze(0).unsqueeze(1)
         prediction = net(tensor)
         #print(tensor.shape, prediction.shape, prediction.min())
         #print(prediction.shape)
@@ -165,17 +95,17 @@ for index, freq in enumerate(freqs):
     corr.append(accum)
     print(accum)
 corr = torch.stack(corr).type(torch.int).numpy()
-perfect = np.all(corr == 100 * eye(corr.shape[0], corr.shape[1], dtype=int))
+perfect = np.all(corr == 100 * np.eye(corr.shape[0], corr.shape[1], dtype=int))
 
 print(corr, corr.shape)
 print("PERFECT !!!!!!" if perfect else ":(")
 
 if perfect:
-    print('saving state')
     torch.save({
+        'freqs': freqs,
         'nclass_out': args.nclass_out,
-        'model_state': net.state_dict(),
+        'net_state_dict': net.state_dict(),
         }, "perfect.state")
 
 if not args.batch:
-    show()
+    plt.show()
