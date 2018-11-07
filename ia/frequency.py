@@ -16,6 +16,8 @@ parser.add_argument('--ntest', metavar='N', type=int, default=2000,
                     help='test set size')
 parser.add_argument('--learning_rate', metavar='LR', type=float, default=1,
                     help='learning rate')
+parser.add_argument('--batch', type=bool, default=False,
+                    help='batch mode')
 parser.add_argument('--sum', dest='accumulate', action='store_const',
                     const=sum, default=max,
                     help='sum the integers (default: find the max)')
@@ -88,13 +90,13 @@ import torch.optim as optim
 import torch.nn.functional as F
 
 class Net(nn.Module):
-    def __init__(self):
+    def __init__(self, nclass_out):
         super(Net, self).__init__()
         self.conv1 = nn.Conv1d(1, 1, 128)
         #self.pool = nn.MaxPool1d(2)
         self.fc1 = nn.Linear(129, 64)
-        self.fc2 = nn.Linear(64, args.nclass_out)
-        self.fc3 = nn.Linear(args.nclass_out, args.nclass_out)
+        self.fc2 = nn.Linear(64, nclass_out)
+        self.fc3 = nn.Linear(nclass_out, nclass_out)
     def forward(self, x):
         x = F.relu(self.conv1(x))
         #print('forward', x.size())
@@ -105,7 +107,7 @@ class Net(nn.Module):
         x = F.relu(self.fc3(x))
         return x
 
-net = Net()
+net = Net(args.nclass_out)
 print(net)
 params = list(net.parameters())
 print("params", len(params))
@@ -141,10 +143,11 @@ for epoch in range(args.nepoch):
     print('--', loss_accum)
     losses.append(loss_accum)
 
-figure()
-ylabel("loss")
-xlabel("epoch")
-semilogy(losses)
+if not args.batch:
+    figure()
+    ylabel("loss")
+    xlabel("epoch")
+    semilogy(losses)
 
 corr = []
 for index, freq in enumerate(freqs):
@@ -167,4 +170,12 @@ perfect = np.all(corr == 100 * eye(corr.shape[0], corr.shape[1], dtype=int))
 print(corr, corr.shape)
 print("PERFECT !!!!!!" if perfect else ":(")
 
-#show()
+if perfect:
+    print('saving state')
+    torch.save({
+        'nclass_out': args.nclass_out,
+        'model_state': net.state_dict(),
+        }, "perfect.state")
+
+if not args.batch:
+    show()
