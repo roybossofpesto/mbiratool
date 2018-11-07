@@ -14,6 +14,8 @@ parser.add_argument('--nclass_out', metavar='C_out', type=int, default=2,
                     help='number of outpu class')
 parser.add_argument('--ntest', metavar='N', type=int, default=2000,
                     help='test set size')
+parser.add_argument('--learning_rate', metavar='LR', type=float, default=1,
+                    help='learning rate')
 parser.add_argument('--sum', dest='accumulate', action='store_const',
                     const=sum, default=max,
                     help='sum the integers (default: find the max)')
@@ -25,7 +27,7 @@ print(args)
 from pylab import *
 
 def serie(freq, factor=None, phase=None):
-    noise = .2 * randn(ts.shape[0])
+    noise = .1 * randn(ts.shape[0])
     if freq is None: return abs(fft(noise, 256))
     if factor is None: factor = 1 + .1 * (rand() - .5)
     if phase is None: phase = 2j * pi * rand()
@@ -109,7 +111,9 @@ params = list(net.parameters())
 print("params", len(params))
 print("input_shape", params[0].size())
 
-optimizer = optim.SGD(net.parameters(), lr=0.05, momentum=.1)
+
+#optimizer = optim.SGD(net.parameters(), lr=args.learning_rate, momentum=.1)
+optimizer = optim.Adadelta(net.parameters(), lr=args.learning_rate)
 criterion = nn.CrossEntropyLoss()
 #criterion = nn.MSELoss()
 
