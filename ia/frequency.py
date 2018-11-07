@@ -8,9 +8,9 @@ parser.add_argument('--nepoch', metavar='E', type=int, default=50,
                     help='number of training epoch')
 parser.add_argument('--ntraining', metavar='M', type=int, default=200,
                     help='training set size')
-parser.add_argument('--nclass_in', metavar='C', type=int, default=5,
+parser.add_argument('--nclass_in', metavar='C_in', type=int, default=5,
                     help='number of input class')
-parser.add_argument('--nclass_out', metavar='C', type=int, default=2,
+parser.add_argument('--nclass_out', metavar='C_out', type=int, default=2,
                     help='number of outpu class')
 parser.add_argument('--ntest', metavar='N', type=int, default=2000,
                     help='test set size')
@@ -25,37 +25,55 @@ print(args)
 from pylab import *
 
 def serie(freq, factor=None, phase=None):
+    noise = .2 * randn(ts.shape[0])
+    if freq is None: return abs(fft(noise, 256))
     if factor is None: factor = 1 + .1 * (rand() - .5)
     if phase is None: phase = 2j * pi * rand()
     freq_ = factor * freq
-    noise = .2 * randn(ts.shape[0])
     ys = exp(2j * pi * freq_ * ts - phase) + noise
     return abs(fft(ys, 256))
     #return abs(fft(ys, 512)[256:][::-1])
 
 ts = arange(0, 25e-3, 1./44100, dtype=float)
-freqs = logspace(2.5, 4, args.nclass_in)
+freqs = list(logspace(2.5, 4, args.nclass_in))
+freqs.append(None)
 #freqs = array([400])
 print("time", ts.shape)
-print("freqs", freqs.shape)
+print("freqs", len(freqs))
 
-
-samples = []
-targets = []
 
 # single class batch
-for index, freq in enumerate(freqs):
-    foo = [serie(freq, 1)]
-    bar = [index]
-    for kk in range(args.ntraining - 1):
-        foo.append(serie(freq))
-        bar.append(index)
-    samples.append(foo)
-    targets.append(bar)
+def init_single_class_batch():
+    samples = []
+    targets = []
+    for index, freq in enumerate(freqs):
+        foo = [serie(freq, 1)]
+        bar = [index]
+        for kk in range(args.ntraining - 1):
+            foo.append(serie(freq))
+            bar.append(index)
+        samples.append(foo)
+        targets.append(bar)
+    return samples, targets
 
 # multi label batch:
-for kk in range(args.ntraining):
-    pass
+def init_multi_class_batch():
+    samples = []
+    targets = []
+    for _ in enumerate(freqs):
+        foo = []
+        bar = []
+        for kk in range(args.ntraining):
+            index = np.random.choice(len(freqs))
+            signal = serie(freqs[index])
+            foo.append(signal)
+            bar.append(index)
+        samples.append(foo)
+        targets.append(bar)
+    return samples, targets
+
+#samples, targets = init_single_class_batch()
+samples, targets = init_multi_class_batch()
 
 print("samples", len(samples))
 print("targets", len(targets))
@@ -74,6 +92,7 @@ class Net(nn.Module):
         #self.pool = nn.MaxPool1d(2)
         self.fc1 = nn.Linear(129, 64)
         self.fc2 = nn.Linear(64, args.nclass_out)
+        self.fc3 = nn.Linear(args.nclass_out, args.nclass_out)
     def forward(self, x):
         x = F.relu(self.conv1(x))
         #print('forward', x.size())
@@ -81,6 +100,7 @@ class Net(nn.Module):
         #x = self.pool(x, 2)
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
+        x = F.relu(self.fc3(x))
         return x
 
 net = Net()
@@ -89,7 +109,7 @@ params = list(net.parameters())
 print("params", len(params))
 print("input_shape", params[0].size())
 
-optimizer = optim.SGD(net.parameters(), lr=0.005, momentum=.1)
+optimizer = optim.SGD(net.parameters(), lr=0.05, momentum=.1)
 criterion = nn.CrossEntropyLoss()
 #criterion = nn.MSELoss()
 
