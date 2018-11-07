@@ -42,12 +42,14 @@ print("freqs", freqs.shape)
 
 samples = []
 targets = []
-for ident, freq in enumerate(freqs):
-    targets.append(ident)
+for index, freq in enumerate(freqs):
     foo = [serie(freq, 1)]
+    bar = [index]
     for kk in range(args.ntraining - 1):
         foo.append(serie(freq))
+        bar.append(index)
     samples.append(foo)
+    targets.append(bar)
 
 print("samples", len(samples))
 print("targets", len(targets))
@@ -89,11 +91,10 @@ losses = []
 for epoch in range(args.nepoch):
     print("-", epoch, "--", end=" ")
     loss_accum = 0
-    for index, sample in zip(targets, samples):
+    for target, sample in zip(targets, samples):
         sample = torch.tensor(sample, dtype=torch.float).unsqueeze(1)
-        target = torch.zeros(sample.shape[0], dtype=torch.long)
-        target[:] = index
-        #print("training", target.shape, sample.shape)
+        target = torch.tensor(target, dtype=torch.long)
+        #print("training", target.shape, target.dtype, sample.shape, sample.dtype)
         #print(target)
 
         optimizer.zero_grad()
