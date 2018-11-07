@@ -6,6 +6,8 @@ import argparse
 parser = argparse.ArgumentParser(description='mbira autochord.')
 parser.add_argument('--nepoch', metavar='E', type=int, default=50,
                     help='number of training epoch')
+parser.add_argument('--nsample', metavar='S', type=int, default=128,
+                    help='dimension of training space')
 parser.add_argument('--ntraining', metavar='M', type=int, default=200,
                     help='training set size')
 parser.add_argument('--nclass_in', metavar='C_in', type=int, default=5,
@@ -33,14 +35,14 @@ print("freqs", len(freqs))
 
 import data
 #samples, targets = init_single_class_batch()
-samples, targets = data.init_multi_class_batch(freqs, args.ntraining)
+samples, targets = data.init_multi_class_batch(args.nsample, freqs, args.ntraining)
 print("samples", len(samples))
 print("targets", len(targets))
 
 import model
 import torch
 
-net = model.Net(args.nclass_out)
+net = model.Net(args.nsample, args.nclass_out)
 print("net", net)
 params = list(net.parameters())
 print("params", len(params))
@@ -66,11 +68,11 @@ for epoch in range(args.nepoch):
 
         loss = criterion(prediction, target)
         loss_accum += loss.item()
-        print(loss.item(), end=" ")
+        #print(loss.item(), end=" ")
 
         loss.backward()
         step = optimizer.step()
-    print('--', loss_accum)
+    print(loss_accum)
     losses.append(loss_accum)
 
 if not args.batch:
@@ -84,7 +86,7 @@ for index, freq in enumerate(freqs):
     print("#", index, freq, end=' ')
     accum = torch.zeros(args.nclass_out)
     for kk in range(args.ntest):
-        tensor = torch.from_numpy(data.serie(freq)).type(torch.float).unsqueeze(0).unsqueeze(1)
+        tensor = torch.from_numpy(data.serie(args.nsample, freq)).type(torch.float).unsqueeze(0).unsqueeze(1)
         prediction = net(tensor)
         #print(tensor.shape, prediction.shape, prediction.min())
         #print(prediction.shape)
@@ -103,6 +105,8 @@ print("PERFECT !!!!!!" if perfect else ":(")
 if perfect:
     torch.save({
         'freqs': freqs,
+        'nsample': args.nsample,
+        'nclass_in': args.nclass_in,
         'nclass_out': args.nclass_out,
         'net_state_dict': net.state_dict(),
         }, "perfect.state")
