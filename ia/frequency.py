@@ -57,7 +57,7 @@ class Net(nn.Module):
         self.conv1 = nn.Conv1d(1, 1, 128)
         #self.pool = nn.MaxPool1d(2)
         self.fc1 = nn.Linear(129, 64)
-        self.fc2 = nn.Linear(64, 10)
+        self.fc2 = nn.Linear(64, freqs.shape[0])
     def forward(self, x):
         x = F.relu(self.conv1(x))
         #print('forward', x.size())
@@ -73,13 +73,13 @@ params = list(net.parameters())
 print("params", len(params))
 print("input_shape", params[0].size())
 
-optimizer = optim.SGD(net.parameters(), lr=0.01, momentum=.9)
+optimizer = optim.SGD(net.parameters(), lr=0.005, momentum=.1)
 criterion = nn.CrossEntropyLoss()
 #criterion = nn.MSELoss()
 
 losses = []
 for epoch in range(args.nepoch):
-    print("-", epoch, end=" ")
+    print("-", epoch, "--", end=" ")
     loss_accum = 0
     for index, sample in zip(targets, samples):
         sample = torch.tensor(sample, dtype=torch.float).unsqueeze(1)
@@ -98,12 +98,14 @@ for epoch in range(args.nepoch):
         print(loss.item(), end=" ")
 
         loss.backward()
-        optimizer.step()
+        step = optimizer.step()
     print('--', loss_accum)
     losses.append(loss_accum)
 
 figure()
-plot(losses)
+ylabel("loss")
+xlabel("epoch")
+semilogy(losses)
 
 for index, freq in enumerate(freqs):
     print("#", index, freq, end=' ')
@@ -112,7 +114,7 @@ for index, freq in enumerate(freqs):
         tensor = torch.from_numpy(serie(freq)).type(torch.float).unsqueeze(0).unsqueeze(1)
         prediction = net(tensor)
         #print(tensor.shape, prediction.shape, prediction.min())
-        #print(prediction)
+        #print(prediction.shape)
         confidence, index_ = prediction.max(1)
         #print(confidence.item(), index_.item())
         accum += index == index_
