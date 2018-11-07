@@ -163,4 +163,4 @@ perfect = np.all(corr == 100 * eye(corr.shape[0], corr.shape[1], dtype=int))
 print(corr, corr.shape)
 print("PERFECT !!!!!!" if perfect else ":(")
 
-show()
+#show()
