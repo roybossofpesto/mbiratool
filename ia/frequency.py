@@ -42,6 +42,8 @@ print("freqs", freqs.shape)
 
 samples = []
 targets = []
+
+# single class batch
 for index, freq in enumerate(freqs):
     foo = [serie(freq, 1)]
     bar = [index]
@@ -50,6 +52,10 @@ for index, freq in enumerate(freqs):
         bar.append(index)
     samples.append(foo)
     targets.append(bar)
+
+# multi label batch:
+for kk in range(args.ntraining):
+    pass
 
 print("samples", len(samples))
 print("targets", len(targets))
