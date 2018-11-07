@@ -4,13 +4,13 @@
 import argparse
 
 parser = argparse.ArgumentParser(description='mbira autochord.')
-parser.add_argument('--nepoch', metavar='E', type=int, default=4,
+parser.add_argument('--nepoch', metavar='E', type=int, default=50,
                     help='number of training epoch')
-parser.add_argument('--ntraining', metavar='M', type=int, default=25,
+parser.add_argument('--ntraining', metavar='M', type=int, default=200,
                     help='training set size')
 parser.add_argument('--nclass_in', metavar='C', type=int, default=5,
                     help='number of input class')
-parser.add_argument('--nclass_out', metavar='C', type=int, default=5,
+parser.add_argument('--nclass_out', metavar='C', type=int, default=2,
                     help='number of outpu class')
 parser.add_argument('--ntest', metavar='N', type=int, default=2000,
                     help='test set size')
@@ -19,7 +19,7 @@ parser.add_argument('--sum', dest='accumulate', action='store_const',
                     help='sum the integers (default: find the max)')
 
 args = parser.parse_args()
-args.nclass_out = max(args.nclass_out, args.nclass_in)
+args.nclass_out = max(args.nclass_out, args.nclass_in+1)
 print(args)
 
 from pylab import *
