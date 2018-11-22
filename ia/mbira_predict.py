@@ -20,7 +20,7 @@ net = model.Net(state['nsample'], state['nclass_out'])
 net.load_state_dict(state['net_state_dict'])
 nclass_out = state['nclass_out']
 nsample = state['nsample']
-print(net, state)
+print(net)
 
 import alsaaudio as audio
 
@@ -52,6 +52,8 @@ while True:
         if foo > threshold:
             prediction = net(chunk)
             confidence, note = prediction.max(1)
+            confidence = 100*confidence.item()/prediction.sum().item()
+            note = note.item()
             print(note, confidence)
         plt.pause(1e-3)
 
