@@ -1,4 +1,5 @@
 data
 perfect.state
 mbira.series
+*.wav
 __pycache__
