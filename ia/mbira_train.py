@@ -3,7 +3,7 @@
 
 import argparse
 
-parser = argparse.ArgumentParser(description='freq autochord trainer.')
+parser = argparse.ArgumentParser(description='mbira autochord trainer.')
 parser.add_argument('--nepoch', metavar='E', type=int, default=50,
                     help='number of training epoch')
 parser.add_argument('--nsample', metavar='S', type=int, default=128,

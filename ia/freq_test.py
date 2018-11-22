@@ -3,7 +3,7 @@
 
 import argparse
 
-parser = argparse.ArgumentParser(description='mbira autochord.')
+parser = argparse.ArgumentParser(description='freq autochord prediction.')
 parser.add_argument('--ntest', metavar='N', type=int, default=2000,
                     help='test set size')
 parser.add_argument('state_filename', metavar='perfect.state', type=str, default="perfect.state",
