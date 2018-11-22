@@ -16,10 +16,10 @@ def serie(size, freq, factor=None, phase=None):
     return np.abs(fft.fft(ys, size))
     #return abs(fft(ys, 512)[256:][::-1])
 
-print("time", ts.shape)
 
 # single class batch
 def init_single_class_batch(size, freqs, ntraining):
+    print("time", ts.shape)
     samples = []
     targets = []
     for index, freq in enumerate(freqs):
@@ -34,6 +34,7 @@ def init_single_class_batch(size, freqs, ntraining):
 
 # multi label batch
 def init_multi_class_batch(size, freqs, ntraining):
+    print("time", ts.shape)
     samples = []
     targets = []
     for _ in enumerate(freqs):
@@ -55,18 +56,23 @@ def init_from_notes(notes, batch=32):
         for serie in series:
             data.append((note, serie))
     random.shuffle(data)
-    print(len(data))
+    nchunk = len(data)
+    nsample = None
     samples = []
     targets = []
     while data:
         foo = []
         bar = []
         for target, sample in data[:batch]:
+            if nsample is None: nsample = sample.shape
+            else: assert( nsample == sample.shape )
             foo.append(sample)
             bar.append(target)
         samples.append(foo)
         targets.append(bar)
         data = data[batch:]
+    print("time", nsample)
+    print('chunk', nchunk)
     return samples, targets
 
 

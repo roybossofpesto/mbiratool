@@ -8,8 +8,6 @@ parser.add_argument('--input', metavar='input.series', default="mbira.series",
                     help='input series')
 parser.add_argument('--nepoch', metavar='E', type=int, default=50,
                     help='number of training epoch')
-parser.add_argument('--nsample', metavar='S', type=int, default=128,
-                    help='dimension of training space')
 parser.add_argument('--ntraining', metavar='M', type=int, default=200,
                     help='training set size')
 parser.add_argument('--nclass_out', metavar='C_out', type=int, default=2,
@@ -31,13 +29,15 @@ notes = data["notes"]
 args.nclass_in = len(notes)
 args.nclass_out = max(args.nclass_out, args.nclass_in)
 print(notes.keys())
-print(args)
 
 import data
 
 samples, targets = data.init_from_notes(notes)
+args.nsample = len(samples[0][0])
 print("samples", len(samples), sum(list(map(len, samples))))
 print("targets", len(targets), sum(list(map(len, targets))))
+
+print(args)
 
 import model
 
@@ -84,7 +84,7 @@ if not args.batch:
     plt.semilogy(losses)
 
 final_loss = losses[-1]
-perfect = final_loss < 1e-3
+perfect = final_loss < 5e-3
 
 print(final_loss)
 print("PERFECT !!!!!!" if perfect else ":(")
