@@ -4,6 +4,7 @@
 import alsaaudio as audio
 import numpy as np
 import matplotlib.pyplot as plt
+import torch
 
 stream = audio.PCM(audio.PCM_CAPTURE,audio.PCM_NONBLOCK)
 stream.setchannels(1)
@@ -16,22 +17,42 @@ threshold = .1
 plt.figure()
 line, = plt.plot(np.zeros(chunk_size))
 level = plt.axhline(0)
-plt.axhline(threshold)
+plt.axhline(threshold, color="r")
 plt.ylim(-1, 1)
 
-captured = 0
-while True:
-    ll, chunk = stream.read()
-    if ll > 0:
-        chunk = np.fromstring(chunk, dtype=np.int16).astype(np.float) / 32768.
-        foo = chunk.std()
-        level.set_ydata(foo)
-        line.set_ydata(chunk)
-        if foo > threshold:
-            captured += 1
-            print(captured)
-        else:
-            captured = 0
-    plt.pause(1e-3)
+def get_series(nserie, nchunk=20):
+    series = []
+    chunks = []
+    while True:
+        ll, chunk = stream.read()
+        if ll > 0:
+            chunk = np.fromstring(chunk, dtype=np.int16).astype(np.float) / 32768.
+            foo = chunk.std()
+            level.set_ydata(foo)
+            line.set_ydata(chunk)
+            if foo > threshold:
+                chunks.append(chunk)
+                print(len(chunks), end='\r')
+            else:
+                if chunks:
+                    print()
+                if len(chunks) > nchunk:
+                    series += chunks
+                    print('!!!', len(series))
+                    if len(series) > nserie:
+                        return series
+                chunks = []
+        plt.pause(1e-3)
 
-plt.show()
+notes = {}
+for note in range(5):
+    print('press RETURN to record note %d' % note)
+    input()
+    series = get_series(50)
+    notes[note] = series
+
+torch.save({
+    "notes": notes,
+    }, "mbira.series")
+print('victory')
+
