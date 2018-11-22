@@ -1,4 +1,5 @@
 
+import random
 import numpy as np
 import numpy.random as random
 import numpy.fft as fft
@@ -31,7 +32,7 @@ def init_single_class_batch(size, freqs, ntraining):
         targets.append(bar)
     return samples, targets
 
-# multi label batch:
+# multi label batch
 def init_multi_class_batch(size, freqs, ntraining):
     samples = []
     targets = []
@@ -46,4 +47,26 @@ def init_multi_class_batch(size, freqs, ntraining):
         samples.append(foo)
         targets.append(bar)
     return samples, targets
+
+# format series from notes
+def init_from_notes(notes, batch=32):
+    data = []
+    for note, series in notes.items():
+        for serie in series:
+            data.append((note, serie))
+    random.shuffle(data)
+    print(len(data))
+    samples = []
+    targets = []
+    while data:
+        foo = []
+        bar = []
+        for target, sample in data[:batch]:
+            foo.append(sample)
+            bar.append(target)
+        samples.append(foo)
+        targets.append(bar)
+        data = data[batch:]
+    return samples, targets
+
 

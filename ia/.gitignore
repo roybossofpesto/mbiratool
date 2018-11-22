@@ -1,5 +1,6 @@
 data
-perfect.state
+freq_perfect.state
+mbira_good.state
 mbira.series
 *.wav
 __pycache__

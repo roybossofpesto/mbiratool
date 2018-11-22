@@ -109,7 +109,7 @@ if perfect:
         'nclass_in': args.nclass_in,
         'nclass_out': args.nclass_out,
         'net_state_dict': net.state_dict(),
-        }, "perfect.state")
+        }, "freq_perfect.state")
 
 if not args.batch:
     plt.show()
