@@ -6,7 +6,7 @@ import argparse
 parser = argparse.ArgumentParser(description='freq autochord prediction.')
 parser.add_argument('--ntest', metavar='N', type=int, default=2000,
                     help='test set size')
-parser.add_argument('state_filename', metavar='perfect.state', type=str, default="perfect.state",
+parser.add_argument('state_filename', metavar='freq_perfect.state', type=str, default="freq_perfect.state",
                     help='input state filename')
 parser.add_argument('--batch', type=bool, default=False,
                     help='batch mode')
