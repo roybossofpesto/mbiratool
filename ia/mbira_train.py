@@ -6,6 +6,8 @@ import argparse
 parser = argparse.ArgumentParser(description='mbira autochord trainer.')
 parser.add_argument('--input', metavar='input.series', default="mbira.series",
                     help='input series')
+parser.add_argument('--output', metavar='output.state', default="mbira_good.state",
+                    help='output network state')
 parser.add_argument('--nepoch', metavar='E', type=int, default=50,
                     help='number of training epoch')
 parser.add_argument('--ntraining', metavar='M', type=int, default=200,
@@ -28,6 +30,7 @@ import torch
 print("loading", args.input)
 data = torch.load(args.input)
 notes = data["notes"]
+threshold = data["args"].threshold
 args.nclass_in = len(notes)
 args.nclass_out = max(args.nclass_out, args.nclass_in)
 print(notes.keys())
@@ -92,13 +95,15 @@ print(final_loss)
 print("GOOD !!!!!!" if perfect else ":(")
 
 if perfect:
+    print('saving', args.output)
     torch.save({
+        'threshold': threshold,
         'losses': losses,
         'nsample': args.nsample,
         'nclass_in': args.nclass_in,
         'nclass_out': args.nclass_out,
         'net_state_dict': net.state_dict(),
-        }, "mbira_good.state")
+        }, args.output)
 
 if not args.batch:
     plt.show()

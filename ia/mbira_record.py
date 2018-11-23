@@ -47,7 +47,8 @@ def get_series(nserie, nchunk):
         ll, chunk = stream.read()
         if ll > 0:
             chunk = np.fromstring(chunk, dtype=np.int16).astype(np.float) / 32768.
-            foo = chunk.std()
+            #foo = chunk.std()
+            foo = np.abs(chunk - chunk.mean()).max()
             if not args.batch:
                 level.set_ydata(foo)
                 line.set_ydata(chunk)
@@ -75,6 +76,7 @@ for note in range(args.nnote):
 print('saving', args.output)
 torch.save({
     "notes": notes,
+    "args": args,
     }, args.output)
 print('victory')
 

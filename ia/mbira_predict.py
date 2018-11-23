@@ -20,6 +20,7 @@ net = model.Net(state['nsample'], state['nclass_out'])
 net.load_state_dict(state['net_state_dict'])
 nclass_out = state['nclass_out']
 nsample = state['nsample']
+threshold = state['threshold']
 print(net)
 
 import alsaaudio as audio
@@ -31,7 +32,6 @@ stream.setformat(audio.PCM_FORMAT_S16_LE)
 chunk_size = stream.setperiodsize(1024)
 print(nsample, chunk_size)
 assert( nsample == chunk_size )
-threshold = .1
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -46,13 +46,13 @@ while True:
     ll, chunk = stream.read()
     if ll > 0:
         chunk = torch.from_numpy(np.fromstring(chunk, dtype=np.int16).astype(np.float) / 32768.).float().unsqueeze(0).unsqueeze(0)
-        foo = chunk.std()
+        #foo = chunk.std()
+        foo = np.abs(chunk - chunk.mean()).max()
         level.set_ydata(foo)
         line.set_ydata(chunk)
         if foo > threshold:
             prediction = net(chunk)
             confidence, note = prediction.max(1)
-            confidence = int(100*confidence.item()/prediction.sum().item())
             note = note.item()
             print(note + 1, confidence, end='\r')
         plt.pause(1e-3)
