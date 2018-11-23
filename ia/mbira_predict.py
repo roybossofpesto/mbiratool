@@ -52,8 +52,8 @@ while True:
         if foo > threshold:
             prediction = net(chunk)
             confidence, note = prediction.max(1)
-            confidence = 100*confidence.item()/prediction.sum().item()
+            confidence = int(100*confidence.item()/prediction.sum().item())
             note = note.item()
-            print(note, confidence)
+            print(note + 1, confidence, end='\r')
         plt.pause(1e-3)
 
