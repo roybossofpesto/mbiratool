@@ -16,6 +16,8 @@ parser.add_argument('--ntest', metavar='N', type=int, default=2000,
                     help='test set size')
 parser.add_argument('--learning_rate', metavar='LR', type=float, default=1,
                     help='learning rate')
+parser.add_argument('--max_loss', type=float, default=1e-3,
+                    help='learning rate')
 parser.add_argument('--batch', type=bool, default=False,
                     help='batch mode')
 
@@ -84,13 +86,14 @@ if not args.batch:
     plt.semilogy(losses)
 
 final_loss = losses[-1]
-perfect = final_loss < 5e-3
+perfect = final_loss < args.max_loss
 
 print(final_loss)
-print("PERFECT !!!!!!" if perfect else ":(")
+print("GOOD !!!!!!" if perfect else ":(")
 
 if perfect:
     torch.save({
+        'losses': losses,
         'nsample': args.nsample,
         'nclass_in': args.nclass_in,
         'nclass_out': args.nclass_out,
