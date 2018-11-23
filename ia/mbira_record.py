@@ -1,6 +1,20 @@
 #!/usr/bin/env python3
 # coding: utf-8
 
+import argparse
+
+parser = argparse.ArgumentParser(description='mbira autochord recorder.')
+parser.add_argument('--output', metavar='mbira.series', default="mbira.series",
+                    help='output series')
+parser.add_argument('--ntraining', metavar='M', type=int, default=200,
+                    help='training set size. minimum number of chunk per class.')
+parser.add_argument('--nnote', metavar='C_out', type=int, default=5,
+                    help='number of output class. number of note')
+parser.add_argument('--batch', type=bool, default=False,
+                    help='batch mode')
+
+args = parser.parse_args()
+
 import alsaaudio as audio
 import numpy as np
 import matplotlib.pyplot as plt
@@ -12,13 +26,16 @@ stream.setrate(44100)
 stream.setformat(audio.PCM_FORMAT_S16_LE)
 chunk_size = stream.setperiodsize(1024)
 print(chunk_size)
+stream.dumpinfo()
+
 threshold = .1
 
-plt.figure()
-line, = plt.plot(np.zeros(chunk_size))
-level = plt.axhline(0)
-plt.axhline(threshold, color="r")
-plt.ylim(-1, 1)
+if not args.batch:
+    plt.figure()
+    line, = plt.plot(np.zeros(chunk_size))
+    level = plt.axhline(0)
+    plt.axhline(threshold, color="r")
+    plt.ylim(-1, 1)
 
 def get_series(nserie, nchunk=20):
     series = []
@@ -28,8 +45,9 @@ def get_series(nserie, nchunk=20):
         if ll > 0:
             chunk = np.fromstring(chunk, dtype=np.int16).astype(np.float) / 32768.
             foo = chunk.std()
-            level.set_ydata(foo)
-            line.set_ydata(chunk)
+            if not args.batch:
+                level.set_ydata(foo)
+                line.set_ydata(chunk)
             if foo > threshold:
                 chunks.append(chunk)
                 print(len(chunks), end='\r')
@@ -45,14 +63,15 @@ def get_series(nserie, nchunk=20):
         plt.pause(1e-3)
 
 notes = {}
-for note in range(5):
-    print('press RETURN to record note %d' % note)
-    input()
-    series = get_series(50)
+for note in range(args.nnote):
+    print('press RETURN to record note %d' % (note + 1))
+    #input()
+    series = get_series(args.ntraining)
     notes[note] = series
 
+print('saving', args.output)
 torch.save({
     "notes": notes,
-    }, "mbira.series")
+    }, args.output)
 print('victory')
 
