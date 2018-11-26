@@ -4,8 +4,10 @@
 import argparse
 
 parser = argparse.ArgumentParser(description='mbira autochord recorder.')
-parser.add_argument('--output', metavar='mbira.series', default="mbira.series",
+parser.add_argument('output', metavar='mbira.series', default="mbira.series",
                     help='output series')
+parser.add_argument('--sampling_freq', metavar='Fs', type=int, default=44100,
+                    help='sampling frequency')
 parser.add_argument('--ntraining', metavar='M', type=int, default=200,
                     help='training set size. minimum number of chunk per class.')
 parser.add_argument('--nchunk', type=int, default=18,
@@ -26,12 +28,11 @@ import torch
 
 stream = audio.PCM(audio.PCM_CAPTURE,audio.PCM_NONBLOCK)
 stream.setchannels(1)
-stream.setrate(44100)
+stream.setrate(args.sampling_freq)
 stream.setformat(audio.PCM_FORMAT_S16_LE)
 chunk_size = stream.setperiodsize(1024)
 print(chunk_size)
 stream.dumpinfo()
-
 
 if not args.batch:
     plt.figure()
@@ -68,7 +69,8 @@ def get_series(nserie, nchunk):
 
 notes = {}
 for note in range(args.nnote):
-    print('press RETURN to record note %d' % (note + 1))
+    print('recording note %d' % (note + 1))
+    #print('press RETURN to record note %d' % (note + 1))
     #input()
     series = get_series(args.ntraining, args.nchunk)
     notes[note] = series
@@ -76,7 +78,7 @@ for note in range(args.nnote):
 print('saving', args.output)
 torch.save({
     "notes": notes,
-    "args": args,
+    "record_args": args,
     }, args.output)
 print('victory')
 

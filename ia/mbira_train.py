@@ -4,16 +4,18 @@
 import argparse
 
 parser = argparse.ArgumentParser(description='mbira autochord trainer.')
-parser.add_argument('--input', metavar='input.series', default="mbira.series",
+parser.add_argument('input', metavar='input.series', default="mbira.series",
                     help='input series')
-parser.add_argument('--output', metavar='output.state', default="mbira_good.state",
+parser.add_argument('output', metavar='output.state', default="mbira_good.state",
                     help='output network state')
 parser.add_argument('--nepoch', metavar='E', type=int, default=50,
                     help='number of training epoch')
 parser.add_argument('--ntraining', metavar='M', type=int, default=200,
                     help='training set size')
 parser.add_argument('--nclass_out', metavar='C_out', type=int, default=2,
-                    help='number of outpu class')
+                    help='number of output class')
+parser.add_argument('--nmiddle', metavar='C_middle', type=int, default=128,
+                    help='middle layer size')
 parser.add_argument('--ntest', metavar='N', type=int, default=2000,
                     help='test set size')
 parser.add_argument('--learning_rate', metavar='LR', type=float, default=1,
@@ -30,7 +32,6 @@ import torch
 print("loading", args.input)
 data = torch.load(args.input)
 notes = data["notes"]
-threshold = data["args"].threshold
 args.nclass_in = len(notes)
 args.nclass_out = max(args.nclass_out, args.nclass_in)
 print(notes.keys())
@@ -46,7 +47,8 @@ print(args)
 
 import model
 
-net = model.Net(args.nsample, args.nclass_out)
+args.nkernel = 256
+net = model.Net(args.nsample, args.nclass_out, args.nmiddle, args.nkernel)
 print("net", net)
 params = list(net.parameters())
 print("params", len(params))
@@ -97,11 +99,9 @@ print("GOOD !!!!!!" if perfect else ":(")
 if perfect:
     print('saving', args.output)
     torch.save({
-        'threshold': threshold,
+        'record_args': data["record_args"],
+        'train_args': args,
         'losses': losses,
-        'nsample': args.nsample,
-        'nclass_in': args.nclass_in,
-        'nclass_out': args.nclass_out,
         'net_state_dict': net.state_dict(),
         }, args.output)
 

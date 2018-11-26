@@ -5,10 +5,11 @@ import torch.nn.functional as F
 import torch.optim as optim
 
 class Net(nn.Module):
-    def __init__(self, nsample, nclass_out, nmiddle=128):
+    def __init__(self, nsample, nclass_out, nmiddle, nkernel):
         super(Net, self).__init__()
-        self.kernel_size = nsample // 6
-        self.linear_size = 1 + nsample - self.kernel_size
+        self.params = params
+        self.kernel_size = nkernel
+        self.linear_size = 1 + nsample - nkernel
         #print(self.kernel_size, self.linear_size)
         self.conv1 = nn.Conv1d(1, 1, self.kernel_size)
         #self.pool = nn.MaxPool1d(2)
