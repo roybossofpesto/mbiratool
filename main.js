@@ -24,7 +24,8 @@ const root_key_colors = ["#1c96fe", "#feb831", "#aee742", "#b75ac4", "#15cdc2", 
 
 let mbira_synth = undefined;
 
-const helper = (chord, delta, octave) => ({
+// create chord
+const create_note = (chord, delta, octave) => ({
     note: `${letters[wrap(chord+delta)]}${octave}`,
     chord: wrap(chord),
     octave: octave,
@@ -54,12 +55,14 @@ const helper_standard = (chords, octaves, nn = 4) => {
 }
 
 const expands_chord = [
+    // 0
     (aa, bb, cc) => [
         helper_standard([aa, aa], [5, 4], 3),
         helper_standard([aa, aa], [5, 4], 3),
         helper_standard([bb, bb], [5, 4], 3),
         helper_standard([cc, cc], [5, 4], 3),
     ].flat(),
+    // 1
     (aa, bb, cc) => [
         helper_single([aa], 3, 5),
         helper_single([aa], 3),
@@ -105,25 +108,34 @@ const expands_chord = [
     },
     (aa, bb, cc) => {
         return [
-            helper(aa, 0, 4), helper(aa, 0, 5), helper(aa, 0, 3), helper(aa, 4, 5),
-            helper(bb, 0, 4), helper(bb, 0, 5), helper(bb, 0, 3), helper(bb, 4, 5),
-            helper(cc, 0, 4), helper(cc, 0, 5), helper(cc, 0, 3), helper(cc, 4, 5),
+            create_note(aa, 0, 4), create_note(aa, 0, 5), create_note(aa, 0, 3), create_note(aa, 4, 5),
+            create_note(bb, 0, 4), create_note(bb, 0, 5), create_note(bb, 0, 3), create_note(bb, 4, 5),
+            create_note(cc, 0, 4), create_note(cc, 0, 5), create_note(cc, 0, 3), create_note(cc, 4, 5),
         ];
     },
     (aa, bb, cc) => {
         return [
-            helper(aa, 0, 4), helper(aa, 2, 5), helper(aa, 0, 3), helper(aa, 4, 5),
-            helper(bb, 0, 4), helper(bb, 2, 5), helper(bb, 0, 3), helper(bb, 4, 5),
-            helper(cc, 0, 4), helper(cc, 2, 5), helper(cc, 0, 3), helper(cc, 4, 5),
+            create_note(aa, 0, 4), create_note(aa, 2, 5), create_note(aa, 0, 3), create_note(aa, 4, 5),
+            create_note(bb, 0, 4), create_note(bb, 2, 5), create_note(bb, 0, 3), create_note(bb, 4, 5),
+            create_note(cc, 0, 4), create_note(cc, 2, 5), create_note(cc, 0, 3), create_note(cc, 4, 5),
         ];
     },
     (aa, bb, cc) => {
         return [
-            helper(aa, 0, 5), null, helper(aa, 0, 5), null,
-            helper(bb, 0, 5), null, helper(bb, 0, 5), null,
-            helper(cc, 0, 5), null, helper(cc, 0, 5), null,
+            create_note(aa, 0, 5), null, create_note(aa, 0, 5), null,
+            create_note(bb, 0, 5), null, create_note(bb, 0, 5), null,
+            create_note(cc, 0, 5), null, create_note(cc, 0, 5), null,
         ];
     },
+    // 10
+    (aa, bb, cc) => {
+        return [
+            null, null, create_note(aa, 0, 5), null,
+            create_note(bb, 0, 5), null, create_note(bb, 0, 5), null,
+            create_note(cc, 0, 5), null, create_note(cc, 0, 5), null,
+        ];
+
+    }
 ]
 
 $(document).ready(() => {
