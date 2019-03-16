@@ -634,7 +634,7 @@ $(document).ready(() => {
                 sector.note = chord.note;
                 sector.chord = chord.chord;
                 sector.attr('fill', root_key_colors[chord.chord]
-                    .brighten(chord.delta == 4 ? 1 : chord.delta == 2 ? 2.5 : 0))
+                    .brighten(chord.delta == 4 ? 1 : chord.delta == 3 ?  1.7 : chord.delta == 2 ? 2.5 : 0))
             })
         }
         return {
