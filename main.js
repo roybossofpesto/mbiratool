@@ -135,7 +135,11 @@ const expands_chord = [
             create_note(aa, 4, 5),
             create_note(aa, 0, 4),
             ///////////////////////////////
-            null, null, null, null,
+            create_note(aa, 0, 6),
+            create_note(bb, 0, 5),
+            create_note(bb, 2, 5),
+            create_note(bb, 0, 4),
+            ///////////////////////////////
             null, null, null, null,
         ];
 
