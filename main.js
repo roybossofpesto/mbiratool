@@ -55,14 +55,35 @@ const helper_standard = (chords, octaves, nn = 4) => {
 }
 
 const expands_chord = [
-    // 0
+    // Nemamoussassa on 4??
+    (aa, bb, cc) => {
+        return [
+            ///////////////////////////////
+            create_note(aa, 0, 6),
+            create_note(aa, 0, 5),
+            create_note(aa, 4, 5),
+            create_note(aa, 0, 4),
+            ///////////////////////////////
+            create_note(aa, 0, 6),
+            create_note(bb, 0, 5),
+            create_note(bb, 2, 5),
+            create_note(bb, 0, 4),
+            ///////////////////////////////
+            create_note(bb, 0, 5),
+            create_note(cc, 4, 5),
+            create_note(cc, 0, 5),
+            create_note(cc, 0, 5),
+            ///////////////////////////////
+        ];
+    },
+    // next
     (aa, bb, cc) => [
         helper_standard([aa, aa], [5, 4], 3),
         helper_standard([aa, aa], [5, 4], 3),
         helper_standard([bb, bb], [5, 4], 3),
         helper_standard([cc, cc], [5, 4], 3),
     ].flat(),
-    // 1
+    // next next
     (aa, bb, cc) => [
         helper_single([aa], 3, 5),
         helper_single([aa], 3),
@@ -127,23 +148,6 @@ const expands_chord = [
             create_note(cc, 0, 5), null, create_note(cc, 0, 5), null,
         ];
     },
-    // 10 - Nemamoussassa on 4??
-    (aa, bb, cc) => {
-        return [
-            create_note(aa, 0, 6),
-            create_note(aa, 0, 5),
-            create_note(aa, 4, 5),
-            create_note(aa, 0, 4),
-            ///////////////////////////////
-            create_note(aa, 0, 6),
-            create_note(bb, 0, 5),
-            create_note(bb, 2, 5),
-            create_note(bb, 0, 4),
-            ///////////////////////////////
-            null, null, null, null,
-        ];
-
-    }
 ]
 
 $(document).ready(() => {
