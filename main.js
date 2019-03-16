@@ -57,9 +57,13 @@ const create_notes = (chords, octaves, nn = 4) => {
     return foo;
 }
 
+function flatten(arr) {
+  return [].concat(...arr)
+}
+
 const expands_chord = [
-    nema_full,
     nema_left_hand,
+    nema_full,
     // Nemamoussassa on 4??
     (aa, bb, cc) => {
         return [
@@ -82,54 +86,54 @@ const expands_chord = [
         ];
     },
     // next
-    (aa, bb, cc) => [
+    (aa, bb, cc) => flatten([
         create_notes([aa, aa], [5, 4], 3),
         create_notes([aa, aa], [5, 4], 3),
         create_notes([bb, bb], [5, 4], 3),
         create_notes([cc, cc], [5, 4], 3),
-    ].flat(),
+    ]),
     // next next
-    (aa, bb, cc) => [
+    (aa, bb, cc) => flatten([
         helper_single([aa], 3, 5),
         helper_single([aa], 3),
         helper_single([bb], 3),
         helper_single([cc], 3),
-    ].flat(),
-    (aa, bb, cc) => [
+    ]),
+    (aa, bb, cc) => flatten([
         helper_single([aa], 3),
         helper_single([aa], 3),
         helper_single([bb], 3),
         helper_single([cc], 3),
-    ].flat(),
+    ]),
     (aa, bb, cc) => {
-        const foo = [
+        const foo = flatten([
             helper_single([aa], 6),
             helper_single([bb], 3),
             helper_single([cc], 3),
-        ].flat();
+        ]);
         return foo;
     },
-    (aa, bb, cc) => [
+    (aa, bb, cc) => flatten([
         helper_single([aa], 3),
         helper_single([aa], 3),
         helper_single([bb], 3),
         helper_single([cc], 3),
-    ].flat(),
+    ]),
     (aa, bb, cc) => {
-        const foo = [
+        const foo = flatten([
             helper_single([aa], 3),
             helper_single([bb], 3),
             helper_single([aa], 3),
             helper_single([cc], 3),
-        ].flat();
+        ]);
         return foo;
     },
     (aa, bb, cc) => {
-        const foo = [
+        const foo = flatten([
             helper_single([aa]),
             helper_single([bb]),
             helper_single([cc]),
-        ].flat();
+        ]);
         return foo;
     },
     (aa, bb, cc) => {
