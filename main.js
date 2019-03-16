@@ -32,14 +32,17 @@ const create_note = (chord, delta, octave) => ({
     delta: delta,
 });
 
+// ???? octave popping
 const helper_single = (chords, nn = 4, octave = 4) => {
     const octaves = [];
     while (octaves.length < chords.length)
         octaves.push(octave);
-    return helper_standard(chords, octaves, nn);
+    return create_notes(chords, octaves, nn);
 }
 
-const helper_standard = (chords, octaves, nn = 4) => {
+// create notes from [chords], [octaves], padding
+// create_notes([0, 0], [4, 5], 5) => ["C4", "C5", null, null, null]
+const create_notes = (chords, octaves, nn = 4) => {
     const foo = chords.map((chord, index) => {
         const octave = octaves[index];
         return {
@@ -54,46 +57,47 @@ const helper_standard = (chords, octaves, nn = 4) => {
     return foo;
 }
 
+const nema = (aa, bb, cc, index) => { // Nemamoussassa left hand
+    console.log('NemamoussassaLeftHand', aa, bb, cc, index);
+    if (index != 0) return [];
+    let foo = [
+        //////
+        create_note(aa, 0, 4), null,
+        create_note(aa, 0, 4), null,
+        create_note(bb, 0, 4), null,
+        create_note(bb, 0, 4), null,
+        create_note(cc, 0, 4), null,
+        create_note(cc, 0, 4), null,
+        ///////
+        create_note(aa, 0, 4), null,
+        create_note(aa, 0, 4), null,
+        create_note(bb, 0, 4), null,
+        create_note(bb, 0, 4), null,
+        create_note(cc+1, 0, 4), null,
+        create_note(cc+1, 0, 4), null,
+        ///////
+        create_note(aa, 0, 4), null,
+        create_note(aa, 0, 4), null,
+        create_note(bb+1, 0, 4), null,
+        create_note(bb+1, 0, 4), null,
+        create_note(cc+1, 0, 4), null,
+        create_note(cc+1, 0, 4), null,
+        ///////
+        create_note(aa+1, 0, 4), null,
+        create_note(aa+1, 0, 4), null,
+        create_note(bb+1, 0, 4), null,
+        create_note(bb+1, 0, 4), null,
+        create_note(cc+1, 0, 4), null,
+        create_note(cc+1, 0, 4), null,
+        ///////
+        // { note: 'A5', chord: 5, delta: 0, octave: 5 },
+    ];
+    // while (foo.length < 12) foo.push(null);
+    return foo;
+};
+
 const expands_chord = [
-    (aa, bb, cc, index) => { // dirac
-        console.log('coucou', aa, bb, cc, index);
-        if (index != 0) return [];
-        let foo = [
-            //////
-            create_note(aa, 0, 4), null,
-            create_note(aa, 0, 4), null,
-            create_note(bb, 0, 4), null,
-            create_note(bb, 0, 4), null,
-            create_note(cc, 0, 4), null,
-            create_note(cc, 0, 4), null,
-            ///////
-            create_note(aa, 0, 4), null,
-            create_note(aa, 0, 4), null,
-            create_note(bb, 0, 4), null,
-            create_note(bb, 0, 4), null,
-            create_note(cc+1, 0, 4), null,
-            create_note(cc+1, 0, 4), null,
-            ///////
-            create_note(aa, 0, 4), null,
-            create_note(aa, 0, 4), null,
-            create_note(bb+1, 0, 4), null,
-            create_note(bb+1, 0, 4), null,
-            create_note(cc+1, 0, 4), null,
-            create_note(cc+1, 0, 4), null,
-            ///////
-            create_note(aa+1, 0, 4), null,
-            create_note(aa+1, 0, 4), null,
-            create_note(bb+1, 0, 4), null,
-            create_note(bb+1, 0, 4), null,
-            create_note(cc+1, 0, 4), null,
-            create_note(cc+1, 0, 4), null,
-            ///////
-            // { note: 'A5', chord: 5, delta: 0, octave: 5 },
-        ];
-        // while (foo.length < 12) foo.push(null);
-        console.log(foo);
-        return foo;
-    },
+    nema,
     // Nemamoussassa on 4??
     (aa, bb, cc) => {
         return [
@@ -117,10 +121,10 @@ const expands_chord = [
     },
     // next
     (aa, bb, cc) => [
-        helper_standard([aa, aa], [5, 4], 3),
-        helper_standard([aa, aa], [5, 4], 3),
-        helper_standard([bb, bb], [5, 4], 3),
-        helper_standard([cc, cc], [5, 4], 3),
+        create_notes([aa, aa], [5, 4], 3),
+        create_notes([aa, aa], [5, 4], 3),
+        create_notes([bb, bb], [5, 4], 3),
+        create_notes([cc, cc], [5, 4], 3),
     ].flat(),
     // next next
     (aa, bb, cc) => [
@@ -573,15 +577,12 @@ $(document).ready(() => {
         const update_chords = () => {
             let chords = [];
             const value = mode + tuning;
-            console.log('------------', first_song_blocks.get())
             first_song_blocks.each(function(index) {
                 const aa = wrap(value + 0 + (index > 2));
                 const bb = wrap(value + 2 + (index > 1));
                 const cc = wrap(value + 4 + (index > 0));
-                console.log(index, 'expands_chord(', aa, bb, cc, index, ')');
                 if (chords.length < 48) chords = chords.concat(expands_chord[current_expand_chord_index](aa, bb, cc, index));
             })
-            console.log(chords);
             mbira_sectors.forEach((sector, index) => {
                 const chord = chords[index];
                 if (chord == null) {
