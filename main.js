@@ -24,21 +24,25 @@ const root_key_colors = ["#1c96fe", "#feb831", "#aee742", "#b75ac4", "#15cdc2", 
 
 let mbira_synth = undefined;
 
-const helper = (chord, delta, octave) => ({
+// create note from chord, delta (=0 root, =2 third, =4 fifth) and octave on keyboard
+const create_note = (chord, delta, octave) => ({
     note: `${letters[wrap(chord+delta)]}${octave}`,
     chord: wrap(chord),
     octave: octave,
     delta: delta,
 });
 
+// ???? octave popping
 const helper_single = (chords, nn = 4, octave = 4) => {
     const octaves = [];
     while (octaves.length < chords.length)
         octaves.push(octave);
-    return helper_standard(chords, octaves, nn);
+    return create_notes(chords, octaves, nn);
 }
 
-const helper_standard = (chords, octaves, nn = 4) => {
+// create notes from [chords], [octaves], padding
+// create_notes([0, 0], [4, 5], 5) => ["C4", "C5", null, null, null]
+const create_notes = (chords, octaves, nn = 4) => {
     const foo = chords.map((chord, index) => {
         const octave = octaves[index];
         return {
@@ -54,12 +58,37 @@ const helper_standard = (chords, octaves, nn = 4) => {
 }
 
 const expands_chord = [
+    nema_full,
+    nema_left_hand,
+    // Nemamoussassa on 4??
+    (aa, bb, cc) => {
+        return [
+            ///////////////////////////////
+            create_note(aa, 0, 5),
+            create_note(aa, 4, 5),
+            create_note(aa, 0, 4),
+            create_note(aa, 0, 6),
+            ///////////////////////////////
+            create_note(bb, 0, 5),
+            create_note(bb, 2, 5),
+            create_note(bb, 0, 4),
+            create_note(bb, 0, 5),
+            ///////////////////////////////
+            create_note(cc, 4, 5),
+            create_note(cc, 0, 5),
+            create_note(cc, 0, 5),
+            create_note(cc, 0, 6),
+            ///////////////////////////////
+        ];
+    },
+    // next
     (aa, bb, cc) => [
-        helper_standard([aa, aa], [5, 4], 3),
-        helper_standard([aa, aa], [5, 4], 3),
-        helper_standard([bb, bb], [5, 4], 3),
-        helper_standard([cc, cc], [5, 4], 3),
+        create_notes([aa, aa], [5, 4], 3),
+        create_notes([aa, aa], [5, 4], 3),
+        create_notes([bb, bb], [5, 4], 3),
+        create_notes([cc, cc], [5, 4], 3),
     ].flat(),
+    // next next
     (aa, bb, cc) => [
         helper_single([aa], 3, 5),
         helper_single([aa], 3),
@@ -105,23 +134,23 @@ const expands_chord = [
     },
     (aa, bb, cc) => {
         return [
-            helper(aa, 0, 4), helper(aa, 0, 5), helper(aa, 0, 3), helper(aa, 4, 5),
-            helper(bb, 0, 4), helper(bb, 0, 5), helper(bb, 0, 3), helper(bb, 4, 5),
-            helper(cc, 0, 4), helper(cc, 0, 5), helper(cc, 0, 3), helper(cc, 4, 5),
+            create_note(aa, 0, 4), create_note(aa, 0, 5), create_note(aa, 0, 3), create_note(aa, 4, 5),
+            create_note(bb, 0, 4), create_note(bb, 0, 5), create_note(bb, 0, 3), create_note(bb, 4, 5),
+            create_note(cc, 0, 4), create_note(cc, 0, 5), create_note(cc, 0, 3), create_note(cc, 4, 5),
         ];
     },
     (aa, bb, cc) => {
         return [
-            helper(aa, 0, 4), helper(aa, 2, 5), helper(aa, 0, 3), helper(aa, 4, 5),
-            helper(bb, 0, 4), helper(bb, 2, 5), helper(bb, 0, 3), helper(bb, 4, 5),
-            helper(cc, 0, 4), helper(cc, 2, 5), helper(cc, 0, 3), helper(cc, 4, 5),
+            create_note(aa, 0, 4), create_note(aa, 2, 5), create_note(aa, 0, 3), create_note(aa, 4, 5),
+            create_note(bb, 0, 4), create_note(bb, 2, 5), create_note(bb, 0, 3), create_note(bb, 4, 5),
+            create_note(cc, 0, 4), create_note(cc, 2, 5), create_note(cc, 0, 3), create_note(cc, 4, 5),
         ];
     },
     (aa, bb, cc) => {
         return [
-            helper(aa, 0, 5), null, helper(aa, 0, 5), null,
-            helper(bb, 0, 5), null, helper(bb, 0, 5), null,
-            helper(cc, 0, 5), null, helper(cc, 0, 5), null,
+            create_note(aa, 0, 5), null, create_note(aa, 0, 5), null,
+            create_note(bb, 0, 5), null, create_note(bb, 0, 5), null,
+            create_note(cc, 0, 5), null, create_note(cc, 0, 5), null,
         ];
     },
 ]
@@ -514,7 +543,7 @@ $(document).ready(() => {
                 const aa = wrap(value + 0 + (index > 2));
                 const bb = wrap(value + 2 + (index > 1));
                 const cc = wrap(value + 4 + (index > 0));
-                chords = chords.concat(expands_chord[current_expand_chord_index](aa, bb, cc));
+                if (chords.length < 48) chords = chords.concat(expands_chord[current_expand_chord_index](aa, bb, cc, index));
             })
             mbira_sectors.forEach((sector, index) => {
                 const chord = chords[index];
@@ -527,7 +556,7 @@ $(document).ready(() => {
                 sector.note = chord.note;
                 sector.chord = chord.chord;
                 sector.attr('fill', root_key_colors[chord.chord]
-                    .brighten(chord.delta == 4 ? 1 : chord.delta == 2 ? 2.5 : 0))
+                    .brighten(chord.delta == 4 ? 1 : chord.delta == 3 ?  1.7 : chord.delta == 2 ? 2.5 : 0))
             })
         }
         return {
