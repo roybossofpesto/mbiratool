@@ -101,32 +101,32 @@ const nema_full = (aa, bb, cc, index) => { // Nemamoussassa left hand & right ha
     if (index != 0) return [];
     let foo = [
         //////
+        create_note(aa, 0, 5), null,
         create_note(aa, 0, 4), null,
-        create_note(aa, 0, 4), null,
-        create_note(bb, 0, 4), null,
+        create_note(bb, 0, 5), null,
         create_note(bb, 0, 4), null,
         create_note(cc, 0, 4), null,
-        create_note(cc, 0, 4), null,
+        create_note(cc, 0, 3), null,
         ///////
+        create_note(aa, 0, 5), null,
         create_note(aa, 0, 4), null,
-        create_note(aa, 0, 4), null,
+        create_note(bb, 0, 5), null,
         create_note(bb, 0, 4), null,
-        create_note(bb, 0, 4), null,
-        create_note(cc+1, 0, 4), null,
-        create_note(cc+1, 0, 4), null,
-        ///////
-        create_note(aa, 0, 4), null,
-        create_note(aa, 0, 4), null,
-        create_note(bb+1, 0, 4), null,
-        create_note(bb+1, 0, 4), null,
-        create_note(cc+1, 0, 4), null,
+        create_note(cc+1, 4, 5), null,
         create_note(cc+1, 0, 4), null,
         ///////
-        create_note(aa+1, 0, 4), null,
-        create_note(aa+1, 0, 4), null,
+        create_note(aa, 0, 5), null,
+        create_note(aa, 0, 4), null,
+        create_note(bb+1, 0, 5), null,
         create_note(bb+1, 0, 4), null,
-        create_note(bb+1, 0, 4), null,
+        create_note(cc+1, 4, 5), null,
         create_note(cc+1, 0, 4), null,
+        ///////
+        create_note(aa+1, 0, 5), null,
+        create_note(aa+1, 0, 4), null,
+        create_note(bb+1, 0, 5), null,
+        create_note(bb+1, 0, 4), null,
+        create_note(cc+1, 4, 5), null,
         create_note(cc+1, 0, 4), null,
         ///////
         // { note: 'A5', chord: 5, delta: 0, octave: 5 },
