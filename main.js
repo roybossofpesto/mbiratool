@@ -57,7 +57,7 @@ const create_notes = (chords, octaves, nn = 4) => {
     return foo;
 }
 
-const nema = (aa, bb, cc, index) => { // Nemamoussassa left hand
+const nema_left_hand = (aa, bb, cc, index) => { // Nemamoussassa left hand
     console.log('NemamoussassaLeftHand', aa, bb, cc, index);
     if (index != 0) return [];
     let foo = [
@@ -96,8 +96,48 @@ const nema = (aa, bb, cc, index) => { // Nemamoussassa left hand
     return foo;
 };
 
+const nema_full = (aa, bb, cc, index) => { // Nemamoussassa left hand & right hand
+    console.log('NemamoussassaFull', aa, bb, cc, index);
+    if (index != 0) return [];
+    let foo = [
+        //////
+        create_note(aa, 0, 4), null,
+        create_note(aa, 0, 4), null,
+        create_note(bb, 0, 4), null,
+        create_note(bb, 0, 4), null,
+        create_note(cc, 0, 4), null,
+        create_note(cc, 0, 4), null,
+        ///////
+        create_note(aa, 0, 4), null,
+        create_note(aa, 0, 4), null,
+        create_note(bb, 0, 4), null,
+        create_note(bb, 0, 4), null,
+        create_note(cc+1, 0, 4), null,
+        create_note(cc+1, 0, 4), null,
+        ///////
+        create_note(aa, 0, 4), null,
+        create_note(aa, 0, 4), null,
+        create_note(bb+1, 0, 4), null,
+        create_note(bb+1, 0, 4), null,
+        create_note(cc+1, 0, 4), null,
+        create_note(cc+1, 0, 4), null,
+        ///////
+        create_note(aa+1, 0, 4), null,
+        create_note(aa+1, 0, 4), null,
+        create_note(bb+1, 0, 4), null,
+        create_note(bb+1, 0, 4), null,
+        create_note(cc+1, 0, 4), null,
+        create_note(cc+1, 0, 4), null,
+        ///////
+        // { note: 'A5', chord: 5, delta: 0, octave: 5 },
+    ];
+    // while (foo.length < 12) foo.push(null);
+    return foo;
+};
+
 const expands_chord = [
-    nema,
+    nema_full,
+    nema_left_hand,
     // Nemamoussassa on 4??
     (aa, bb, cc) => {
         return [
