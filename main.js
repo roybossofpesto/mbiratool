@@ -59,20 +59,20 @@ const expands_chord = [
     (aa, bb, cc) => {
         return [
             ///////////////////////////////
-            create_note(aa, 0, 6),
             create_note(aa, 0, 5),
             create_note(aa, 4, 5),
             create_note(aa, 0, 4),
-            ///////////////////////////////
             create_note(aa, 0, 6),
+            ///////////////////////////////
             create_note(bb, 0, 5),
             create_note(bb, 2, 5),
             create_note(bb, 0, 4),
-            ///////////////////////////////
             create_note(bb, 0, 5),
+            ///////////////////////////////
             create_note(cc, 4, 5),
             create_note(cc, 0, 5),
             create_note(cc, 0, 5),
+            create_note(cc, 0, 6),
             ///////////////////////////////
         ];
     },
