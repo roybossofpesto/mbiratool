@@ -55,6 +55,45 @@ const helper_standard = (chords, octaves, nn = 4) => {
 }
 
 const expands_chord = [
+    (aa, bb, cc, index) => { // dirac
+        console.log('coucou', aa, bb, cc, index);
+        if (index != 0) return [];
+        let foo = [
+            //////
+            create_note(aa, 0, 4), null,
+            create_note(aa, 0, 4), null,
+            create_note(bb, 0, 4), null,
+            create_note(bb, 0, 4), null,
+            create_note(cc, 0, 4), null,
+            create_note(cc, 0, 4), null,
+            ///////
+            create_note(aa, 0, 4), null,
+            create_note(aa, 0, 4), null,
+            create_note(bb, 0, 4), null,
+            create_note(bb, 0, 4), null,
+            create_note(cc+1, 0, 4), null,
+            create_note(cc+1, 0, 4), null,
+            ///////
+            create_note(aa, 0, 4), null,
+            create_note(aa, 0, 4), null,
+            create_note(bb+1, 0, 4), null,
+            create_note(bb+1, 0, 4), null,
+            create_note(cc+1, 0, 4), null,
+            create_note(cc+1, 0, 4), null,
+            ///////
+            create_note(aa+1, 0, 4), null,
+            create_note(aa+1, 0, 4), null,
+            create_note(bb+1, 0, 4), null,
+            create_note(bb+1, 0, 4), null,
+            create_note(cc+1, 0, 4), null,
+            create_note(cc+1, 0, 4), null,
+            ///////
+            // { note: 'A5', chord: 5, delta: 0, octave: 5 },
+        ];
+        // while (foo.length < 12) foo.push(null);
+        console.log(foo);
+        return foo;
+    },
     // Nemamoussassa on 4??
     (aa, bb, cc) => {
         return [
@@ -534,12 +573,15 @@ $(document).ready(() => {
         const update_chords = () => {
             let chords = [];
             const value = mode + tuning;
+            console.log('------------', first_song_blocks.get())
             first_song_blocks.each(function(index) {
                 const aa = wrap(value + 0 + (index > 2));
                 const bb = wrap(value + 2 + (index > 1));
                 const cc = wrap(value + 4 + (index > 0));
-                chords = chords.concat(expands_chord[current_expand_chord_index](aa, bb, cc));
+                console.log(index, 'expands_chord(', aa, bb, cc, index, ')');
+                if (chords.length < 48) chords = chords.concat(expands_chord[current_expand_chord_index](aa, bb, cc, index));
             })
+            console.log(chords);
             mbira_sectors.forEach((sector, index) => {
                 const chord = chords[index];
                 if (chord == null) {
