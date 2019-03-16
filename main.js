@@ -658,6 +658,13 @@ $(document).ready(() => {
         },
     });
 
+    $(".setting_transpose").click(function() {
+        transpose_coarse = parseFloat($(this).attr('tc'));
+        transpose_fine = parseFloat($(this).attr('tf'));
+        const transpose = transpose_coarse + transpose_fine / 100.;
+        $('div.view.transpose').text(transpose);
+    });
+
     $('#transpose-knob-coarse').knob({
         'width': knob_size,
         'height': knob_size,
