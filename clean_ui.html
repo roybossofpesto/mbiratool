@@ -15,29 +15,41 @@
 
         $().ready(() => {
 
+            const elem_t = $($.parseHTML(
+                '<p> <div class="ui icon top left pointing gap dropdown mini button"> <div class="default text">1st</div> <div class="menu"> <div class="item" data-value="0">1st</div> <div class="item" data-value="2">3rd</div> <div class="item" data-value="4">5th</div> </div> </div> </p> <p> <div class="ui compact icon vertical octave buttons"> <button class="ui button" data-value="1"> + </button> <button class="ui button active" data-value="0"> 0 </button> <button class="ui button" data-value="-1"> - </button> </div> </p>'
+            ));
 
-            let octave = 0;
-            let delta = 0;
+            // const elem = $($.parseHTML('<p>coucou</p>'));
 
-            const update_all = function() {
-                console.log('newState', delta, octave);
-            }
+            $('.note').each(function() {
+                console.log('fofofo')
+                $(this).append(elem.clone());
 
-            const octave_buttons = $('.ui.octave.buttons').find('button');
-            octave_buttons.click(function() {
-                const current = $(this);
-                const vv = parseFloat(current.attr('data-value'));
-                octave = vv;
-                octave_buttons.removeClass('active');
-                current.addClass('active');
-                update_all();
-            });
 
-            $('.ui.gap.dropdown').dropdown({
-                onChange: function() {
-                    delta = parseInt($(this).dropdown('get value'));
+                let octave = 0;
+                let delta = 0;
+
+                const update_all = function() {
+                    const elem = elem_t.clone();
+                    console.log('newState', delta, octave);
+                }
+
+                const octave_buttons = elem.find('.ui.octave.buttons').find('button');
+                octave_buttons.click(function() {
+                    const current = $(this);
+                    const vv = parseFloat(current.attr('data-value'));
+                    octave = vv;
+                    octave_buttons.removeClass('active');
+                    current.addClass('active');
                     update_all();
-                },
+                });
+
+                $('.ui.gap.dropdown').dropdown({
+                    onChange: function() {
+                        delta = parseInt($(this).dropdown('get value'));
+                        update_all();
+                    },
+                });
             });
 
         });
@@ -54,25 +66,41 @@
     <div class="ui text container">
         <div class="ui twelve column center aligned grid">
             <div class="column">
-                <p>
-                    <div class="ui icon top left pointing gap dropdown mini button">
-                        <div class="default text">1st</div>
-                        <div class="menu">
-                            <div class="item" data-value='0'>1st</div>
-                            <div class="item" data-value='2'>3rd</div>
-                            <div class="item" data-value='4'>5th</div>
-                        </div>
-                    </div>
-                </p>
-                <p>
-                    <div class="ui compact icon vertical octave buttons">
-                        <button class="ui button" data-value="1"> + </button>
-                        <button class="ui button active" data-value="0"> 0 </button>
-                        <button class="ui button" data-value="-1"> - </button>
-                    </div>
-                </p>
+                <div class="note"></div>
             </div>
-            <div class="column">2</div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
             <div class="column">3</div>
             <div class="column">4</div>
             <div class="column">5</div>
