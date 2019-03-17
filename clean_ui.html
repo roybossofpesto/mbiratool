@@ -15,26 +15,33 @@
 
         $().ready(() => {
 
-            const elem_t = $($.parseHTML(
-                '<p> <div class="ui icon top left pointing gap dropdown mini button"> <div class="default text">1st</div> <div class="menu"> <div class="item" data-value="0">1st</div> <div class="item" data-value="2">3rd</div> <div class="item" data-value="4">5th</div> </div> </div> </p> <p> <div class="ui compact icon vertical octave buttons"> <button class="ui button" data-value="1"> + </button> <button class="ui button active" data-value="0"> 0 </button> <button class="ui button" data-value="-1"> - </button> </div> </p>'
-            ));
+            $('.note').each(function(index) {
+                // const foo =
+                //     '<p id="lol"><div class="ui icon top left pointing gap dropdown mini button"> <div class="default text">1st</div> <div class="menu"> <div class="item" data-value="0">1st</div> <div class="item" data-value="2">3rd</div> <div class="item" data-value="4">5th</div> </div> </div> </p> ';
+                //
+                // const elem = $($.parseHTML(foo));
+                const aa = $.parseHTML('<div class="ui compact icon vertical octave buttons"> <button class="ui button" data-value="1"> + </button> <button class="ui button active" data-value="0"> 0 </button> <button class="ui button" data-value="-1"> - </button></div>');
+                const elem = $.parseHTML('<p><i class="ui warning icon"></i> <span id="coucou">aa</span></p>');
+                // elem.children(0).append(aa);
+                $(elem).find('#coucou').text(`${index}`);
 
-            // const elem = $($.parseHTML('<p>coucou</p>'));
+                console.log('fofofo', index, elem);
+                $(this).append(elem);
 
-            $('.note').each(function() {
-                console.log('fofofo')
-                $(this).append(elem.clone());
-
+                return;
+                // const elem = elem_t.clone();
+                console.log('clone elem', elem.children().get(), elem.find('#lol').length)
 
                 let octave = 0;
                 let delta = 0;
 
                 const update_all = function() {
-                    const elem = elem_t.clone();
+                    // const elem = elem_t.clone();
                     console.log('newState', delta, octave);
                 }
 
                 const octave_buttons = elem.find('.ui.octave.buttons').find('button');
+                console.log(elem.find('.ui').length, octave_buttons.length);
                 octave_buttons.click(function() {
                     const current = $(this);
                     const vv = parseFloat(current.attr('data-value'));
@@ -44,12 +51,13 @@
                     update_all();
                 });
 
-                $('.ui.gap.dropdown').dropdown({
+                elem.find('.ui.gap.dropdown').dropdown({
                     onChange: function() {
                         delta = parseInt($(this).dropdown('get value'));
                         update_all();
                     },
                 });
+
             });
 
         });
@@ -101,52 +109,115 @@
             <div class="column">
                 <div class="note"></div>
             </div>
-            <div class="column">3</div>
-            <div class="column">4</div>
-            <div class="column">5</div>
-            <div class="column">6</div>
-            <div class="column">7</div>
-            <div class="column">8</div>
-            <div class="column">9</div>
-            <div class="column">10</div>
-            <div class="column">11</div>
-            <div class="column">12</div>
-            <div class="column">13</div>
-            <div class="column">14</div>
-            <div class="column">15</div>
-            <div class="column">16</div>
-            <div class="column">17</div>
-            <div class="column">18</div>
-            <div class="column">19</div>
-            <div class="column">20</div>
-            <div class="column">21</div>
-            <div class="column">22</div>
-            <div class="column">23</div>
-            <div class="column">24</div>
-            <div class="column">25</div>
-            <div class="column">26</div>
-            <div class="column">27</div>
-            <div class="column">28</div>
-            <div class="column">29</div>
-            <div class="column">30</div>
-            <div class="column">31</div>
-            <div class="column">32</div>
-            <div class="column">33</div>
-            <div class="column">34</div>
-            <div class="column">35</div>
-            <div class="column">36</div>
-            <div class="column">37</div>
-            <div class="column">38</div>
-            <div class="column">39</div>
-            <div class="column">40</div>
-            <div class="column">41</div>
-            <div class="column">42</div>
-            <div class="column">43</div>
-            <div class="column">44</div>
-            <div class="column">45</div>
-            <div class="column">46</div>
-            <div class="column">47</div>
-            <div class="column">48</div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+            <div class="column">
+                <div class="note"></div>
+            </div>
+
         </div>
     </div>
 </body>
