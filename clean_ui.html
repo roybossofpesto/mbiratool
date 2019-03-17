@@ -15,23 +15,28 @@
 
         $().ready(() => {
 
-            const octave_buttons = $('.octave.buttons').find('button');
-            console.log('coucou', octave_buttons.length);
 
             let octave = 0;
+            let delta = 0;
+
+            const update_all = function() {
+                console.log('newState', delta, octave);
+            }
+
+            const octave_buttons = $('.ui.octave.buttons').find('button');
             octave_buttons.click(function() {
                 const current = $(this);
                 const vv = parseFloat(current.attr('data-value'));
                 octave = vv;
                 octave_buttons.removeClass('active');
                 current.addClass('active');
+                update_all();
             });
 
-            let delta = 0;
             $('.ui.gap.dropdown').dropdown({
                 onChange: function() {
                     delta = parseInt($(this).dropdown('get value'));
-                    console.log('foofo', delta, octave);
+                    update_all();
                 },
             });
 
@@ -59,12 +64,13 @@
                         </div>
                     </div>
                 </p>
-
-                <div class="ui compact icon vertical octave buttons">
-                    <button class="ui button" data-value="-1"> + </button>
-                    <button class="ui button active" data-value="0"> 0 </button>
-                    <button class="ui button" data-value="1"> - </button>
-                </div>
+                <p>
+                    <div class="ui compact icon vertical octave buttons">
+                        <button class="ui button" data-value="1"> + </button>
+                        <button class="ui button active" data-value="0"> 0 </button>
+                        <button class="ui button" data-value="-1"> - </button>
+                    </div>
+                </p>
             </div>
             <div class="column">2</div>
             <div class="column">3</div>
