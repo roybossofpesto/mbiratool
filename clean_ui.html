@@ -39,13 +39,14 @@
                 }
 
                 // const octave_buttons = elem.find('.ui.octave.buttons').find('button');
-                console.log('boo', $(octave_buttons).find('button').length);
-                $(octave_buttons).find('button').click(function() {
+                const aaa = $(octave_buttons).find('button');
+                console.log('boo', aaa.length);
+                aaa.click(function() {
                     const current = $(this);
                     const vv = parseFloat(current.attr('data-value'));
                     octave = vv;
                     // console.log('octave', octave, $(octave_buttons).length)
-                    $(octave_buttons).find('button').removeClass('active');
+                    aaa.removeClass('active');
                     current.addClass('active');
                     // update_all();
                 });
