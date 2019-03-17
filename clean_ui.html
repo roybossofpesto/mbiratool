@@ -20,43 +20,54 @@
                 //     '<p id="lol"><div class="ui icon top left pointing gap dropdown mini button"> <div class="default text">1st</div> <div class="menu"> <div class="item" data-value="0">1st</div> <div class="item" data-value="2">3rd</div> <div class="item" data-value="4">5th</div> </div> </div> </p> ';
                 //
                 // const elem = $($.parseHTML(foo));
-                const aa = $.parseHTML('<div class="ui compact icon vertical octave buttons"> <button class="ui button" data-value="1"> + </button> <button class="ui button active" data-value="0"> 0 </button> <button class="ui button" data-value="-1"> - </button></div>');
+                const octave_buttons = $.parseHTML(
+                    '<div class="ui compact icon vertical octave buttons"> <button class="ui button" data-value="1"> + </button> <button class="ui button active" data-value="0"> 0 </button> <button class="ui button" data-value="-1"> - </button></div>'
+                );
                 const elem = $.parseHTML('<p><i class="ui warning icon"></i> <span id="coucou">aa</span></p>');
                 // elem.children(0).append(aa);
                 $(elem).find('#coucou').text(`${index}`);
+                $(elem).append(octave_buttons);
 
                 console.log('fofofo', index, elem);
-                $(this).append(elem);
-
-                return;
-                // const elem = elem_t.clone();
-                console.log('clone elem', elem.children().get(), elem.find('#lol').length)
 
                 let octave = 0;
-                let delta = 0;
+
 
                 const update_all = function() {
                     // const elem = elem_t.clone();
-                    console.log('newState', delta, octave);
+                    console.log('newState', octave);
                 }
 
-                const octave_buttons = elem.find('.ui.octave.buttons').find('button');
-                console.log(elem.find('.ui').length, octave_buttons.length);
-                octave_buttons.click(function() {
+                // const octave_buttons = elem.find('.ui.octave.buttons').find('button');
+                console.log('boo', $(octave_buttons).find('button').length);
+                $(octave_buttons).find('button').click(function() {
                     const current = $(this);
                     const vv = parseFloat(current.attr('data-value'));
                     octave = vv;
-                    octave_buttons.removeClass('active');
+                    // console.log('octave', octave, $(octave_buttons).length)
+                    $(octave_buttons).find('button').removeClass('active');
                     current.addClass('active');
-                    update_all();
+                    // update_all();
                 });
 
-                elem.find('.ui.gap.dropdown').dropdown({
-                    onChange: function() {
-                        delta = parseInt($(this).dropdown('get value'));
-                        update_all();
-                    },
-                });
+                $(this).append(elem);
+
+
+                // return;
+                // // const elem = elem_t.clone();
+                // console.log('clone elem', elem.children().get(), elem.find('#lol').length)
+                //
+                // let delta = 0;
+                //
+                //
+                //
+                //
+                // elem.find('.ui.gap.dropdown').dropdown({
+                //     onChange: function() {
+                //         delta = parseInt($(this).dropdown('get value'));
+                //         update_all();
+                //     },
+                // });
 
             });
 
@@ -76,7 +87,7 @@
             <div class="column">
                 <div class="note"></div>
             </div>
-            <div class="column">
+            <!-- <div class="column">
                 <div class="note"></div>
             </div>
             <div class="column">
@@ -216,7 +227,7 @@
             </div>
             <div class="column">
                 <div class="note"></div>
-            </div>
+            </div> -->
 
         </div>
     </div>
