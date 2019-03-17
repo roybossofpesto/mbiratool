@@ -3,26 +3,29 @@
 class NoteWidget {
 
     constructor(index) {
-        this.octave = 0;
+        this.octave = 5;
         this.index = index;
+        this.delta = -1;
 
-        // const foo =
-        //     '<p id="lol"><div class="ui icon top left pointing gap dropdown mini button"> <div class="default text">1st</div> <div class="menu"> <div class="item" data-value="0">1st</div> <div class="item" data-value="2">3rd</div> <div class="item" data-value="4">5th</div> </div> </div> </p> ';
-        //
-        // const elem = $($.parseHTML(foo));
-        const octave_elem = $.parseHTML(`<div class="ui compact icon vertical octave buttons">
-            <button class="ui button" data-value="1">+</button>
-            <button class="ui button active" data-value="0">0</button>
-            <button class="ui button" data-value="-1">-</button>
-            </div>`);
-        const elem = $.parseHTML('<p><i class="ui warning icon"></i> <span id="index">aa</span></p>');
-        // elem.children(0).append(aa);
-        $(elem).find('#index').text(`${index}`);
-        $(elem).append(octave_elem);
+        const octave_elem = $.parseHTML(`<p><div class="ui mini icon vertical buttons">
+            <button class="ui button" data-value="6">+</button>
+            <button class="ui button active" data-value="5">0</button>
+            <button class="ui button" data-value="4">-</button>
+        </div></p>`);
+
+        const delta_elem = $.parseHTML(`<p><div class="ui icon top left pointing dropdown mini button">
+            <div class="default text">&emptyset;</div>
+            <div class="menu">
+                <div class="item" data-value="-1">&emptyset;</div>
+                <div class="item" data-value="0">1st</div>
+                <div class="item" data-value="2">3rd</div>
+                <div class="item" data-value="4">5th</div>
+            </div>
+        </div></p>`);
 
         const self = this;
 
-        const octave_buttons = $(octave_elem).find('button');
+        const octave_buttons = $(octave_elem).find('.ui.button');
         octave_buttons.click(function() {
             const current = $(this);
             const vv = parseFloat(current.attr('data-value'));
@@ -32,14 +35,29 @@ class NoteWidget {
             self.update();
         });
 
+        const delta_dropdown = $(delta_elem);
+        delta_dropdown.dropdown({
+            onChange: function() {
+                self.delta = parseInt($(this).dropdown('get value'));
+                self.update();
+            },
+        });
+
+        // const elem = $.parseHTML('<div><p id="index"></p></div>');
+        // elem.find('#index').text(`${index}`);
+        const elem = $('<div>');
+        elem.append(delta_elem);
+        elem.append(octave_elem);
+
         this.elem = elem;
     }
 
     get note() {
-
+        return this.delta < 0 ? null : create_note(0, this.delta, this.octave);
     }
 
     update() {
-        console.log('NoteWidget', 'update', this.index, this.octave);
+        // console.log('NoteWidget', 'update', this.index,     this.note);
+        if (this.onUpdate) this.onUpdate();
     }
 }

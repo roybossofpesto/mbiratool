@@ -1,10 +1,5 @@
 'use strict';
 
-const wrap = (xx) => {
-    return xx % 7;
-};
-
-const letters = "CDEFGAB";
 const numbers = "1234567";
 const tunings = [
     "Ionian",
