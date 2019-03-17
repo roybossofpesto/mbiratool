@@ -667,6 +667,11 @@ $(document).ready(() => {
         transpose_fine = parseFloat($(this).attr('tf'));
         const transpose = transpose_coarse + transpose_fine / 100.;
         $('div.view.transpose').text(transpose);
+
+        tuning = wrap(parseInt($(this).attr('tuning')));
+        $('div.view.tuning').text(tunings[wrap(tuning)]);
+
+        update_all();
     });
 
     $('#transpose-knob-coarse').knob({
