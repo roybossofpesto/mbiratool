@@ -24,14 +24,6 @@ const root_key_colors = ["#1c96fe", "#feb831", "#aee742", "#b75ac4", "#15cdc2", 
 
 let mbira_synth = undefined;
 
-// create note from chord, delta (=0 root, =2 third, =4 fifth) and octave on keyboard
-const create_note = (chord, delta, octave) => ({
-    note: `${letters[wrap(chord+delta)]}${octave}`,
-    chord: wrap(chord),
-    octave: octave,
-    delta: delta,
-});
-
 // ???? octave popping
 const helper_single = (chords, nn = 4, octave = 4) => {
     const octaves = [];
