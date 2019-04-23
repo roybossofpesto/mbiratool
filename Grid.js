@@ -27,16 +27,16 @@ class NoteWidget {
 
         const dual_button = $.parseHTML(`
         <div class="ui vertical fluid icon buttons">
-        <div class="ui icon top left pointing dropdown mini black basic button delta">
+        <div class="ui icon top left pointing dropdown mini black button delta">
             <div class="default text">&emptyset;</div>
             <div class="menu">
-                <div class="item" data-color="black" data-value="-1">&emptyset;</div>
-                <div class="item" data-color="red" data-value="0">1st</div>
-                <div class="item" data-color="green" data-value="2">3rd</div>
-                <div class="item" data-color="blue" data-value="4">5th</div>
+                <div class="item" data-value="-1">&emptyset;</div>
+                <div class="item" data-value="0">1st</div>
+                <div class="item" data-value="2">3rd</div>
+                <div class="item" data-value="4">5th</div>
             </div>
         </div>
-        <div class="ui icon top left pointing dropdown mini black basic button octave">
+        <div class="ui icon top left pointing dropdown mini black button octave">
             <div class="default text">0</div>
             <div class="menu">
                 <div class="item" data-value="6">+</div>
@@ -59,16 +59,27 @@ class NoteWidget {
             },
         });
 
+        const delta_current_color = "black";
+        const delta_colors = { 0: "red", 2: "green", 4: "blue", '-1' : "black"};
         const delta_dropdown = $(dual_button).find('.ui.dropdown.delta');
         delta_dropdown.dropdown({
             on: 'hover',
             duration: 0,
             onChange: function() {
                 const current = $(this);
-                const vv = parseFloat(current.dropdown('get value'));
+                const vv = parseInt(current.dropdown('get value'));
+                const color = delta_colors[vv];
+                console.log(vv, color);
+
                 delta_dropdown.removeClass('active');
                 current.addClass('active');
+
+                delta_dropdown.removeClass(self.delta_current_color);
+                self.delta_current_color = color;
+                current.addClass(self.delta_current_color);
+                
                 self.delta = vv;
+
                 self.update();
             },
         });
