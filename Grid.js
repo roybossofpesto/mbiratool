@@ -1,5 +1,7 @@
 "use strict";
 
+const root_key_colors = ["blue", "orange", "green", "purple", "teal", "red", "pink"];
+
 class NoteWidget {
 
     constructor(index) {
@@ -7,6 +9,8 @@ class NoteWidget {
         this.octave = 5;
         this.index = index;
         this.delta = -1;
+        this.chord_color = "black";
+        this.root_key_color = "black";
 
         /*
                 const octave_elem = $.parseHTML(`<p><div class="ui mini icon vertical buttons">
@@ -93,15 +97,8 @@ class NoteWidget {
     }
 
     set chord(root_key) {
-        const delta_dropdown = this.elem.find('.ui.dropdown.delta');
-        const root_key_colors = ["blue", "orange", "green", "purple", "teal", "red", "pink"]
-
         this.__chord = root_key % 7;
-        const color = root_key_colors[this.__chord];
-        // console.log('set root_key', root_key, delta_dropdown, color)
-
-        delta_dropdown.removeClass('black');
-        delta_dropdown.addClass(color);
+        this.update();
     }
 
     get chord() {
@@ -110,6 +107,19 @@ class NoteWidget {
 
     update() {
         // console.log('NoteWidget', 'update', this.delta, this.octave, this.index, this.note);
+        const root_color = root_key_colors[this.__chord];
+
+        const delta_dropdown = this.elem.find('.ui.dropdown.delta');
+        const octave_dropdown = this.elem.find('.ui.dropdown.octave');
+
+        delta_dropdown.removeClass(this.chord_color);
+        this.chord_color = this.note == null ? "black" : root_color;
+        delta_dropdown.addClass(this.chord_color);
+
+        octave_dropdown.removeClass(this.root_key_color);
+        this.root_key_color = root_color;
+        octave_dropdown.addClass(this.root_key_color);
+
         if (this.onUpdate) this.onUpdate();
     }
 }

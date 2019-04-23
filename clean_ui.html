@@ -31,9 +31,9 @@
                     // console.log('widget.index', widget.index);
                     // console.log('widget.chord', widget.chord);
                     const score = widgets.map(widget => widget.note);
-                    //console.log(score)
+                    // console.log(score)
                     const sparse_score = score.map(elem => elem == null ? 'x' : elem.note).join('');
-                    //console.log(sparse_score);
+                    console.log(sparse_score);
                 }
                 const column = $('<div>', {
                     class: 'column'
