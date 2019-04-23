@@ -27,16 +27,16 @@ class NoteWidget {
 
         const dual_button = $.parseHTML(`
         <div class="ui vertical fluid icon buttons">
-        <div class="ui icon top left pointing dropdown mini black basic button octave">
+        <div class="ui icon top left pointing dropdown mini black basic button delta">
             <div class="default text">&emptyset;</div>
             <div class="menu">
-                <div class="item" data-value="-1">&emptyset;</div>
-                <div class="item" data-value="0">1st</div>
-                <div class="item" data-value="2">3rd</div>
-                <div class="item" data-value="4">5th</div>
+                <div class="item" data-color="black" data-value="-1">&emptyset;</div>
+                <div class="item" data-color="red" data-value="0">1st</div>
+                <div class="item" data-color="green" data-value="2">3rd</div>
+                <div class="item" data-color="blue" data-value="4">5th</div>
             </div>
         </div>
-        <div class="ui icon top left pointing dropdown mini black basic button delta">
+        <div class="ui icon top left pointing dropdown mini black basic button octave">
             <div class="default text">0</div>
             <div class="menu">
                 <div class="item" data-value="6">+</div>
@@ -49,7 +49,7 @@ class NoteWidget {
 
         const self = this;
 
-        const octave_dropdown = $(dual_button).find('.ui.dropdown.delta');
+        const octave_dropdown = $(dual_button).find('.ui.dropdown.octave');
         octave_dropdown.dropdown({
             on: 'hover',
             duration: 0,
@@ -59,7 +59,7 @@ class NoteWidget {
             },
         });
 
-        const delta_dropdown = $(dual_button).find('.ui.dropdown.octave');
+        const delta_dropdown = $(dual_button).find('.ui.dropdown.delta');
         delta_dropdown.dropdown({
             on: 'hover',
             duration: 0,
