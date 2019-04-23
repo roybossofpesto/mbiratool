@@ -21,8 +21,11 @@
             for (let kk = 0; kk < 48; kk++) {
                 const widget = new NoteWidget(kk);
                 widget.onUpdate = () => {
-                    console.log('prout', this.note, this.index);
-                    console.log(widgets.map(widget => widget.note));
+                    console.log('prout', widget.note, widget.index);
+                    const score = widgets.map(widget => widget.note);
+                    console.log(score)
+                    const sparse_score = score.map(elem => elem == null ? 'x' : elem.note).join('');
+                    console.log(sparse_score);
                 }
                 const column = $('<div>', {
                     class: 'column'

@@ -48,8 +48,8 @@ class NoteWidget {
 
         const self = this;
 
-        const delta_dropdown = $(dual_button).find('.ui.dropdown.delta');
-        delta_dropdown.dropdown({
+        const octave_dropdown = $(dual_button).find('.ui.dropdown.delta');
+        octave_dropdown.dropdown({
             on: 'hover',
             duration: 0,
             onChange: function() {
@@ -58,14 +58,14 @@ class NoteWidget {
             },
         });
 
-        const octave_dropdown = $(dual_button).find('.ui.dropdown.octave');
-        octave_dropdown.dropdown({
+        const delta_dropdown = $(dual_button).find('.ui.dropdown.octave');
+        delta_dropdown.dropdown({
             on: 'hover',
             duration: 0,
             onChange: function() {
                 const current = $(this);
                 const vv = parseFloat(current.dropdown('get value'));
-                octave_dropdown.removeClass('active');
+                delta_dropdown.removeClass('active');
                 current.addClass('active');
                 self.delta = vv;
                 self.update();
@@ -88,7 +88,7 @@ class NoteWidget {
     }
 
     update() {
-//        console.log('NoteWidget', 'update', this.delta, this.octave, this.index, this.note);
-        //if (this.onUpdate) this.onUpdate();
+        // console.log('NoteWidget', 'update', this.delta, this.octave, this.index, this.note);
+        if (this.onUpdate) this.onUpdate();
     }
 }
