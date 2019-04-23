@@ -3,6 +3,7 @@
 class NoteWidget {
 
     constructor(index) {
+        this.__chord = null;
         this.octave = 5;
         this.index = index;
         this.delta = -1;
@@ -59,8 +60,6 @@ class NoteWidget {
             },
         });
 
-        const delta_current_color = "black";
-        const delta_colors = { 0: "red", 2: "green", 4: "blue", '-1' : "black"};
         const delta_dropdown = $(dual_button).find('.ui.dropdown.delta');
         delta_dropdown.dropdown({
             on: 'hover',
@@ -68,16 +67,10 @@ class NoteWidget {
             onChange: function() {
                 const current = $(this);
                 const vv = parseInt(current.dropdown('get value'));
-                const color = delta_colors[vv];
-                console.log(vv, color);
 
                 delta_dropdown.removeClass('active');
                 current.addClass('active');
 
-                delta_dropdown.removeClass(self.delta_current_color);
-                self.delta_current_color = color;
-                current.addClass(self.delta_current_color);
-                
                 self.delta = vv;
 
                 self.update();
@@ -96,7 +89,23 @@ class NoteWidget {
     }
 
     get note() {
-        return this.delta < 0 ? null : create_note(0, this.delta, this.octave);
+        return this.delta < 0 ? null : create_note(this.chord, this.delta, this.octave);
+    }
+
+    set chord(root_key) {
+        const delta_dropdown = this.elem.find('.ui.dropdown.delta');
+        const root_key_colors = ["blue", "orange", "green", "purple", "teal", "red", "pink"]
+
+        this.__chord = root_key % 7;
+        const color = root_key_colors[this.__chord];
+        // console.log('set root_key', root_key, delta_dropdown, color)
+
+        delta_dropdown.removeClass('black');
+        delta_dropdown.addClass(color);
+    }
+
+    get chord() {
+        return this.__chord;
     }
 
     update() {
