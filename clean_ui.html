@@ -17,16 +17,22 @@
         $().ready(() => {
             const main_grid = $('#main_grid');
 
-            const chords = [];
+            const chords_default = [];
             [0, 2, 4, 0, 2, 5, 0, 3, 5, 1, 3, 5].forEach((value, index) => {
                 for (let kk = 0; kk < 4; kk++)
-                    chords.push(value);
-            })
+                    chords_default.push(value);
+            });
+
+            const chords_one = [0, 0, 0, 0, 0, 0, 2, 2, 2, 4, 4, 4,
+                0, 0, 0, 0, 0, 0, 2, 2, 2, 5, 5, 5,
+                0, 0, 0, 0, 0, 0, 3, 3, 3, 5, 5, 5,
+                1, 1, 1, 1, 1, 1, 3, 3, 3, 5, 5, 5
+            ];
 
             $('.ui.edit.dropdown').dropdown();
             const sparse_score_label = $('#sparse_score_label');
 
-            const widgets = chords.map((chord, index) => {
+            const widgets = chords_default.map((chord, index) => {
                 const widget = new NoteWidget(index);
                 widget.chord = chord;
                 widget.onUpdate = () => {
@@ -41,7 +47,7 @@
                     sparse_score.splice(38, 0, "<br/>");
 
                     sparse_score = sparse_score.join(' ');
-                    console.log(sparse_score);
+                    // console.log(sparse_score);
                     sparse_score_label.html(sparse_score);
                 }
                 const column = $('<div>', {
@@ -52,6 +58,25 @@
 
                 return widget;
             });
+
+            $('.ui.clear_all.button').click(() => {
+                widgets.forEach((widget, index) => {
+                    widget.chord = 0;
+                });
+                console.log('coucou', widgets.length);
+            })
+            $('.ui.set_chords_one.button').click(() => {
+                widgets.forEach((widget, index) => {
+                    widget.chord = chords_one[index];
+                });
+                console.log('coucou', widgets.length);
+            })
+            $('.ui.set_chords_default.button').click(() => {
+                widgets.forEach((widget, index) => {
+                    widget.chord = chords_default[index];
+                });
+                console.log('coucou', widgets.length);
+            })
 
         });
     </script>
@@ -66,6 +91,15 @@
     <div class="ui container">
         <div class="ui segments">
             <div class="ui top attached menu">
+                <div class="ui clear_all button item icon">
+                    <i class="eraser icon"></i>
+                </div>
+                <div class="ui set_chords_one button item">
+                    633
+                </div>
+                <div class="ui set_chords_default button item">
+                    444
+                </div>
                 <div class="ui edit dropdown icon item">
                     <i class="wrench icon"></i>
                     <div class="menu">
