@@ -6,7 +6,7 @@ class NoteWidget {
 
     constructor(index) {
         this.__chord = null;
-        this.octave = 5;
+        this.__octave = 5;
         this.index = index;
         this.delta = -1;
         this.chord_color = "black";
@@ -54,12 +54,12 @@ class NoteWidget {
 
         const self = this;
 
-        const octave_dropdown = $(dual_button).find('.ui.dropdown.octave');
-        octave_dropdown.dropdown({
+        this.octave_dropdown = $(dual_button).find('.ui.dropdown.octave');
+        this.octave_dropdown.dropdown({
             on: 'hover',
             duration: 0,
             onChange: function() {
-                self.octave = parseInt($(this).dropdown('get value'));
+                self.__octave = parseInt($(this).dropdown('get value'));
                 self.update();
             },
         });
@@ -92,6 +92,16 @@ class NoteWidget {
         this.elem = elem;
     }
 
+    get octave() {
+        return this.__octave;
+    }
+
+    set octave(value) {
+        this.__octave = value;
+        // console.log(this.octave_dropdown, this.octave_dropdown.dropdown('get value'));
+        this.octave_dropdown.dropdown('set selected', value);
+    }
+
     get note() {
         return this.delta < 0 ? null : create_note(this.chord, this.delta, this.octave);
     }
@@ -110,15 +120,14 @@ class NoteWidget {
         const root_color = root_key_colors[this.__chord];
 
         const delta_dropdown = this.elem.find('.ui.dropdown.delta');
-        const octave_dropdown = this.elem.find('.ui.dropdown.octave');
 
         delta_dropdown.removeClass(this.chord_color);
         this.chord_color = this.note == null ? "black" : root_color;
         delta_dropdown.addClass(this.chord_color);
 
-        octave_dropdown.removeClass(this.root_key_color);
+        this.octave_dropdown.removeClass(this.root_key_color);
         this.root_key_color = root_color;
-        octave_dropdown.addClass(this.root_key_color);
+        this.octave_dropdown.addClass(this.root_key_color);
 
         if (this.onUpdate) this.onUpdate();
     }

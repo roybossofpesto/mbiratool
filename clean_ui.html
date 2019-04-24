@@ -64,19 +64,21 @@
                 widgets.forEach((widget, index) => {
                     widget.chord = 0;
                 });
-                console.log('coucou', widgets.length);
             })
             $('.ui.set_chords_one.button').click(() => {
                 widgets.forEach((widget, index) => {
                     widget.chord = chords_one[index];
                 });
-                console.log('coucou', widgets.length);
             })
             $('.ui.set_chords_default.button').click(() => {
                 widgets.forEach((widget, index) => {
                     widget.chord = chords_default[index];
                 });
-                console.log('coucou', widgets.length);
+            })
+            $('.ui.set_binary_octave.button').click(() => {
+                widgets.forEach((widget, index) => {
+                    widget.octave = index % 2 == 0 ? 5 : 6;
+                });
             })
 
         });
@@ -100,6 +102,9 @@
                 </div>
                 <div class="ui set_chords_default button item">
                     444
+                </div>
+                <div class="ui set_binary_octave button item">
+                    0+
                 </div>
                 <div class="ui edit dropdown icon item">
                     <i class="wrench icon"></i>
