@@ -19,9 +19,12 @@
 
             const chords = [];
             [0, 2, 4, 0, 2, 5, 0, 3, 5, 1, 3, 5].forEach((value, index) => {
-                for (let kk=0; kk<4; kk++)
+                for (let kk = 0; kk < 4; kk++)
                     chords.push(value);
             })
+
+            $('.ui.edit.dropdown').dropdown();
+            const sparse_score_label = $('#sparse_score_label');
 
             const widgets = chords.map((chord, index) => {
                 const widget = new NoteWidget(index);
@@ -32,8 +35,14 @@
                     // console.log('widget.chord', widget.chord);
                     const score = widgets.map(widget => widget.note);
                     // console.log(score)
-                    const sparse_score = score.map(elem => elem == null ? 'x' : elem.note).join('');
+                    let sparse_score = score.map(elem => elem == null ? '__' : elem.note);
+                    sparse_score.splice(12, 0, "<br/>");
+                    sparse_score.splice(25, 0, "<br/>");
+                    sparse_score.splice(38, 0, "<br/>");
+
+                    sparse_score = sparse_score.join(' ');
                     console.log(sparse_score);
+                    sparse_score_label.html(sparse_score);
                 }
                 const column = $('<div>', {
                     class: 'column'
@@ -56,14 +65,53 @@
 
     <div class="ui container">
         <div class="ui segments">
-
-        <div class="ui top attached button">Button before grid</div>
-        <div class="ui segment">
-            <div class="ui twelve column centered grid" id="main_grid"></div>
+            <div class="ui top attached menu">
+                <div class="ui edit dropdown icon item">
+                    <i class="wrench icon"></i>
+                    <div class="menu">
+                        <div class="item">
+                            <i class=" dropdown icon"></i>
+                            <span class="text">New</span>
+                            <div class="menu">
+                                <div class="item">Document</div>
+                                <div class="item">Image</div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            Open...
+                        </div>
+                        <div class="item">
+                            Save...
+                        </div>
+                        <div class="item">Edit Permissions</div>
+                        <div class="divider"></div>
+                        <div class="header">
+                            Export
+                        </div>
+                        <div class="item">
+                            Share...
+                        </div>
+                    </div>
+                </div>
+                <div class="right menu">
+                    <div class="ui right aligned category search item">
+                        <div class="ui transparent icon input">
+                            <input class="prompt" type="text" placeholder="Search animals...">
+                            <i class="search link icon"></i>
+                        </div>
+                        <div class="results"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui segment">
+                <div class="ui twelve column centered grid" id="main_grid"></div>
+            </div>
+            <div class="ui bottom attached centered segment">
+                <p style="font-family: monospace;" id="sparse_score_label">Friend</h2>
+            </div>
         </div>
-        <div class="ui bottom attached button">Button after grid</div>
-    </div>
-
+        <div class="ui center aligned text container">
+        </div>
     </div>
 </body>
 
