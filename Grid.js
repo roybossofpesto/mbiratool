@@ -4,29 +4,10 @@ const root_key_colors = ["#1c96fe", "#feb831", "#aee742", "#b75ac4", "#15cdc2", 
 
 class NoteWidget {
 
-    constructor(index) {
+    constructor() {
         this.__chord = null;
         this.__octave = 5;
         this.__delta = -1;
-        this.index = index;
-
-        /*
-                const octave_elem = $.parseHTML(`<p><div class="ui mini icon vertical buttons">
-                    <button class="ui button" data-value="6">+</button>
-                    <button class="ui button active" data-value="5">0</button>
-                    <button class="ui button" data-value="4">-</button>
-                </div></p>`);
-
-                const delta_elem = $.parseHTML(`<p><div class="ui icon top left pointing dropdown mini button">
-                    <div class="default text">&emptyset;</div>
-                    <div class="menu">
-                        <div class="item" data-value="-1">&emptyset;</div>
-                        <div class="item" data-value="0">1st</div>
-                        <div class="item" data-value="2">3rd</div>
-                        <div class="item" data-value="4">5th</div>
-                    </div>
-                </div></p>`);
-                */
 
         const dual_button = $.parseHTML(`
         <div class="ui vertical fluid icon buttons">
@@ -72,15 +53,7 @@ class NoteWidget {
             },
         });
 
-
-        // const elem = $.parseHTML('<div><p id="index"></p></div>');
-        // elem.find('#index').text(`${index}`);
-        const elem = $('<div>');
-        //elem.append(delta_elem);
-        //elem.append(octave_elem);
-        elem.append(dual_button)
-
-        this.elem = elem;
+        this.elem = dual_button;
     }
 
     get delta() {

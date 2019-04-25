@@ -18,11 +18,7 @@
         $().ready(() => {
             const main_grid = $('#main_grid');
 
-            const chords_default = [];
-            [0, 2, 4, 0, 2, 5, 0, 3, 5, 1, 3, 5].forEach((value, index) => {
-                for (let kk = 0; kk < 4; kk++)
-                    chords_default.push(value);
-            });
+            const sparse_score_label = $('#sparse_score_label');
 
             const chords_one = [
                 0, 0, 0, 0, 0, 0, 2, 2, 2, 4, 4, 4,
@@ -31,10 +27,13 @@
                 1, 1, 1, 1, 1, 1, 3, 3, 3, 5, 5, 5
             ];
 
-            $('.ui.edit.dropdown').dropdown();
-            const sparse_score_label = $('#sparse_score_label');
+            const chords_two = [];
+            [0, 2, 4, 0, 2, 5, 0, 3, 5, 1, 3, 5].forEach((value, index) => {
+                for (let kk = 0; kk < 4; kk++)
+                    chords_two.push(value);
+            });
 
-            const widgets = chords_default.map((chord, index) => {
+            const widgets = chords_two.map((chord, index) => {
                 const widget = new NoteWidget(index);
                 widget.chord = chord;
                 widget.onUpdate = () => {
@@ -61,34 +60,40 @@
                 return widget;
             });
 
+            // edit menus
+            $('.edit_menu').dropdown();
+
+
             // chord tools
-            $('.ui.clear_chords.button').click(() => {
+            $('.chords_menu').dropdown();
+            $('.clear_chords').click(() => {
                 widgets.forEach((widget, index) => {
                     widget.chord = 0;
                 });
-            })
-            $('.ui.set_chords_one.button').click(() => {
+            });
+            $('.set_chords_one').click(() => {
                 widgets.forEach((widget, index) => {
                     widget.chord = chords_one[index];
                 });
-            })
-            $('.ui.set_chords_default.button').click(() => {
+            });
+            $('.set_chords_two').click(() => {
                 widgets.forEach((widget, index) => {
-                    widget.chord = chords_default[index];
+                    widget.chord = chords_two[index];
                 });
-            })
+            });
 
             // octave tools
-            $('.ui.clear_octave.button').click(() => {
+            $('.octave_menu').dropdown();
+            $('.clear_octave').click(() => {
                 widgets.forEach((widget, index) => {
                     widget.octave = 5;
                 });
-            })
-            $('.ui.set_binary_octave.button').click(() => {
+            });
+            $('.set_binary_octave').click(() => {
                 widgets.forEach((widget, index) => {
                     widget.octave = index % 2 == 0 ? 5 : 6;
                 });
-            })
+            });
 
 
         });
@@ -104,22 +109,23 @@
     <div class="ui container">
         <div class="ui segments">
             <div class="ui top attached menu">
-                <div class="ui clear_chords button item icon">
-                    <i class="eraser icon"></i>
+                <div class="ui chords_menu dropdown icon item">
+                    Chords
+                    <div class="menu">
+                        <div class="clear_chords icon item"><i class="eraser icon"></i></div>
+                        <div class="set_chords_one item">633</div>
+                        <div class="set_chords_two item">444</div>
+                    </div>
                 </div>
-                <div class="ui set_chords_one button item">
-                    633
+                <div class="ui octave_menu dropdown icon item">
+                    Octave
+                    <div class="menu">
+                        <div class="clear_octave icon item"><i class="eraser icon"></i></div>
+                        <div class="set_binary_octave item">0+</div>
+                    </div>
                 </div>
-                <div class="ui set_chords_default button item">
-                    444
-                </div>
-                <div class="ui clear_octave button item icon">
-                    <i class="eraser icon"></i>
-                </div>
-                <div class="ui set_binary_octave button item">
-                    0+
-                </div>
-                <div class="ui edit dropdown icon item">
+
+                <div class="ui edit_menu dropdown icon item">
                     <i class="wrench icon"></i>
                     <div class="menu">
                         <div class="item">
