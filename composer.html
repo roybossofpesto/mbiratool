@@ -68,7 +68,7 @@
             $('.chords_menu').dropdown();
             $('.clear_chords').click(() => {
                 widgets.forEach((widget, index) => {
-                    widget.chord = 0;
+                    widget.chord = index;
                 });
             });
             $('.set_chords_one').click(() => {
@@ -83,19 +83,30 @@
             });
 
             // octave tools
-            $('.octave_menu').dropdown();
-            $('.clear_octave').click(() => {
+            $('.octaves_menu').dropdown();
+            $('.clear_octaves').click(() => {
                 widgets.forEach((widget, index) => {
                     widget.octave = 5;
                 });
             });
-            $('.set_binary_octave').click(() => {
+            $('.set_binary_octaves').click(() => {
                 widgets.forEach((widget, index) => {
                     widget.octave = index % 2 == 0 ? 5 : 6;
                 });
             });
 
-
+            // delta tools
+            $('.deltas_menu').dropdown();
+            $('.clear_deltas').click(() => {
+                widgets.forEach((widget, index) => {
+                    widget.delta = -1;
+                });
+            });
+            $('.set_all_first_deltas').click(() => {
+                widgets.forEach((widget, index) => {
+                    widget.delta = 0;
+                });
+            });
         });
     </script>
 </head>
@@ -112,16 +123,23 @@
                 <div class="ui chords_menu dropdown icon item">
                     Chords
                     <div class="menu">
-                        <div class="clear_chords icon item"><i class="eraser icon"></i></div>
                         <div class="set_chords_one item">633</div>
                         <div class="set_chords_two item">444</div>
+                        <div class="clear_chords item"><i class="eraser icon"></i>Incremental</div>
                     </div>
                 </div>
-                <div class="ui octave_menu dropdown icon item">
-                    Octave
+                <div class="ui octaves_menu dropdown icon item">
+                    Octaves
                     <div class="menu">
-                        <div class="clear_octave icon item"><i class="eraser icon"></i></div>
-                        <div class="set_binary_octave item">0+</div>
+                        <div class="set_binary_octaves item">Repeat 0+</div>
+                        <div class="clear_octaves item"><i class="eraser icon"></i>All 0</div>
+                    </div>
+                </div>
+                <div class="ui deltas_menu dropdown icon item">
+                    Deltas
+                    <div class="menu">
+                        <div class="set_all_first_deltas item">All 1st</div>
+                        <div class="clear_deltas item"><i class="eraser icon"></i>All &emptyset;</div>
                     </div>
                 </div>
 

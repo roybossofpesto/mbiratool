@@ -62,7 +62,7 @@ class NoteWidget {
 
     set delta(value) {
         this.__delta = value;
-        this.delta_dropdown.dropdown('set selected', value);
+        this.delta_dropdown.dropdown('set selected', value.toString());
         this.update();
     }
 
@@ -72,7 +72,7 @@ class NoteWidget {
 
     set octave(value) {
         this.__octave = value;
-        this.octave_dropdown.dropdown('set selected', value);
+        this.octave_dropdown.dropdown('set selected', value.toString());
         this.update();
     }
 
