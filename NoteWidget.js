@@ -7,31 +7,33 @@ class NoteWidget {
         this.__octave = 5;
         this.__delta = -1;
 
-        const dual_button = $.parseHTML(`
-        <div class="ui vertical fluid icon buttons">
-            <div class="ui icon top left pointing dropdown mini black button delta">
-                <div class="default text">&emptyset;</div>
-                <div class="menu">
-                    <div class="item" data-value="-1">&emptyset;</div>
-                    <div class="item" data-value="0">1st</div>
-                    <div class="item" data-value="2">3rd</div>
-                    <div class="item" data-value="4">5th</div>
+        const dual_button = $($.parseHTML(`
+        <div class="ui column">
+            <div class="ui vertical fluid icon buttons">
+                <div class="ui icon top left pointing dropdown mini black button delta">
+                    <div class="default text">&emptyset;</div>
+                    <div class="menu">
+                        <div class="item" data-value="-1">&emptyset;</div>
+                        <div class="item" data-value="0">1st</div>
+                        <div class="item" data-value="2">3rd</div>
+                        <div class="item" data-value="4">5th</div>
+                    </div>
                 </div>
-            </div>
-            <div class="ui icon top left pointing dropdown mini black button octave">
-                <div class="default text">0</div>
-                <div class="menu">
-                    <div class="item" data-value="6">+</div>
-                    <div class="item" data-value="5">0</div>
-                    <div class="item" data-value="4">-</div>
+                <div class="ui icon top left pointing dropdown mini black button octave">
+                    <div class="default text">0</div>
+                    <div class="menu">
+                        <div class="item" data-value="6">+</div>
+                        <div class="item" data-value="5">0</div>
+                        <div class="item" data-value="4">-</div>
+                    </div>
                 </div>
             </div>
         </div>
-        `);
+        `));
 
         const self = this;
 
-        this.__octave_dropdown = $(dual_button).find('.ui.dropdown.octave');
+        this.__octave_dropdown = dual_button.find('.ui.dropdown.octave');
         this.__octave_dropdown.dropdown({
             on: 'hover',
             duration: 0,
@@ -41,7 +43,7 @@ class NoteWidget {
             },
         });
 
-        this.__delta_dropdown = $(dual_button).find('.ui.dropdown.delta');
+        this.__delta_dropdown = dual_button.find('.ui.dropdown.delta');
         this.__delta_dropdown.dropdown({
             on: 'hover',
             duration: 0,

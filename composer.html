@@ -12,186 +12,20 @@
     <script src="chroma.min.js" charset="utf-8"></script>
     <script src="common.js" charset="utf-8"></script>
     <script src="NoteWidget.js" charset="utf-8"></script>
+    <script src="GridWidget.js" charset="utf-8"></script>
     <title>mbira composer</title>
     <script type="text/javascript">
         "use strict";
 
         $().ready(() => {
-            const main_grid = $('#main_grid');
-
-            const sparse_score_label = $('#sparse_score_label');
-
-            const chords_one = [
-                0, 0, 0, 0, 0, 0, 2, 2, 2, 4, 4, 4,
-                0, 0, 0, 0, 0, 0, 2, 2, 2, 5, 5, 5,
-                0, 0, 0, 0, 0, 0, 3, 3, 3, 5, 5, 5,
-                1, 1, 1, 1, 1, 1, 3, 3, 3, 5, 5, 5
-            ];
-
-            const chords_two = [];
-            [0, 2, 4, 0, 2, 5, 0, 3, 5, 1, 3, 5].forEach((value, index) => {
-                for (let kk = 0; kk < 4; kk++)
-                    chords_two.push(value);
-            });
-
-            const widgets = chords_two.map((chord, index) => {
-                const widget = new NoteWidget(index);
-                widget.chord = chord;
-                widget.onUpdate = () => {
-                    console.log('prot')
-                    // console.log('widget.note', widget.note);
-                    // console.log('widget.index', widget.index);
-                    // console.log('widget.chord', widget.chord);
-                    const score = widgets.map(widget => widget.note);
-                    // console.log(score)
-                    let sparse_score = score.map(elem => elem == null ? '__' : elem.note);
-                    sparse_score.splice(12, 0, "<br/>");
-                    sparse_score.splice(25, 0, "<br/>");
-                    sparse_score.splice(38, 0, "<br/>");
-
-                    sparse_score = sparse_score.join(' ');
-                    // console.log(sparse_score);
-                    sparse_score_label.html(sparse_score);
-                }
-                const column = $('<div>', {
-                    class: 'column'
-                });
-                column.append(widget.elem);
-                main_grid.append(column);
-
-                return widget;
-            });
-
-            // edit menus
-            $('.edit_menu').dropdown();
-
-
-            // chord tools
-            $('.chords_menu').dropdown();
-            $('.clear_chords').click(() => {
-                widgets.forEach((widget, index) => {
-                    widget.chord = index;
-                });
-            });
-            $('.set_chords_one').click(() => {
-                widgets.forEach((widget, index) => {
-                    widget.chord = chords_one[index];
-                });
-            });
-            $('.set_chords_two').click(() => {
-                widgets.forEach((widget, index) => {
-                    widget.chord = chords_two[index];
-                });
-            });
-
-            // octave tools
-            $('.octaves_menu').dropdown();
-            $('.clear_octaves').click(() => {
-                widgets.forEach((widget, index) => {
-                    widget.octave = 5;
-                });
-            });
-            $('.set_binary_octaves').click(() => {
-                widgets.forEach((widget, index) => {
-                    widget.octave = index % 2 == 0 ? 5 : 6;
-                });
-            });
-
-            // delta tools
-            $('.deltas_menu').dropdown();
-            $('.clear_deltas').click(() => {
-                widgets.forEach((widget, index) => {
-                    widget.delta = -1;
-                });
-            });
-            $('.set_all_first_deltas').click(() => {
-                widgets.forEach((widget, index) => {
-                    widget.delta = 0;
-                });
-            });
+            const grid = new GridWidget();
+            grid.elem.appendTo('#main');
         });
     </script>
 </head>
 
 <body>
-    <div class="ui text container">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae suscipit, accusamus nulla maxime unde placeat assumenda doloremque cum culpa, blanditiis officia qui, incidunt rem, dicta sunt facilis! In numquam obcaecati dolorem. Dolore
-            molestias hic dignissimos, harum placeat ullam. Error recusandae, explicabo cupiditate suscipit quod exercitationem ullam consectetur molestias a magnam.</p>
-    </div>
-
-    <div class="ui container">
-        <div class="ui segments">
-            <div class="ui top attached menu">
-                <div class="ui chords_menu dropdown icon item">
-                    Chords
-                    <div class="menu">
-                        <div class="set_chords_one item">633</div>
-                        <div class="set_chords_two item">444</div>
-                        <div class="clear_chords item"><i class="eraser icon"></i>Incremental</div>
-                    </div>
-                </div>
-                <div class="ui octaves_menu dropdown icon item">
-                    Octaves
-                    <div class="menu">
-                        <div class="set_binary_octaves item">Repeat 0+</div>
-                        <div class="clear_octaves item"><i class="eraser icon"></i>All 0</div>
-                    </div>
-                </div>
-                <div class="ui deltas_menu dropdown icon item">
-                    Deltas
-                    <div class="menu">
-                        <div class="set_all_first_deltas item">All 1st</div>
-                        <div class="clear_deltas item"><i class="eraser icon"></i>All &emptyset;</div>
-                    </div>
-                </div>
-
-                <div class="ui edit_menu dropdown icon item">
-                    <i class="wrench icon"></i>
-                    <div class="menu">
-                        <div class="item">
-                            <i class=" dropdown icon"></i>
-                            <span class="text">New</span>
-                            <div class="menu">
-                                <div class="item">Document</div>
-                                <div class="item">Image</div>
-                            </div>
-                        </div>
-                        <div class="item">
-                            Open...
-                        </div>
-                        <div class="item">
-                            Save...
-                        </div>
-                        <div class="item">Edit Permissions</div>
-                        <div class="divider"></div>
-                        <div class="header">
-                            Export
-                        </div>
-                        <div class="item">
-                            Share...
-                        </div>
-                    </div>
-                </div>
-                <div class="right menu">
-                    <div class="ui right aligned category search item">
-                        <div class="ui transparent icon input">
-                            <input class="prompt" type="text" placeholder="Search animals...">
-                            <i class="search link icon"></i>
-                        </div>
-                        <div class="results"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="ui segment">
-                <div class="ui twelve column centered grid" id="main_grid"></div>
-            </div>
-            <div class="ui bottom attached centered segment">
-                <p style="font-family: monospace;" id="sparse_score_label">Friend</h2>
-            </div>
-        </div>
-        <div class="ui center aligned text container">
-        </div>
-    </div>
+    <div class="ui container" id="main"></div>
 </body>
 
 </html>
