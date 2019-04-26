@@ -19,13 +19,18 @@
 
         $().ready(() => {
             const grid = new GridWidget();
-            grid.elem.appendTo('#main');
+            grid.elem.appendTo('.master.container');
         });
     </script>
+    <style media="screen">
+        .ui.master.container {
+            padding: 3em 0;
+        }
+    </style>
 </head>
 
 <body>
-    <div class="ui container" id="main"></div>
+    <div class="ui master container"></div>
 </body>
 
 </html>
