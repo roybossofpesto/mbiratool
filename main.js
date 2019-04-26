@@ -12,11 +12,6 @@ const tunings = [
 ];
 const song_names = []
 
-const root_key_colors = ["#1c96fe", "#feb831", "#aee742", "#b75ac4", "#15cdc2", "#fa2424", "#ff5986"]
-    .map((color) => {
-        return chroma(color);
-    });
-
 let mbira_synth = undefined;
 
 // ???? octave popping
@@ -240,7 +235,7 @@ $(document).ready(() => {
 
         const reset_colors = () => {
             keys.forEach((foo) => {
-                foo.attr('fill', root_key_colors[wrap(foo.key + tuning)])
+                foo.attr('fill', chord_colors[wrap(foo.key + tuning)])
             })
         };
         const highlight_colors = function() {
@@ -248,7 +243,7 @@ $(document).ready(() => {
             const key_third = (key + 2) % 7;
             const key_fifth = (key + 4) % 7;
             keys.forEach((foo, kk) => {
-                const base_color = root_key_colors[wrap(key + tuning)];
+                const base_color = chord_colors[wrap(key + tuning)];
                 const color =
                     foo.key == key ? base_color :
                     foo.key == key_third ? base_color.brighten(2.5) :
@@ -264,7 +259,7 @@ $(document).ready(() => {
             const path_object = paper.path(path_string);
             path_object.attr({
                 "stroke-width": 2 * pen_width,
-                "fill": root_key_colors[wrap(key + tuning)],
+                "fill": chord_colors[wrap(key + tuning)],
             });
             path_object.key = key;
             keys.push(path_object);
@@ -348,7 +343,7 @@ $(document).ready(() => {
                 .attr({
                     "stroke-width": 0,
                     'stroke': "#f0f",
-                    'fill': root_key_colors[Math.floor(kk / 4) % 7],
+                    'fill': chord_colors[Math.floor(kk / 4) % 7],
                     'arc': [center, center, 0, 360 / 48 + .5, radius_inside, radius_outside],
                     'cursor': 'pointer',
                 })
@@ -546,7 +541,7 @@ $(document).ready(() => {
                 }
                 sector.note = chord.note;
                 sector.chord = chord.chord;
-                sector.attr('fill', root_key_colors[chord.chord]
+                sector.attr('fill', chord_colors[chord.chord]
                     .brighten(chord.delta == 4 ? 1 : chord.delta == 3 ?  1.7 : chord.delta == 2 ? 2.5 : 0))
             })
         }
@@ -570,7 +565,7 @@ $(document).ready(() => {
             const aa_ = wrap(value_ + 0 + (index > 2));
             $(this)
                 .text(`${alphabet[aa]}${alphabet[bb]}${alphabet[cc]}`)
-                .css('background-color', root_key_colors[aa_]);
+                .css('background-color', chord_colors[aa_]);
         })
         second_song_blocks.each(function(index) {
             const aa = wrap(value + 2 + (index < 2));
@@ -579,7 +574,7 @@ $(document).ready(() => {
             const aa_ = wrap(value_ + 2 + (index < 2));
             $(this)
                 .text(`${alphabet[aa]}${alphabet[bb]}${alphabet[cc]}`)
-                .css('background-color', root_key_colors[aa_]);
+                .css('background-color', chord_colors[aa_]);
         })
         third_song_blocks.each(function(index) {
             const aa = wrap(value + 4 + (index < 3));
@@ -588,7 +583,7 @@ $(document).ready(() => {
             const aa_ = wrap(value_ + 4 + (index < 3));
             $(this)
                 .text(`${alphabet[aa]}${alphabet[bb]}${alphabet[cc]}`)
-                .css('background-color', root_key_colors[aa_]);
+                .css('background-color', chord_colors[aa_]);
         })
     };
 

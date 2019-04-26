@@ -1,7 +1,5 @@
 "use strict";
 
-const root_key_colors = ["#1c96fe", "#feb831", "#aee742", "#b75ac4", "#15cdc2", "#fa2424", "#ff5986"].map(color => chroma(color));
-
 class NoteWidget {
 
     constructor() {
@@ -33,8 +31,8 @@ class NoteWidget {
 
         const self = this;
 
-        this.octave_dropdown = $(dual_button).find('.ui.dropdown.octave');
-        this.octave_dropdown.dropdown({
+        this.__octave_dropdown = $(dual_button).find('.ui.dropdown.octave');
+        this.__octave_dropdown.dropdown({
             on: 'hover',
             duration: 0,
             onChange: function() {
@@ -43,8 +41,8 @@ class NoteWidget {
             },
         });
 
-        this.delta_dropdown = $(dual_button).find('.ui.dropdown.delta');
-        this.delta_dropdown.dropdown({
+        this.__delta_dropdown = $(dual_button).find('.ui.dropdown.delta');
+        this.__delta_dropdown.dropdown({
             on: 'hover',
             duration: 0,
             onChange: function() {
@@ -62,8 +60,7 @@ class NoteWidget {
 
     set delta(value) {
         this.__delta = value;
-        this.delta_dropdown.dropdown('set selected', value.toString());
-        this.update();
+        this.__delta_dropdown.dropdown('set selected', value.toString());
     }
 
     get octave() {
@@ -72,28 +69,27 @@ class NoteWidget {
 
     set octave(value) {
         this.__octave = value;
-        this.octave_dropdown.dropdown('set selected', value.toString());
-        this.update();
+        this.__octave_dropdown.dropdown('set selected', value.toString());
     }
 
     get chord() {
         return this.__chord;
     }
 
-    set chord(root_key) {
-        this.__chord = root_key % 7;
+    set chord(value) {
+        this.__chord = wrap(value);
         this.update();
     }
 
     get note() {
-        return this.delta < 0 ? null : create_note(this.chord, this.delta, this.octave);
+        return create_note(this.__chord, this.__delta, this.__octave);
     }
 
     update() {
         // console.log('NoteWidget', 'update', this.delta, this.octave, this.index, this.note);
-        const root_color = root_key_colors[this.__chord];
-        this.delta_dropdown.css('background-color', this.note == null ? "black" : root_color)
-        this.octave_dropdown.css('background-color', root_color);
+        const chord_color = chord_colors[this.__chord];
+        this.__octave_dropdown.css('background-color', chord_color);
+        this.__delta_dropdown.css('background-color', this.note == null ? "#000" : chord_color)
         if (this.onUpdate) this.onUpdate();
     }
 }
