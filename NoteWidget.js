@@ -15,8 +15,8 @@ class NoteWidget {
                     <div class="menu">
                         <div class="item" data-value="-1">&emptyset;</div>
                         <div class="item" data-value="0">1st</div>
-                        <div class="item" data-value="2">3rd</div>
                         <div class="item" data-value="4">5th</div>
+                        <div class="item" data-value="2">3rd</div>
                     </div>
                 </div>
                 <div class="ui icon top left pointing dropdown mini black button octave">
@@ -89,9 +89,10 @@ class NoteWidget {
 
     update() {
         // console.log('NoteWidget', 'update', this.delta, this.octave, this.index, this.note);
-        const chord_color = chord_colors[this.__chord];
-        this.__octave_dropdown.css('background-color', chord_color);
-        this.__delta_dropdown.css('background-color', this.note == null ? "#000" : chord_color)
+        const octave_color = chord_colors[this.__chord];
+        const delta_color = this.__delta < 0 ? "black" : octave_color.brighten(this.__delta == 4 ? 1 : this.__delta == 3 ? 1.7 : this.__delta == 2 ? 2.5 : 0)
+        this.__octave_dropdown.css('background-color', octave_color);
+        this.__delta_dropdown.css('background-color', delta_color)
         if (this.onUpdate) this.onUpdate();
     }
 }

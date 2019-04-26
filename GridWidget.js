@@ -28,7 +28,7 @@ class GridWidget {
                     <div class="clear_deltas item">All &emptyset;</div>
                 </div>
             </div>
-            <div class="ui edit_menu dropdown icon item">
+            <!--<div class="ui edit_menu dropdown icon item">
                 <i class="wrench icon"></i>
                 <div class="menu">
                     <div class="item">
@@ -54,7 +54,7 @@ class GridWidget {
                         Share...
                     </div>
                 </div>
-            </div>
+            </div>-->
             <div class="right menu">
                 <div class="ui right aligned category search item">
                     <div class="ui transparent icon input">
@@ -70,7 +70,7 @@ class GridWidget {
             class: "ui twelve column center aligned grid segment",
         });
         const label = $('<div>', {
-            class: "ui bottom attached left aligned segment",
+            class: "ui bottom attached left aligned score_label segment",
             style: "font-family: monospace;",
             text: "coucou",
         });
@@ -92,20 +92,11 @@ class GridWidget {
             const widget = new NoteWidget();
             widget.chord = chord;
             widget.onUpdate = () => {
-                console.log("prout")
                 // console.log('widget.note', widget.note);
                 // console.log('widget.index', widget.index);
                 // console.log('widget.chord', widget.chord);
                 this.__score[index] = widget.note;
-
-                let sparse_score = this.__score.map(elem => elem == null ? '__' : elem.note);
-                sparse_score.splice(12, 0, "<br/>");
-                sparse_score.splice(25, 0, "<br/>");
-                sparse_score.splice(38, 0, "<br/>");
-                sparse_score = sparse_score.join(' ');
-                // console.log(sparse_score);
-
-                label.html(sparse_score);
+                this.update();
             }
             grid.append(widget.elem);
             return widget;
@@ -166,5 +157,18 @@ class GridWidget {
         this.elem.append(menus);
         this.elem.append(grid);
         this.elem.append(label);
+
+        this.update();
+    }
+
+    update() {
+        let sparse_score = this.__score.map(elem => elem == null ? '__' : elem.note);
+        sparse_score.splice(12, 0, "<br/>");
+        sparse_score.splice(25, 0, "<br/>");
+        sparse_score.splice(38, 0, "<br/>");
+        sparse_score = sparse_score.join(' ');
+        // console.log(sparse_score);
+
+        this.elem.find('.score_label').html(sparse_score);
     }
 }
