@@ -26,14 +26,22 @@
             const grid = new GridWidget();
             grid.elem.appendTo('.master.container');
 
-            Tone.Transport.bpm.value = 60;
+            Tone.Transport.bpm.value = 120;
 
-            const mbira_synth = new Tone.FMSynth().toMaster();
-            // const mbira_synth = new Tone.PolySynth(24, Tone.Synth).toMaster();
-            // mbira_synth.voices.forEach((voice) => {
-            //     voice.envelope.attack = 0.0005;
-            //     voice.envelope.release = 10;
-            // })
+            // const mbira_synth = new Tone.FMSynth().toMaster();
+            const mbira_synth = new Tone.PolySynth(24, Tone.Synth).toMaster();
+            mbira_synth.set({
+                "envelope": {
+                    "attack": 1e-2,
+                    "attackCurve": "exponential",
+                    "decay": 1.,
+                    "sustain": .3,
+                    "release": 1.5,
+                    "releaseCurve": "ripple",
+                },
+                "volume": -20,
+            });
+            console.log(mbira_synth.get());
 
             const mbira_loop = new Tone.Pattern(function(time, widget) {
                 // const transpose = transpose_coarse + transpose_fine / 100.;
@@ -41,13 +49,13 @@
                 if (next_note) mbira_synth.triggerAttackRelease(Tone.Frequency(next_note), "16n", time);
                 // if (note) mbira_synth.triggerAttackRelease(Tone.Frequency(note).transpose(transpose), "16n", time);
                 Tone.Draw.schedule(function() {
-                    console.log(widget.elem.find('.icon.buttons'))
                     widget.elem.find('.icon.buttons')
                         .css('margin-right', '10px')
-                        .animate({ marginRight: 0}, 300);
+                        .animate({
+                            marginRight: 0
+                        }, 300);
                 }, time);
             }, grid.widgets).start(0);
-            mbira_loop.interval = '8n';
 
             let is_playing = false;
             const play_pause_button = $('.synth_play_pause');
