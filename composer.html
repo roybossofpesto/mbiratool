@@ -6,14 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="semantic.min.css">
+
     <script src="jquery.min.js" charset="utf-8"></script>
     <!-- <script src="jquery-webstorage.js" charset="utf-8"></script> -->
     <script src="semantic.min.js" charset="utf-8"></script>
     <script src="chroma.min.js" charset="utf-8"></script>
+    <script src="Tone.min.js" charset="utf-8"></script>
+
     <script src="common.js" charset="utf-8"></script>
     <script src="nema.js" charset="utf-8"></script>
     <script src="NoteWidget.js" charset="utf-8"></script>
     <script src="GridWidget.js" charset="utf-8"></script>
+
     <title>mbira composer</title>
     <script type="text/javascript">
         "use strict";
@@ -21,6 +25,43 @@
         $().ready(() => {
             const grid = new GridWidget();
             grid.elem.appendTo('.master.container');
+
+            Tone.Transport.bpm.value = 60;
+
+            const mbira_synth = new Tone.FMSynth().toMaster();
+            // const mbira_synth = new Tone.PolySynth(24, Tone.Synth).toMaster();
+            // mbira_synth.voices.forEach((voice) => {
+            //     voice.envelope.attack = 0.0005;
+            //     voice.envelope.release = 10;
+            // })
+
+            const mbira_loop = new Tone.Pattern(function(time, widget) {
+                // const transpose = transpose_coarse + transpose_fine / 100.;
+                const next_note = widget.note ? widget.note.note : null;
+                if (next_note) mbira_synth.triggerAttackRelease(Tone.Frequency(next_note), "16n", time);
+                // if (note) mbira_synth.triggerAttackRelease(Tone.Frequency(note).transpose(transpose), "16n", time);
+                Tone.Draw.schedule(function() {
+                    console.log(widget.elem.find('.icon.buttons'))
+                    widget.elem.find('.icon.buttons')
+                        .css('margin-right', '10px')
+                        .animate({ marginRight: 0}, 300);
+                }, time);
+            }, grid.widgets).start(0);
+            mbira_loop.interval = '8n';
+
+            let is_playing = false;
+            const play_pause_button = $('.synth_play_pause');
+            play_pause_button.click(() => {
+                is_playing = !is_playing;
+                if (is_playing) {
+                    Tone.Transport.start();
+                    play_pause_button.find('i').attr('class', 'pause icon');
+                } else {
+                    Tone.Transport.stop();
+                    play_pause_button.find('i').attr('class', 'play icon');
+                }
+            })
+
         });
     </script>
     <style media="screen">
@@ -33,9 +74,8 @@
 <body>
     <div class="ui master container">
         <div class="ui compact icon buttons">
-            <button class="ui button"><i class="play icon"></i></button>
-            <button class="ui disabled button"><i class="pause icon"></i></button>
-            <button class="ui disabled button"><i class="stop icon"></i></button>
+            <button class="ui synth_play_pause button"><i class="play icon"></i></button>
+            <button class="ui disabled button"><i class="fast backward icon"></i></button>
         </div>
     </div>
 </body>

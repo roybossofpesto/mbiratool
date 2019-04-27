@@ -94,28 +94,28 @@ class GridWidget {
                 chords_444.push(value);
         });
 
-        this.__widgets = chords_444.map((chord, index) => {
+        this.widgets = chords_444.map((chord, index) => {
             const widget = new NoteWidget();
             widget.chord = chord;
             widget.onUpdate = () => {
                 // console.log('widget.note', widget.note);
                 // console.log('widget.index', widget.index);
                 // console.log('widget.chord', widget.chord);
-                this.__score[index] = widget.note;
+                this.score[index] = widget.note;
                 this.update();
             }
             grid.append(widget.elem);
             return widget;
         });
-        this.__score = this.__widgets.map(widget => widget.note);
+        this.score = this.widgets.map(widget => widget.note);
 
         menus.find('.ui.dropdown').dropdown();
 
-        const widget_action = cb => () => this.__widgets.forEach(cb);
+        const widget_action = cb => () => this.widgets.forEach(cb);
 
         // chord tools
         menus.find('.increment_chords').click(widget_action((widget, index) => widget.chord++));
-        menus.find('.decrement_chords').click(widget_action((widget, index) => widget.chord--));
+        menus.find('.decrement_chords').click(widget_action((widget, index) => widget.chord+=6));
         menus.find('.set_chords_444').click(widget_action((widget, index) => widget.chord = chords_444[index]));
         menus.find('.set_chords_633').click(widget_action((widget, index) => widget.chord = chords_633[index]));
 
@@ -142,7 +142,7 @@ class GridWidget {
     }
 
     update() {
-        let sparse_score = this.__score.map(elem => elem == null ? '__' : elem.note);
+        let sparse_score = this.score.map(elem => elem == null ? '__' : elem.note);
         sparse_score.splice(12, 0, "<br/>");
         sparse_score.splice(25, 0, "<br/>");
         sparse_score.splice(38, 0, "<br/>");

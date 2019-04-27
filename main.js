@@ -12,8 +12,6 @@ const tunings = [
 ];
 const song_names = []
 
-let mbira_synth = undefined;
-
 // ???? octave popping
 const helper_single = (chords, nn = 4, octave = 4) => {
     const octaves = [];
@@ -167,7 +165,7 @@ $(document).ready(() => {
 
     // const mbira_synth = new Tone.Synth().toMaster()
     // const mbira_synth = new Tone.FMSynth().toMaster();
-    mbira_synth = new Tone.PolySynth(24, Tone.Synth).toMaster();
+    const mbira_synth = new Tone.PolySynth(24, Tone.Synth).toMaster();
     mbira_synth.voices.forEach((voice) => {
         voice.envelope.attack = 0.0005;
         voice.envelope.release = 10;
