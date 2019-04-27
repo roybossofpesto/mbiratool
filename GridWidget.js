@@ -7,8 +7,8 @@ class GridWidget {
             <div class="ui chords_menu dropdown icon item">
                 Chords
                 <div class="menu">
-                    <div class="set_chords_one item">Pattern 633</div>
-                    <div class="set_chords_two item">Pattern 444</div>
+                    <div class="set_chords_633 item">Pattern 633</div>
+                    <div class="set_chords_444 item">Pattern 444</div>
                     <div class="divider"></div>
                     <div class="increment_chords item">Transpose +</div>
                     <div class="decrement_chords item">Transpose -</div>
@@ -81,20 +81,20 @@ class GridWidget {
             text: "coucou",
         });
 
-        const chords_one = [
+        const chords_633 = [
             0, 0, 0, 0, 0, 0, 2, 2, 2, 4, 4, 4,
             0, 0, 0, 0, 0, 0, 2, 2, 2, 5, 5, 5,
             0, 0, 0, 0, 0, 0, 3, 3, 3, 5, 5, 5,
             1, 1, 1, 1, 1, 1, 3, 3, 3, 5, 5, 5
         ];
 
-        const chords_two = [];
+        const chords_444 = [];
         [0, 2, 4, 0, 2, 5, 0, 3, 5, 1, 3, 5].forEach((value, index) => {
             for (let kk = 0; kk < 4; kk++)
-                chords_two.push(value);
+                chords_444.push(value);
         });
 
-        this.__widgets = chords_one.map((chord, index) => {
+        this.__widgets = chords_444.map((chord, index) => {
             const widget = new NoteWidget();
             widget.chord = chord;
             widget.onUpdate = () => {
@@ -116,8 +116,8 @@ class GridWidget {
         // chord tools
         menus.find('.increment_chords').click(widget_action((widget, index) => widget.chord++));
         menus.find('.decrement_chords').click(widget_action((widget, index) => widget.chord--));
-        menus.find('.set_chords_one').click(widget_action((widget, index) => widget.chord = chords_one[index]));
-        menus.find('.set_chords_two').click(widget_action((widget, index) => widget.chord = chords_two[index]));
+        menus.find('.set_chords_444').click(widget_action((widget, index) => widget.chord = chords_444[index]));
+        menus.find('.set_chords_633').click(widget_action((widget, index) => widget.chord = chords_633[index]));
 
         // octave tools
         menus.find('.clear_octaves').click(widget_action((widget, index) => widget.octave = 5));
