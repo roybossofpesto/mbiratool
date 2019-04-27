@@ -17,6 +17,7 @@ class NoteWidget {
                         <div class="item" data-value="0">1st</div>
                         <div class="item" data-value="4">5th</div>
                         <div class="item" data-value="2">3rd</div>
+                        <div class="item" data-value="3">4th</div>
                     </div>
                 </div>
                 <div class="ui icon top left pointing dropdown mini black button octave">
@@ -62,7 +63,7 @@ class NoteWidget {
 
     set delta(value) {
         this.__delta = value;
-        this.__delta_dropdown.dropdown('set selected', value.toString());
+        this.__delta_dropdown.dropdown('set selected', this.__delta.toString());
     }
 
     get octave() {
@@ -71,7 +72,7 @@ class NoteWidget {
 
     set octave(value) {
         this.__octave = value;
-        this.__octave_dropdown.dropdown('set selected', value.toString());
+        this.__octave_dropdown.dropdown('set selected', this.__octave.toString());
     }
 
     get chord() {
@@ -87,12 +88,25 @@ class NoteWidget {
         return create_note(this.__chord, this.__delta, this.__octave);
     }
 
+    set note(value) {
+        console.log('ldsflkj', value)
+        this.__chord = wrap(value.chord);
+        this.__delta = value.delta;
+        this.__octave = value.octave;
+        this.__delta_dropdown.dropdown('set selected', this.__delta.toString());
+        this.__octave_dropdown.dropdown('set selected', this.__octave.toString());
+    }
+
     update() {
         // console.log('NoteWidget', 'update', this.delta, this.octave, this.index, this.note);
-        const octave_color = chord_colors[this.__chord];
-        const delta_color = this.__delta < 0 ? "black" : octave_color.brighten(this.__delta == 4 ? 1 : this.__delta == 3 ? 1.7 : this.__delta == 2 ? 2.5 : 0)
-        this.__octave_dropdown.css('background-color', octave_color);
-        this.__delta_dropdown.css('background-color', delta_color)
+        const octave_backcolor = chord_colors[this.__chord];
+        this.__octave_dropdown.css('background-color', octave_backcolor.css());
+
+        const delta_backcolor = delta_brighten(octave_backcolor, this.__delta);
+        // const delta_color = this.__delta <= 0 || this.__delta == 4 ? "white" : "black";
+        this.__delta_dropdown.css('background-color', delta_backcolor.css());
+        // this.__delta_dropdown.css('color', delta_color)
+
         if (this.onUpdate) this.onUpdate();
     }
 }

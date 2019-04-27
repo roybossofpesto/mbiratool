@@ -28,6 +28,12 @@ class GridWidget {
                     <div class="clear_deltas item">All &emptyset;</div>
                 </div>
             </div>
+            <div class="ui deltas_menu dropdown icon item">
+                Songs
+                <div class="menu">
+                    <div class="set_nemamoussassa item">Nemamoussassa</div>
+                </div>
+            </div>
             <!--<div class="ui edit_menu dropdown icon item">
                 <i class="wrench icon"></i>
                 <div class="menu">
@@ -105,51 +111,25 @@ class GridWidget {
 
         menus.find('.ui.dropdown').dropdown();
 
+        const widget_action = cb => () => this.__widgets.forEach(cb);
+
         // chord tools
-        menus.find('.increment_chords').click(() => {
-            this.__widgets.forEach((widget, index) => {
-                widget.chord++;
-            });
-        });
-        menus.find('.decrement_chords').click(() => {
-            this.__widgets.forEach((widget, index) => {
-                widget.chord--;
-            });
-        });
-        menus.find('.set_chords_one').click(() => {
-            this.__widgets.forEach((widget, index) => {
-                widget.chord = chords_one[index];
-            });
-        });
-        menus.find('.set_chords_two').click(() => {
-            this.__widgets.forEach((widget, index) => {
-                widget.chord = chords_two[index];
-            });
-        });
+        menus.find('.increment_chords').click(widget_action((widget, index) => widget.chord++));
+        menus.find('.decrement_chords').click(widget_action((widget, index) => widget.chord--));
+        menus.find('.set_chords_one').click(widget_action((widget, index) => widget.chord = chords_one[index]));
+        menus.find('.set_chords_two').click(widget_action((widget, index) => widget.chord = chords_two[index]));
 
         // octave tools
-        menus.find('.clear_octaves').click(() => {
-            this.__widgets.forEach((widget, index) => {
-                widget.octave = 5;
-            });
-        });
-        menus.find('.set_binary_octaves').click(() => {
-            this.__widgets.forEach((widget, index) => {
-                widget.octave = index % 2 == 0 ? 5 : 6;
-            });
-        });
+        menus.find('.clear_octaves').click(widget_action((widget, index) => widget.octave = 5));
+        menus.find('.set_binary_octaves').click(widget_action((widget, index) => widget.octave = index % 2 == 0 ? 5 : 6));
 
         // delta tools
-        menus.find('.clear_deltas').click(() => {
-            this.__widgets.forEach((widget, index) => {
-                widget.delta = -1;
-            });
-        });
-        menus.find('.set_all_first_deltas').click(() => {
-            this.__widgets.forEach((widget, index) => {
-                widget.delta = 0;
-            });
-        });
+        menus.find('.clear_deltas').click(widget_action((widget, index) => widget.delta = -1));
+        menus.find('.set_all_first_deltas').click(widget_action((widget, index) => widget.delta = 0));
+
+        // songs tools
+        const nemamoussassa_notes = nema_full(0, 2, 5, 0);
+        menus.find('.set_nemamoussassa').click(widget_action((widget, index) => widget.note = nemamoussassa_notes[index]));
 
         this.elem = $('<div>', {
             class: "ui segments"

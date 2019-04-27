@@ -14,3 +14,10 @@ const create_note = (chord, delta, octave) => delta < 0 ? null : {
 
 const chord_colors = ["#1c96fe", "#feb831", "#aee742", "#b75ac4", "#15cdc2", "#fa2424", "#ff5986"]
     .map(color => chroma(color));
+
+const delta_brighten = (color, delta) => color.brighten(
+    delta == 4 ? 1 :
+    delta == 3 ? 1.7 :
+    delta == 2 ? 2.5 :
+    delta == 0 ? 0 :
+    -10);
