@@ -89,7 +89,6 @@ class NoteWidget {
     }
 
     set note(value) {
-        console.log('ldsflkj', value)
         this.__chord = wrap(value.chord);
         this.__delta = value.delta;
         this.__octave = value.octave;
@@ -103,9 +102,9 @@ class NoteWidget {
         this.__octave_dropdown.css('background-color', octave_backcolor.css());
 
         const delta_backcolor = delta_brighten(octave_backcolor, this.__delta);
-        // const delta_color = this.__delta <= 0 || this.__delta == 4 ? "white" : "black";
+        const delta_color = this.__delta <= 0 || this.__delta == 4 ? chroma("white") : chroma.mix(octave_backcolor, "black");
         this.__delta_dropdown.css('background-color', delta_backcolor.css());
-        // this.__delta_dropdown.css('color', delta_color)
+        this.__delta_dropdown.css('color', delta_color.css())
 
         if (this.onUpdate) this.onUpdate();
     }
