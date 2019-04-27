@@ -28,8 +28,22 @@
 
             Tone.Transport.bpm.value = 120;
 
+            // const phaser = new Tone.Phaser({
+            // 	"frequency" : 15,
+            // 	"octaves" : 5,
+            // 	"baseFrequency" : 1000
+            // }).toMaster();
+
+            const auto_panner = new Tone.AutoPanner().toMaster().start();
+            auto_panner.set({
+                frequency: "8n",
+                type: "sine",
+                depth: .8,
+            });
+            console.log("auto_panner", auto_panner.get());
+
             // const mbira_synth = new Tone.FMSynth().toMaster();
-            const mbira_synth = new Tone.PolySynth(24, Tone.Synth).toMaster();
+            const mbira_synth = new Tone.PolySynth(24, Tone.Synth).connect(auto_panner);
             mbira_synth.set({
                 "envelope": {
                     "attack": 1e-2,
@@ -41,35 +55,44 @@
                 },
                 "volume": -20,
             });
-            console.log(mbira_synth.get());
+            console.log("mbira_synth", mbira_synth.get());
 
-            const mbira_loop = new Tone.Pattern(function(time, widget) {
+            const mbira_loop = new Tone.Sequence((time, widget) => {
                 // const transpose = transpose_coarse + transpose_fine / 100.;
                 const next_note = widget.note ? widget.note.note : null;
                 if (next_note) mbira_synth.triggerAttackRelease(Tone.Frequency(next_note), "16n", time);
                 // if (note) mbira_synth.triggerAttackRelease(Tone.Frequency(note).transpose(transpose), "16n", time);
-                Tone.Draw.schedule(function() {
+                Tone.Draw.schedule(() => {
                     widget.elem.find('.icon.buttons')
                         .css('margin-right', '10px')
                         .animate({
                             marginRight: 0
                         }, 300);
                 }, time);
-            }, grid.widgets).start(0);
+            }, grid.widgets, "8n").start();
 
-            let is_playing = false;
-            const play_pause_button = $('.synth_play_pause');
-            play_pause_button.click(() => {
-                is_playing = !is_playing;
-                if (is_playing) {
-                    Tone.Transport.start();
-                    play_pause_button.find('i').attr('class', 'pause icon');
-                } else {
-                    Tone.Transport.stop();
-                    play_pause_button.find('i').attr('class', 'play icon');
-                }
-            })
+            $('.transport.buttons .start').click(() => Tone.Transport.start());
+            $('.transport.buttons .pause').click(() => Tone.Transport.pause());
+            $('.transport.buttons .stop').click(() => Tone.Transport.stop());
+            $(document).keydown((evt) => {
+                if (evt.keyCode != 32) return;
+                const state = Tone.Transport.state;
+                if (state == "paused" || state == "stopped") Tone.Transport.start();
+                else Tone.Transport.pause();
+            });
 
+            Tone.Transport.on('start', () => {
+                $('.transport.buttons .button').removeClass('active');
+                $('.transport.buttons .start').addClass('active');
+            });
+            Tone.Transport.on('pause', () => {
+                $('.transport.buttons .button').removeClass('active');
+                $('.transport.buttons .pause').addClass('active');
+            });
+            Tone.Transport.on('stop', () => {
+                $('.transport.buttons .button').removeClass('active');
+                $('.transport.buttons .stop').addClass('active');
+            });
         });
     </script>
     <style media="screen">
@@ -81,9 +104,10 @@
 
 <body>
     <div class="ui master container">
-        <div class="ui compact icon buttons">
-            <button class="ui synth_play_pause button"><i class="play icon"></i></button>
-            <button class="ui disabled button"><i class="fast backward icon"></i></button>
+        <div class="ui compact icon transport buttons">
+            <div class="ui start button"><i class="play icon"></i></div>
+            <div class="ui pause button"><i class="pause icon"></i></div>
+            <div class="ui stop active button"><i class="stop icon"></i></div>
         </div>
     </div>
 </body>
