@@ -111,8 +111,13 @@ class GridWidget {
                     title: 'empty',
                     description: ['minLength[6]', 'empty'],
                 },
-                onSuccess: (evt, fields) => {
-                    console.log('fsldfkl', evt, fields);
+                onSuccess: (evt, song) => {
+                    song.notes = this.score;
+
+                    const songs = JSON.parse(localStorage.getItem('mbira_songs')) || [];
+                    songs.push(song);
+                    localStorage.setItem('mbira_songs', JSON.stringify(songs));
+
                     add_song_form.form('clear');
                     add_song_modal.modal('hide');
                 }
