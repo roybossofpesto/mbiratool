@@ -28,6 +28,13 @@ class GridWidget {
                     <div class="clear_deltas item">All &emptyset;</div>
                 </div>
             </div>
+            <div class="ui dropdown icon item">
+                Songs
+                <div class="menu">
+                    <div class="set_nemafull_song item">Nemamoussassa</div>
+                    <div class="set_nemaleft_song item">Nemamoussassa left hand</div>
+                </div>
+            </div>
             <div class="right menu">
                 <!--<div class="ui item">
                     <div class="ui transparent icon input">
@@ -130,17 +137,20 @@ class GridWidget {
         { // Search song
             const song_search = menus.find('.song.search');
             song_search.search({
-                source: [{
-                        title: 'NemaFull',
-                        description: 'Nemamoussassa full song',
-                        notes: nema_full(0, 2, 4),
+                apiSettings: {
+                    responseAsync: (settings, cb) => {
+                        const query = settings.urlData.query.toLowerCase();
+
+                        let songs = JSON.parse(localStorage.getItem('mbira_songs')) || [];
+                        songs = songs.filter(song => song.title.toLowerCase().startsWith(query));
+
+                        const response = {
+                            success: songs.length > 0,
+                            results: songs,
+                        };
+                        cb(response);
                     },
-                    {
-                        title: 'NemaLeftHand',
-                        description: 'Nemamoussassa left hand only',
-                        notes: nema_left_hand(0, 2, 4),
-                    }
-                ],
+                },
                 minCharacters: 0,
                 onSelect: (selection) => {
                     // console.log('got song', selection.title, selection.notes)
@@ -148,10 +158,10 @@ class GridWidget {
                 }
             });
 
-            song_search.find('.search_all').click(() => {
+            /*song_search.find('.search_all').click(() => {
                 song_search.search('set value', '');
                 song_search.search('query');
-            })
+            })*/
         }
 
         const widget_action = cb => () => this.widgets.forEach(cb);
@@ -177,6 +187,11 @@ class GridWidget {
             menus.find('.set_all_first_deltas').click(widget_action((widget, index) => widget.delta = 0));
         }
 
+        { // song tools
+            const set_notes_action = notes => set_action('note', notes);
+            menus.find('.set_nemafull_song').click(set_notes_action(nema_full(0, 2, 4)));
+            menus.find('.set_nemaleft_song').click(set_notes_action(nema_left_hand(0, 2, 4)));
+        }
 
         this.elem = $('<div>', {
             class: "ui segments"
