@@ -4,7 +4,7 @@ class GridWidget {
     constructor() {
         const menus = $($.parseHTML(`
         <div class="ui top attached menu">
-            <div class="ui chords_menu dropdown icon item">
+            <div class="ui dropdown icon item">
                 Chords
                 <div class="menu">
                     <div class="set_chords_633 item">Pattern 633</div>
@@ -14,58 +14,25 @@ class GridWidget {
                     <div class="decrement_chords item">Transpose -</div>
                 </div>
             </div>
-            <div class="ui octaves_menu dropdown icon item">
+            <div class="ui dropdown icon item">
                 Octaves
                 <div class="menu">
                     <div class="set_binary_octaves item">Repeat 0+</div>
                     <div class="clear_octaves item">All 0</div>
                 </div>
             </div>
-            <div class="ui deltas_menu dropdown icon item">
+            <div class="ui dropdown icon item">
                 Deltas
                 <div class="menu">
                     <div class="set_all_first_deltas item">All 1st</div>
                     <div class="clear_deltas item">All &emptyset;</div>
                 </div>
             </div>
-            <div class="ui deltas_menu dropdown icon item">
-                Songs
-                <div class="menu">
-                    <div class="set_nemamoussassa item">Nemamoussassa</div>
-                </div>
-            </div>
-            <!--<div class="ui edit_menu dropdown icon item">
-                <i class="wrench icon"></i>
-                <div class="menu">
-                    <div class="item">
-                        <i class=" dropdown icon"></i>
-                        <span class="text">New</span>
-                        <div class="menu">
-                            <div class="item">Document</div>
-                            <div class="item">Image</div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        Open...
-                    </div>
-                    <div class="item">
-                        Save...
-                    </div>
-                    <div class="item">Edit Permissions</div>
-                    <div class="divider"></div>
-                    <div class="header">
-                        Export
-                    </div>
-                    <div class="item">
-                        Share...
-                    </div>
-                </div>
-            </div>-->
             <div class="right menu">
-                <div class="ui right aligned category search item">
+                <div class="ui song search item">
                     <div class="ui transparent icon input">
-                        <input class="prompt" type="text" placeholder="Search animals...">
-                        <i class="search link icon"></i>
+                        <input class="prompt" type="text" placeholder="Search songs...">
+                            <i class="search link icon search_all"></i>
                     </div>
                     <div class="results"></div>
                 </div>
@@ -109,10 +76,35 @@ class GridWidget {
         });
         this.score = this.widgets.map(widget => widget.note);
 
-        menus.find('.ui.dropdown').dropdown();
 
         const widget_action = cb => () => this.widgets.forEach(cb);
         const set_action = (key, values) => widget_action((widget, index) => widget[key] = values[index]);
+
+        const song_search = menus.find('.song.search');
+        song_search.search({
+            source: [{
+                    title: 'NemaFull',
+                    description: 'Nemamoussassa full song',
+                    notes: nema_full(0, 2, 4),
+                },
+                {
+                    title: 'NemaLeftHand',
+                    description: 'Nemamoussassa left hand only',
+                    notes: nema_left_hand(0, 2, 4),
+                }
+            ],
+            minCharacters: 0,
+            onSelect: (selection) => {
+                // console.log('got song', selection.title, selection.notes)
+                this.widgets.forEach((widget, index) => widget.note = selection.notes[index]);
+            }
+        });
+        song_search.find('.search_all').click(() => {
+            song_search.search('set value', '');
+            song_search.search('query');
+        })
+
+        menus.find('.ui.dropdown').dropdown();
 
         { // chord tools
             const set_chords_action = chords => set_action('chord', chords);
@@ -132,10 +124,8 @@ class GridWidget {
             menus.find('.set_all_first_deltas').click(widget_action((widget, index) => widget.delta = 0));
         }
 
-        { // songs tools
-            const set_notes_action = notes => set_action('note', notes);
-            menus.find('.set_nemamoussassa').click(set_notes_action(nema_full(0, 2, 4)));
-        }
+
+
 
         this.elem = $('<div>', {
             class: "ui segments"

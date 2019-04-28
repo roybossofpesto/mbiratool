@@ -89,11 +89,16 @@ class NoteWidget {
     }
 
     set note(value) {
-        this.__chord = wrap(value.chord);
-        this.__delta = value.delta;
-        this.__octave = value.octave;
-        this.__delta_dropdown.dropdown('set selected', this.__delta.toString());
-        this.__octave_dropdown.dropdown('set selected', this.__octave.toString());
+        if (value) {
+            this.__chord = wrap(value.chord);
+            this.__delta = value.delta;
+            this.__octave = value.octave;
+            this.__delta_dropdown.dropdown('set selected', this.__delta.toString());
+            this.__octave_dropdown.dropdown('set selected', this.__octave.toString());
+        } else {
+            this.__delta = -1;
+            this.__delta_dropdown.dropdown('set selected', this.__delta.toString());
+        }
     }
 
     update() {
