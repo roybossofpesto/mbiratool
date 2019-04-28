@@ -29,10 +29,36 @@ class GridWidget {
                 </div>
             </div>
             <div class="right menu">
+                <!--<div class="ui item">
+                    <div class="ui transparent icon input">
+                        <input type="text" placeholder="Song"/>
+                        <i class="music icon"></i>
+                    </div>
+                </div>-->
+                <div class="item icon add_song button"><i class="save icon"></i></div>
+                <div class="ui tiny add_song modal">
+                    <div class="icon header">
+                        <i class="save icon"></i>
+                        Save song
+                    </div>
+                    <div class="content">
+                        <div class="ui form">
+                            <div class="field">
+                                <label>Title</label>
+                                <input name="title" type="text">
+                            </div>
+                            <div class="field">
+                                <label>Description</label>
+                                <textarea name='description'></textarea>
+                            </div>
+                            <button class="ui primary submit button">Save</button>
+                        </div>
+                    </div>
+                </div>
                 <div class="ui song search item">
                     <div class="ui transparent icon input">
-                        <input class="prompt" type="text" placeholder="Search songs...">
-                            <i class="search link icon search_all"></i>
+                        <input class="prompt" type="text" placeholder="Search songs..."/>
+                        <i class="music link icon search_all"></i>
                     </div>
                     <div class="results"></div>
                 </div>
@@ -76,33 +102,55 @@ class GridWidget {
         });
         this.score = this.widgets.map(widget => widget.note);
 
+        { // Add Song
+            const add_song_button = menus.find('.add_song.button');
+            const add_song_modal = menus.find('.add_song.modal');
+            const add_song_form = add_song_modal.find('.ui.form');
+            add_song_modal.find('.ui.form').form({
+                fields: {
+                    title: 'empty',
+                    description: ['minLength[6]', 'empty'],
+                },
+                onSuccess: (evt, fields) => {
+                    console.log('fsldfkl', evt, fields);
+                    add_song_form.form('clear');
+                    add_song_modal.modal('hide');
+                }
+            });
+            add_song_button.click(() => {
+                add_song_modal.modal('show');
+            });
+        }
+
+        { // Search song
+            const song_search = menus.find('.song.search');
+            song_search.search({
+                source: [{
+                        title: 'NemaFull',
+                        description: 'Nemamoussassa full song',
+                        notes: nema_full(0, 2, 4),
+                    },
+                    {
+                        title: 'NemaLeftHand',
+                        description: 'Nemamoussassa left hand only',
+                        notes: nema_left_hand(0, 2, 4),
+                    }
+                ],
+                minCharacters: 0,
+                onSelect: (selection) => {
+                    // console.log('got song', selection.title, selection.notes)
+                    this.widgets.forEach((widget, index) => widget.note = selection.notes[index]);
+                }
+            });
+
+            song_search.find('.search_all').click(() => {
+                song_search.search('set value', '');
+                song_search.search('query');
+            })
+        }
 
         const widget_action = cb => () => this.widgets.forEach(cb);
         const set_action = (key, values) => widget_action((widget, index) => widget[key] = values[index]);
-
-        const song_search = menus.find('.song.search');
-        song_search.search({
-            source: [{
-                    title: 'NemaFull',
-                    description: 'Nemamoussassa full song',
-                    notes: nema_full(0, 2, 4),
-                },
-                {
-                    title: 'NemaLeftHand',
-                    description: 'Nemamoussassa left hand only',
-                    notes: nema_left_hand(0, 2, 4),
-                }
-            ],
-            minCharacters: 0,
-            onSelect: (selection) => {
-                // console.log('got song', selection.title, selection.notes)
-                this.widgets.forEach((widget, index) => widget.note = selection.notes[index]);
-            }
-        });
-        song_search.find('.search_all').click(() => {
-            song_search.search('set value', '');
-            song_search.search('query');
-        })
 
         menus.find('.ui.dropdown').dropdown();
 
@@ -123,8 +171,6 @@ class GridWidget {
             menus.find('.clear_deltas').click(widget_action((widget, index) => widget.delta = -1));
             menus.find('.set_all_first_deltas').click(widget_action((widget, index) => widget.delta = 0));
         }
-
-
 
 
         this.elem = $('<div>', {
