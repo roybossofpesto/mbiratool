@@ -17,7 +17,9 @@ class GridWidget {
             <div class="ui dropdown icon item">
                 Octaves
                 <div class="menu">
-                    <div class="set_binary_octaves item">Repeat 0+</div>
+                    <div class="set_minus_zero_plus_octaves item">Repeat -0+</div>
+                    <div class="set_minus_zero_octaves item">Repeat -0</div>
+                    <div class="set_zero_plus_octaves item">Repeat 0+</div>
                     <div class="clear_octaves item">All 0</div>
                 </div>
             </div>
@@ -180,7 +182,9 @@ class GridWidget {
 
         { // octave tools
             menus.find('.clear_octaves').click(widget_action((widget, index) => widget.octave = 5));
-            menus.find('.set_binary_octaves').click(widget_action((widget, index) => widget.octave = index % 2 == 0 ? 5 : 6));
+            menus.find('.set_zero_plus_octaves').click(widget_action((widget, index) => widget.octave = index % 2 == 0 ? 5 : 6));
+            menus.find('.set_minus_zero_octaves').click(widget_action((widget, index) => widget.octave = index % 2 == 0 ? 4 : 5));
+            menus.find('.set_minus_zero_plus_octaves').click(widget_action((widget, index) => widget.octave = index % 3 + 4));
         }
 
         { // delta tools
