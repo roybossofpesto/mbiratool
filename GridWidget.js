@@ -116,7 +116,7 @@ class GridWidget {
             add_song_modal.find('.ui.form').form({
                 fields: {
                     title: 'empty',
-                    description: ['minLength[6]', 'empty'],
+                    description: 'maxLength[256]',
                 },
                 onSuccess: (evt, song) => {
                     song.notes = this.score;
@@ -152,10 +152,11 @@ class GridWidget {
                     },
                 },
                 minCharacters: 0,
+                cache: false,
                 onSelect: (selection) => {
                     // console.log('got song', selection.title, selection.notes)
                     this.widgets.forEach((widget, index) => widget.note = selection.notes[index]);
-                }
+                },
             });
 
             /*song_search.find('.search_all').click(() => {
