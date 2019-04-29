@@ -35,18 +35,28 @@
             // }).toMaster();
 
             // Effects
-            const auto_panner = new Tone.AutoPanner().toMaster().start();
-            auto_panner.set({
+            const auto_wah = new Tone.AutoWah({
+                baseFrequency: 50,
+                wet: 0,
+            }).toMaster();
+            $('.effects .auto_wah').click(function() {
+                const enabled = $(this).toggleClass('active').hasClass('active');
+                auto_wah.wet.rampTo(enabled ? .5 : 0, .3);
+            })
+            console.log("auto_wah", auto_wah.get());
+
+            const auto_panner = new Tone.AutoPanner({
                 frequency: "8n",
                 type: "sine",
-                depth: 0,
-            });
-            console.log("auto_panner", auto_panner.get());
-
+                depth: .8,
+                wet: 0,
+            }).connect(auto_wah).start();
             $('.effects .auto_panner').click(function() {
                 const enabled = $(this).toggleClass('active').hasClass('active');
-                auto_panner.set('depth', enabled ? .8 : 0);
+                auto_panner.wet.rampTo(enabled ? 1 : 0, .3);
             })
+            console.log("auto_panner", auto_panner.get());
+
 
             { // Mbira synth & loop
                 const mbira_synth = new Tone.PolySynth(24, Tone.Synth).connect(auto_panner);
@@ -79,32 +89,34 @@
             }
 
             { // Hosho synth and loop
+
                 const hosho_synth = new Tone.NoiseSynth({
                     noise: {
-                        type: 'pink',
+                        type: 'white',
                     },
                     envelope: {
                         attack: 1e-2,
-                        decay: 0.1,
-                        sustain: .05,
-                        release: .1,
+                        decay: 0.4,
+                        sustain: .1,
+                        release: .2,
                     },
-                    volume: -10,
-                }).connect(auto_panner);
+                    volume: -13,
+                }).toMaster();
                 console.log("hosho_synth", hosho_synth.get());
 
                 let hosho_beat = -1;
                 const hosho_loop = new Tone.Sequence((time, index) => {
                     if (hosho_beat < 0) return;
-                    if (index % 3 == hosho_beat) hosho_synth.triggerAttackRelease("16n", time);
-                }, [...Array(48).keys()], '8n').start();
+                    // if (Math.floor(index / 2) % 3 == hosho_beat) hosho_synth.triggerAttackRelease(index % 2 == 0 ? "16n" : "4n", time);
+                    // if ((index + 5) % 6 == 2 * hosho_beat) hosho_synth.triggerAttackRelease("16n", time);
+                    if ((index + 0) % 6 == 2 * hosho_beat) hosho_synth.triggerAttackRelease("2n", time);
+                }, [...Array(6).keys()], '16n').start();
 
                 const beat_buttons = $('.hosho.buttons .beat');
                 beat_buttons.click(function() {
                     beat_buttons.removeClass('active');
                     $(this).addClass('active');
                     hosho_beat = $(this).data('value');
-                    console.log(hosho_beat);
                 });
 
                 $('.hosho.buttons .volume.up').click(() => {
@@ -157,6 +169,7 @@
         </div>
         <div class="ui icon effects buttons">
             <div class="ui auto_panner button"><i class="exchange icon"></i></div>
+            <div class="ui auto_wah button"><i class="mercury icon"></i></div>
         </div>
         <div class="ui icon hosho buttons">
             <div class="ui active none beat button" data-value='-1'>&emptyset;</div>
@@ -165,7 +178,7 @@
             <div class="ui third beat button" data-value='2'>3</div>
             <div class="ui volume down button"><i class="icon volume down"></i></div>
             <div class="ui volume up button"><i class="icon volume up"></i></div>
-            </div>
+        </div>
 
     </div>
 </body>
