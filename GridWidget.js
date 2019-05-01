@@ -31,6 +31,7 @@ class GridWidget {
                     <div class="set_plus_zero_minus_octaves item">Repeat +0- &#x2588;&#x2585;&#x2582;</div>
                     <div class="set_zero_zero_minus_octaves item">Repeat 00- &#x2585;&#x2585;&#x2582;</div>
                     <div class="set_minus_minus_zero_octaves item">Repeat --0 &#x2582;&#x2582;&#x2585;</div>
+                    <div class="set_minus_zero_plus_zero_octaves item">Repeat -0+0 &#x2582;&#x2585;&#x2588;&#x2585;</div>
                 </div>
             </div>
             <div class="ui dropdown icon item">
@@ -212,6 +213,7 @@ class GridWidget {
             menus.find('.set_plus_zero_minus_octaves').click(repeat_octaves_action([6, 5, 4]));
             menus.find('.set_zero_zero_minus_octaves').click(repeat_octaves_action([5, 5, 4]));
             menus.find('.set_minus_minus_zero_octaves').click(repeat_octaves_action([4, 4, 5]));
+            menus.find('.set_minus_zero_plus_zero_octaves').click(repeat_octaves_action([4, 5, 6, 5]));
             menus.find('.increment_octaves').click(widget_action((widget, index) => widget.octave = 4 + (widget.octave - 3) % 3));
             menus.find('.decrement_octaves').click(widget_action((widget, index) => widget.octave = 4 + (widget.octave - 2) % 3));
             menus.find('.shift_right_octaves').click(() => {
