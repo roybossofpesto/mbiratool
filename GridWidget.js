@@ -186,10 +186,10 @@ class GridWidget {
                 },
             });
 
-            /*song_search.find('.search_all').click(() => {
+            song_search.find('.search_all').click(() => {
                 song_search.search('set value', '');
                 song_search.search('query');
-            })*/
+            })
         }
 
         const widget_action = cb => () => this.widgets.forEach(cb);
