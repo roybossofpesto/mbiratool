@@ -72,7 +72,7 @@ class GridWidget {
                     <div class="results"></div>
                 </div>
                 <div class="item icon active mute button"><i class="volume up icon"></i></div>
-                <div class="item icon collapse gray colored button"><i class="eye icon"></i></div>
+                <div class="item icon active collapse button"><i class="eye icon"></i></div>
             </div>
         </div>
         `));
@@ -175,6 +175,14 @@ class GridWidget {
             mute_button.find('i').attr('class', enabled ? 'icon volume up' : 'icon volume off');
             console.log('GridWidget.mute', enabled, this.onMute);
             if (this.onMute) this.onMute(enabled);
+        });
+
+        const collapse_button = menus.find('.collapse.button');
+        collapse_button.click(() => {
+            const enabled = collapse_button .toggleClass('active').hasClass('active');
+            collapse_button.find('i').attr('class', enabled ? 'eye icon' : 'eye slash icon');
+            if (enabled) grid.slideDown("fast");
+            else grid.slideUp("fast");
         })
 
         const widget_action = cb => () => this.widgets.forEach(cb);
