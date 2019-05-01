@@ -21,11 +21,11 @@ class NoteWidget {
                     </div>
                 </div>
                 <div class="ui icon top left pointing dropdown mini black button octave">
-                    <div class="default text">0</div>
+                    <div class="default text">&#x2582;</div>
                     <div class="menu">
-                        <div class="item" data-value="6">+</div>
-                        <div class="item" data-value="5">0</div>
-                        <div class="item" data-value="4">-</div>
+                        <div class="item" data-value="6">&#x2588;</div>
+                        <div class="item" data-value="5">&#x2585;</div>
+                        <div class="item" data-value="4">&#x2582;</div>
                     </div>
                 </div>
             </div>
