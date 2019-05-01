@@ -71,6 +71,8 @@ class GridWidget {
                     </div>
                     <div class="results"></div>
                 </div>
+                <div class="item icon active mute button"><i class="volume up icon"></i></div>
+                <div class="item icon collapse gray colored button"><i class="eye icon"></i></div>
             </div>
         </div>
         `));
@@ -166,6 +168,14 @@ class GridWidget {
                 song_search.search('query');
             })*/
         }
+
+        const mute_button = menus.find('.mute.button');
+        mute_button.click(() => {
+            const enabled = mute_button.toggleClass('active').hasClass('active');
+            mute_button.find('i').attr('class', enabled ? 'icon volume up' : 'icon volume off');
+            console.log('GridWidget.mute', enabled, this.onMute);
+            if (this.onMute) this.onMute(enabled);
+        })
 
         const widget_action = cb => () => this.widgets.forEach(cb);
         const set_action = (key, values) => widget_action((widget, index) => widget[key] = values[index]);
