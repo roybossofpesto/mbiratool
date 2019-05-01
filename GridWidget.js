@@ -2,8 +2,8 @@
 
 class GridWidget {
     constructor() {
-        this.__collapsed = false;
-        this.__muted = false;
+        this.__visible = false;
+        this.__playing = false;
 
         const menus = $($.parseHTML(`
         <div class="ui top attached menu">
@@ -174,12 +174,12 @@ class GridWidget {
 
         this.mute_button = menus.find('.mute.button');
         this.mute_button.click(() => {
-            this.muted = mute_button.toggleClass('active').hasClass('active');
+            this.playing = !this.mute_button.hasClass('active');
         });
 
         this.collapse_button = menus.find('.collapse.button');
         this.collapse_button.click(() => {
-            this.collapsed = collapse_button.toggleClass('active').hasClass('active');
+            this.visible = !this.collapse_button.hasClass('active');
         })
 
         const widget_action = cb => () => this.widgets.forEach(cb);
@@ -223,27 +223,29 @@ class GridWidget {
         this.update();
     }
 
-    get collapsed() {
-        return this.__collapsed;
+    get visible() {
+        return this.__visible;
     }
 
-    set collapsed(enabled) {
-        console.log('GridWidget.collapsed', enabled)
-        this.__collapsed = enabled;
-        this.collapse_button.find('i').attr('class', this.__collapsed ? 'eye icon' : 'eye slash icon');
-        if (this.__collapsed) this.grid.slideDown("fast");
+    set visible(enabled) {
+        this.__visible = enabled;
+        // console.log('GridWidget.visible', this.__visible)
+        this.collapse_button.toggleClass('active', this.__visible);
+        this.collapse_button.find('i').attr('class', this.__visible ? 'eye icon' : 'eye slash icon');
+        if (this.__visible) this.grid.slideDown("fast");
         else this.grid.slideUp("fast");
     }
 
-    get muted() {
-        return this.__muted;
+    get playing() {
+        return this.__playing;
     }
 
-    set muted(enabled) {
-        this.__muted = enabled;
-        console.log('GridWidget.mute', this.__muted, this.onMute);
-        this.mute_button.find('i').attr('class', this.__muted ? 'icon volume up' : 'icon volume off');
-        if (this.onMute) this.onMute(this.__muted);
+    set playing(enabled) {
+        this.__playing = enabled;
+        console.log('GridWidget.mute', this.__playing, this.onMute);
+        this.mute_button.toggleClass('active', this.__playing)
+        this.mute_button.find('i').attr('class', this.__playing ? 'icon volume up' : 'icon volume off');
+        if (this.onMute) this.onMute(this.__playing);
     }
 
     update() {
