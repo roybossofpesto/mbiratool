@@ -27,11 +27,23 @@ class GridWidget {
                     <div class="divider"></div>
                     <div class="clear_octaves item">All 0 &#x2582;</div>
                     <div class="set_minus_zero_octaves item">Repeat -0 &#x2582;&#x2585;</div>
-                    <div class="set_minus_zero_plus_octaves item">Repeat -0+ &#x2582;&#x2585;&#x2588;</div>
-                    <div class="set_plus_zero_minus_octaves item">Repeat +0- &#x2588;&#x2585;&#x2582;</div>
-                    <div class="set_zero_zero_minus_octaves item">Repeat 00- &#x2585;&#x2585;&#x2582;</div>
-                    <div class="set_minus_minus_zero_octaves item">Repeat --0 &#x2582;&#x2582;&#x2585;</div>
-                    <div class="set_minus_zero_plus_zero_octaves item">Repeat -0+0 &#x2582;&#x2585;&#x2588;&#x2585;</div>
+                    <div class="dropdown item">
+                        3 Pattern
+                        <i class="dropdown icon"></i>
+                        <div class="menu">
+                            <div class="set_minus_zero_plus_octaves item">Repeat -0+ &#x2582;&#x2585;&#x2588;</div>
+                            <div class="set_plus_zero_minus_octaves item">Repeat +0- &#x2588;&#x2585;&#x2582;</div>
+                            <div class="set_zero_zero_minus_octaves item">Repeat 00- &#x2585;&#x2585;&#x2582;</div>
+                            <div class="set_minus_minus_zero_octaves item">Repeat --0 &#x2582;&#x2582;&#x2585;</div>
+                        </div>
+                    </div>
+                    <div class="dropdown item">
+                        4 Pattern
+                        <i class="dropdown icon"></i>
+                        <div class="menu">
+                            <div class="set_minus_zero_plus_zero_octaves item">Repeat -0+0 &#x2582;&#x2585;&#x2588;&#x2585;</div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="ui dropdown icon item">
