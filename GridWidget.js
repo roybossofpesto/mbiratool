@@ -20,15 +20,17 @@ class GridWidget {
             <div class="ui dropdown icon item">
                 Octaves
                 <div class="menu">
-                    <div class="set_minus_zero_plus_octaves item">Repeat -0+ &#x2582;&#x2585;&#x2588;</div>
-                    <div class="set_minus_zero_octaves item">Repeat -0 &#x2582;&#x2585;</div>
-                    <div class="clear_octaves item">All 0 &#x2582;</div>
-                    <div class="divider"></div>
                     <div class="increment_octaves item"><i class="ui up arrow icon"></i>Shift Up</div>
                     <div class="decrement_octaves item"><i class="ui down arrow icon"></i>Shift Down</div>
                     <div class="shift_left_octaves item"><i class="ui left arrow icon"></i>Shift Left</div>
                     <div class="shift_right_octaves item"><i class="ui right arrow icon"></i>Shift Right</div>
-
+                    <div class="divider"></div>
+                    <div class="clear_octaves item">All 0 &#x2582;</div>
+                    <div class="set_minus_zero_octaves item">Repeat -0 &#x2582;&#x2585;</div>
+                    <div class="set_minus_zero_plus_octaves item">Repeat -0+ &#x2582;&#x2585;&#x2588;</div>
+                    <div class="set_plus_zero_minus_octaves item">Repeat +0- &#x2588;&#x2585;&#x2582;</div>
+                    <div class="set_zero_zero_minus_octaves item">Repeat 00- &#x2585;&#x2585;&#x2582;</div>
+                    <div class="set_minus_minus_zero_octaves item">Repeat --0 &#x2582;&#x2582;&#x2585;</div>
                 </div>
             </div>
             <div class="ui dropdown icon item">
@@ -177,6 +179,13 @@ class GridWidget {
             })*/
         }
 
+        const widget_action = cb => () => this.widgets.forEach(cb);
+        const set_action = (key, values) => widget_action((widget, index) => widget[key] = values[index % values.length]);
+
+        menus.find('.ui.dropdown').dropdown({
+            on: 'hover'
+        });
+
         this.mute_button = menus.find('.mute.button');
         this.mute_button.click(() => {
             this.playing = !this.mute_button.hasClass('active');
@@ -187,11 +196,6 @@ class GridWidget {
             this.visible = !this.collapse_button.hasClass('active');
         })
 
-        const widget_action = cb => () => this.widgets.forEach(cb);
-        const set_action = (key, values) => widget_action((widget, index) => widget[key] = values[index]);
-
-        menus.find('.ui.dropdown').dropdown();
-
         { // chord tools
             const set_chords_action = chords => set_action('chord', chords);
             menus.find('.increment_chords').click(widget_action((widget, index) => widget.chord++));
@@ -201,13 +205,17 @@ class GridWidget {
         }
 
         { // octave tools
+            const repeat_octaves_action = octaves => set_action('octave', octaves);
             menus.find('.clear_octaves').click(widget_action((widget, index) => widget.octave = 5));
-            menus.find('.set_minus_zero_octaves').click(widget_action((widget, index) => widget.octave = index % 2 == 0 ? 4 : 5));
-            menus.find('.set_minus_zero_plus_octaves').click(widget_action((widget, index) => widget.octave = index % 3 + 4));
+            menus.find('.set_minus_zero_octaves').click(repeat_octaves_action([4, 5]));
+            menus.find('.set_minus_zero_plus_octaves').click(repeat_octaves_action([4, 5, 6]));
+            menus.find('.set_plus_zero_minus_octaves').click(repeat_octaves_action([6, 5, 4]));
+            menus.find('.set_zero_zero_minus_octaves').click(repeat_octaves_action([5, 5, 4]));
+            menus.find('.set_minus_minus_zero_octaves').click(repeat_octaves_action([4, 4, 5]));
             menus.find('.increment_octaves').click(widget_action((widget, index) => widget.octave = 4 + (widget.octave - 3) % 3));
             menus.find('.decrement_octaves').click(widget_action((widget, index) => widget.octave = 4 + (widget.octave - 2) % 3));
             menus.find('.shift_right_octaves').click(() => {
-                let prev = this.widgets[this.widgets.length-1].octave;
+                let prev = this.widgets[this.widgets.length - 1].octave;
                 for (let kk = 0; kk < this.widgets.length; kk++) {
                     const current = this.widgets[kk].octave;
                     this.widgets[kk].octave = prev;
@@ -216,7 +224,7 @@ class GridWidget {
             });
             menus.find('.shift_left_octaves').click(() => {
                 let prev = this.widgets[0].octave;
-                for (let kk = this.widgets.length -1; kk >= 0; kk--) {
+                for (let kk = this.widgets.length - 1; kk >= 0; kk--) {
                     const current = this.widgets[kk].octave;
                     this.widgets[kk].octave = prev;
                     prev = current;
