@@ -20,10 +20,15 @@ class GridWidget {
             <div class="ui dropdown icon item">
                 Octaves
                 <div class="menu">
-                    <div class="set_minus_zero_plus_octaves item">Repeat -0+</div>
-                    <div class="set_minus_zero_octaves item">Repeat -0</div>
-                    <div class="set_zero_plus_octaves item">Repeat 0+</div>
-                    <div class="clear_octaves item">All 0</div>
+                    <div class="set_minus_zero_plus_octaves item">Repeat -0+ &#x2582;&#x2585;&#x2588;</div>
+                    <div class="set_minus_zero_octaves item">Repeat -0 &#x2582;&#x2585;</div>
+                    <div class="clear_octaves item">All 0 &#x2582;</div>
+                    <div class="divider"></div>
+                    <div class="increment_octaves item"><i class="ui up arrow icon"></i>Shift Up</div>
+                    <div class="decrement_octaves item"><i class="ui down arrow icon"></i>Shift Down</div>
+                    <div class="shift_left_octaves item"><i class="ui left arrow icon"></i>Shift Left</div>
+                    <div class="shift_right_octaves item"><i class="ui right arrow icon"></i>Shift Right</div>
+
                 </div>
             </div>
             <div class="ui dropdown icon item">
@@ -197,9 +202,27 @@ class GridWidget {
 
         { // octave tools
             menus.find('.clear_octaves').click(widget_action((widget, index) => widget.octave = 5));
-            menus.find('.set_zero_plus_octaves').click(widget_action((widget, index) => widget.octave = index % 2 == 0 ? 5 : 6));
             menus.find('.set_minus_zero_octaves').click(widget_action((widget, index) => widget.octave = index % 2 == 0 ? 4 : 5));
             menus.find('.set_minus_zero_plus_octaves').click(widget_action((widget, index) => widget.octave = index % 3 + 4));
+            menus.find('.increment_octaves').click(widget_action((widget, index) => widget.octave = 4 + (widget.octave - 3) % 3));
+            menus.find('.decrement_octaves').click(widget_action((widget, index) => widget.octave = 4 + (widget.octave - 2) % 3));
+            menus.find('.shift_right_octaves').click(() => {
+                let prev = this.widgets[this.widgets.length-1].octave;
+                for (let kk = 0; kk < this.widgets.length; kk++) {
+                    const current = this.widgets[kk].octave;
+                    this.widgets[kk].octave = prev;
+                    prev = current;
+                }
+            });
+            menus.find('.shift_left_octaves').click(() => {
+                let prev = this.widgets[0].octave;
+                for (let kk = this.widgets.length -1; kk >= 0; kk--) {
+                    const current = this.widgets[kk].octave;
+                    this.widgets[kk].octave = prev;
+                    prev = current;
+                }
+            });
+
         }
 
         { // delta tools
