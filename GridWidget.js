@@ -232,8 +232,8 @@ class GridWidget {
         // console.log('GridWidget.visible', this.__visible)
         this.collapse_button.toggleClass('active', this.__visible);
         this.collapse_button.find('i').attr('class', this.__visible ? 'eye icon' : 'eye slash icon');
-        if (this.__visible) this.grid.slideDown("fast");
-        else this.grid.slideUp("fast");
+        if (this.__visible) this.grid.show();
+        else this.grid.hide();
     }
 
     get playing() {
@@ -242,7 +242,7 @@ class GridWidget {
 
     set playing(enabled) {
         this.__playing = enabled;
-        console.log('GridWidget.mute', this.__playing, this.onMute);
+        console.log('GridWidget.playing', this.__playing, this.onMute);
         this.mute_button.toggleClass('active', this.__playing)
         this.mute_button.find('i').attr('class', this.__playing ? 'icon volume up' : 'icon volume off');
         if (this.onMute) this.onMute(this.__playing);
