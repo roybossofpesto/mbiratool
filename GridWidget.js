@@ -223,6 +223,14 @@ class GridWidget {
         this.update();
     }
 
+    get collapsed() {
+        return !this.__visible;
+    }
+
+    set collapsed(enabled) {
+        this.visible = !enabled;
+    }
+
     get visible() {
         return this.__visible;
     }
@@ -234,6 +242,14 @@ class GridWidget {
         this.collapse_button.find('i').attr('class', this.__visible ? 'eye icon' : 'eye slash icon');
         if (this.__visible) this.grid.show();
         else this.grid.hide();
+    }
+
+    get muted() {
+        return !this.__playing;
+    }
+
+    set muted(enabled) {
+        this.playing = !enabled;
     }
 
     get playing() {
