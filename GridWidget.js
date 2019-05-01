@@ -2,6 +2,9 @@
 
 class GridWidget {
     constructor() {
+        this.__collapsed = false;
+        this.__muted = false;
+
         const menus = $($.parseHTML(`
         <div class="ui top attached menu">
             <div class="ui dropdown icon item">
@@ -76,7 +79,7 @@ class GridWidget {
             </div>
         </div>
         `));
-        const grid = $('<div>', {
+        this.grid = $('<div>', {
             class: "ui twelve column center aligned grid segment",
         });
         const label = $('<div>', {
@@ -108,7 +111,7 @@ class GridWidget {
                 this.score[index] = widget.note;
                 this.update();
             }
-            grid.append(widget.elem);
+            this.grid.append(widget.elem);
             return widget;
         });
         this.score = this.widgets.map(widget => widget.note);
@@ -169,20 +172,14 @@ class GridWidget {
             })*/
         }
 
-        const mute_button = menus.find('.mute.button');
-        mute_button.click(() => {
-            const enabled = mute_button.toggleClass('active').hasClass('active');
-            mute_button.find('i').attr('class', enabled ? 'icon volume up' : 'icon volume off');
-            console.log('GridWidget.mute', enabled, this.onMute);
-            if (this.onMute) this.onMute(enabled);
+        this.mute_button = menus.find('.mute.button');
+        this.mute_button.click(() => {
+            this.muted = mute_button.toggleClass('active').hasClass('active');
         });
 
-        const collapse_button = menus.find('.collapse.button');
-        collapse_button.click(() => {
-            const enabled = collapse_button .toggleClass('active').hasClass('active');
-            collapse_button.find('i').attr('class', enabled ? 'eye icon' : 'eye slash icon');
-            if (enabled) grid.slideDown("fast");
-            else grid.slideUp("fast");
+        this.collapse_button = menus.find('.collapse.button');
+        this.collapse_button.click(() => {
+            this.collapsed = collapse_button.toggleClass('active').hasClass('active');
         })
 
         const widget_action = cb => () => this.widgets.forEach(cb);
@@ -220,10 +217,33 @@ class GridWidget {
             class: "ui segments"
         });
         this.elem.append(menus);
-        this.elem.append(grid);
+        this.elem.append(this.grid);
         this.elem.append(label);
 
         this.update();
+    }
+
+    get collapsed() {
+        return this.__collapsed;
+    }
+
+    set collapsed(enabled) {
+        console.log('GridWidget.collapsed', enabled)
+        this.__collapsed = enabled;
+        this.collapse_button.find('i').attr('class', this.__collapsed ? 'eye icon' : 'eye slash icon');
+        if (this.__collapsed) this.grid.slideDown("fast");
+        else this.grid.slideUp("fast");
+    }
+
+    get muted() {
+        return this.__muted;
+    }
+
+    set muted(enabled) {
+        this.__muted = enabled;
+        console.log('GridWidget.mute', this.__muted, this.onMute);
+        this.mute_button.find('i').attr('class', this.__muted ? 'icon volume up' : 'icon volume off');
+        if (this.onMute) this.onMute(this.__muted);
     }
 
     update() {

@@ -3,8 +3,8 @@
 class MbiraInstrument {
     constructor(effects) {
         // create grid
-        const grid = new GridWidget();
-        grid.elem.appendTo('.master.container');
+        this.grid = new GridWidget();
+        this.grid.elem.appendTo('.master.container');
 
         // Mbira synth
         const mbira_synth = new Tone.PolySynth(24, Tone.Synth).connect(effects.auto_panner);
@@ -37,14 +37,13 @@ class MbiraInstrument {
                         marginRight: 0
                     }, 300);
             }, time);
-        }, grid.widgets, "8t").start();
+        }, this.grid.widgets, "8t").start();
 
         // Mbira mute
         // grid.onMute = (enabled) => {
         //     enable_loop = enabled;
         // };
 
-        grid.onMute = (enabled) => enable_loop = enabled;
-
+        this.grid.onMute = (enabled) => enable_loop = enabled;
     }
 }

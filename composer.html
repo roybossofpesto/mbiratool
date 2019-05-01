@@ -62,6 +62,8 @@
 
             const mbira_aa = new MbiraInstrument(effects);
             const mbira_bb = new MbiraInstrument(effects);
+            console.log(mbira_aa.grid);
+            mbira_aa.grid.collapsed = false;
 
             { // Hosho synth and loop
                 const hosho_synth = new Tone.NoiseSynth({
