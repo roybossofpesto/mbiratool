@@ -144,16 +144,23 @@
 
             { // Bpm
                 const label = $('.bpm.buttons .value span');
-                $('.bpm.buttons .increment').click(() => {
-                    Tone.Transport.bpm.value += 10;
+                const updateLabel = () => {
                     const displayed_bpm = Tone.Transport.bpm.value;
                     label.text(displayed_bpm.toFixed(0).padStart(3, '0'));
+                }
+                $('.bpm.buttons .increment').click(() => {
+                    Tone.Transport.bpm.value += 1;
+                    updateLabel();
                 })
                 $('.bpm.buttons .decrement').click(() => {
-                    Tone.Transport.bpm.value -= 10;
-                    const displayed_bpm = Tone.Transport.bpm.value;
-                    label.text(displayed_bpm.toFixed(0).padStart(3, '0'));
+                    Tone.Transport.bpm.value -= 1;
+                    updateLabel();
                 })
+                $('.bpm.buttons .dropdown').dropdown();
+                $('.bpm.buttons .set_bpm').click(function(){
+                    Tone.Transport.bpm.value = $(this).data('value');
+                    updateLabel();
+                });
             }
         });
     </script>
@@ -170,13 +177,11 @@
             <div class="eight wide column">
                 <div class="ui bpm icon buttons">
                     <div class="ui decrement button"><i class="minus icon"></i></div>
-                    <div class="ui value button dropdown"><span>060</span>
+                    <div class="ui value button top center pointing dropdown"><span>060</span>
                         <div class="menu">
-                            <div class="set_chords_633 item">Pattern 633</div>
-                            <div class="set_chords_444 item">Pattern 444</div>
-                            <div class="divider"></div>
-                            <div class="increment_chords item">Transpose +</div>
-                            <div class="decrement_chords item">Transpose -</div>
+                            <div class="set_bpm item" data-value="60">60</div>
+                            <div class="set_bpm item" data-value="90">90</div>
+                            <div class="set_bpm item" data-value="120">120</div>
                         </div>
                     </div>
                     <div class="ui increment button"><i class="plus icon"></i></div>

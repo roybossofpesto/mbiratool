@@ -25,23 +25,23 @@ class GridWidget {
                     <div class="shift_left_octaves item"><i class="ui left arrow icon"></i>Shift Left</div>
                     <div class="shift_right_octaves item"><i class="ui right arrow icon"></i>Shift Right</div>
                     <div class="divider"></div>
-                    <div class="clear_octaves item">All 0 &#x2582;</div>
-                    <div class="set_minus_zero_octaves item">Repeat -0 &#x2582;&#x2585;</div>
+                    <div class="clear_octaves item">All &#x2582;</div>
+                    <div class="set_minus_zero_octaves item">Repeat &#x2582;&#x2585;</div>
                     <div class="dropdown item">
                         3 Pattern
                         <i class="dropdown icon"></i>
                         <div class="menu">
-                            <div class="set_minus_zero_plus_octaves item">Repeat -0+ &#x2582;&#x2585;&#x2588;</div>
-                            <div class="set_plus_zero_minus_octaves item">Repeat +0- &#x2588;&#x2585;&#x2582;</div>
-                            <div class="set_zero_zero_minus_octaves item">Repeat 00- &#x2585;&#x2585;&#x2582;</div>
-                            <div class="set_minus_minus_zero_octaves item">Repeat --0 &#x2582;&#x2582;&#x2585;</div>
+                            <div class="set_minus_zero_plus_octaves item">Repeat &#x2582;&#x2585;&#x2588;</div>
+                            <div class="set_plus_zero_minus_octaves item">Repeat &#x2588;&#x2585;&#x2582;</div>
+                            <div class="set_zero_zero_minus_octaves item">Repeat &#x2585;&#x2585;&#x2582;</div>
+                            <div class="set_minus_minus_zero_octaves item">Repeat &#x2582;&#x2582;&#x2585;</div>
                         </div>
                     </div>
                     <div class="dropdown item">
                         4 Pattern
                         <i class="dropdown icon"></i>
                         <div class="menu">
-                            <div class="set_minus_zero_plus_zero_octaves item">Repeat -0+0 &#x2582;&#x2585;&#x2588;&#x2585;</div>
+                            <div class="set_minus_zero_plus_zero_octaves item">Repeat &#x2582;&#x2585;&#x2588;&#x2585;</div>
                         </div>
                     </div>
                 </div>
@@ -57,7 +57,7 @@ class GridWidget {
                 Gates
                 <div class="menu">
                     <div class="set_left_hand_gates item">Left hand</div>
-                    <div class="set_right_hand_gates item">right hand</div>
+                    <div class="set_right_hand_gates item">Right hand</div>
                     <div class="set_gates item">All</div>
                 </div>
             </div>
