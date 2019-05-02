@@ -26,7 +26,7 @@ class MbiraInstrument {
         const mbira_loop = new Tone.Sequence((time, widget) => {
             if (enable_loop) {
                 // const transpose = transpose_coarse + transpose_fine / 100.;
-                const next_note = widget.note ? widget.note.note : null;
+                const next_note = widget.enabled && widget.note ? widget.note.note : null;
                 if (next_note) mbira_synth.triggerAttackRelease(Tone.Frequency(next_note), "16n", time);
                 // if (note) mbira_synth.triggerAttackRelease(Tone.Frequency(note).transpose(transpose), "16n", time);
             }

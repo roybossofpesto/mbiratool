@@ -6,6 +6,7 @@ class NoteWidget {
         this.__chord = null;
         this.__octave = 5;
         this.__delta = -1;
+        this.__enabled = true;
 
         const dual_button = $($.parseHTML(`
         <div class="ui column">
@@ -28,11 +29,18 @@ class NoteWidget {
                         <div class="item" data-value="4">&#x2582;</div>
                     </div>
                 </div>
+                <div class="ui fluid icon button gate"></div>
             </div>
         </div>
         `));
 
         const self = this;
+
+        this.__enabled_button = dual_button.find('.ui.button.gate');
+        this.__enabled_button.click(() => {
+            self.__enabled = !self.__enabled;
+            self.update();
+        })
 
         this.__octave_dropdown = dual_button.find('.ui.dropdown.octave');
         this.__octave_dropdown.dropdown({
@@ -84,6 +92,15 @@ class NoteWidget {
         this.update();
     }
 
+    get enabled() {
+        return this.__enabled;
+    }
+
+    set enabled(value) {
+        this.__enabled = (value == true);
+        this.update();
+    }
+
     get note() {
         return create_note(this.__chord, this.__delta, this.__octave);
     }
@@ -111,7 +128,9 @@ class NoteWidget {
         this.__delta_dropdown.css('background-color', delta_backcolor.css());
         this.__delta_dropdown.css('color', delta_color.css())
 
-        if (this.onUpdate) this.onUpdate();
+        this.__enabled_button.css('background-color', this.__enabled ? octave_backcolor.css() : "black");
+
+        if (this.onUpdate) this.onUpdate(this.note, this.enabled);
     }
 
     ping(duration = 300) {

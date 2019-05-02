@@ -54,6 +54,14 @@ class GridWidget {
                 </div>
             </div>
             <div class="ui dropdown icon item">
+                Gates
+                <div class="menu">
+                    <div class="set_left_hand_gates item">Left hand</div>
+                    <div class="set_right_hand_gates item">right hand</div>
+                    <div class="set_gates item">All</div>
+                </div>
+            </div>
+            <div class="ui dropdown icon item">
                 Songs
                 <div class="menu">
                     <div class="set_nemafull_song item">Nemamoussassa</div>
@@ -124,17 +132,20 @@ class GridWidget {
         this.widgets = chords_444.map((chord, index) => {
             const widget = new NoteWidget();
             widget.chord = chord;
-            widget.onUpdate = () => {
-                // console.log('widget.note', widget.note);
-                // console.log('widget.index', widget.index);
-                // console.log('widget.chord', widget.chord);
-                this.score[index] = widget.note;
+            widget.onUpdate = (note, enabled) => {
+                this.score[index] = {
+                    note: note,
+                    enabled: enabled
+                };
                 this.update();
             }
             this.grid.append(widget.elem);
             return widget;
         });
-        this.score = this.widgets.map(widget => widget.note);
+        this.score = this.widgets.map(widget => ({
+            note: widget.note,
+            enabled: widget.enabled,
+        }));
 
         { // Add Song
             const add_song_button = menus.find('.add_song.button');
@@ -252,6 +263,13 @@ class GridWidget {
             menus.find('.set_all_first_deltas').click(widget_action((widget, index) => widget.delta = 0));
         }
 
+        { // gate tools
+            const set_enabled_action = gates => set_action('enabled', gates);
+            menus.find('.set_gates').click(widget_action((widget, index) => widget.enabled = true));
+            menus.find('.set_left_hand_gates').click(set_enabled_action([true, false]));
+            menus.find('.set_right_hand_gates').click(set_enabled_action([false, true]));
+        }
+
         { // song tools
             const set_notes_action = notes => set_action('note', notes);
             menus.find('.set_nemafull_song').click(set_notes_action(nema_full(0, 2, 4)));
@@ -310,7 +328,7 @@ class GridWidget {
     }
 
     update() {
-        let sparse_score = this.score.map(elem => elem == null ? '__' : elem.note);
+        let sparse_score = this.score.map(elem => elem.enabled ? elem.note == null ? '__' : elem.note.note : '&nbsp;&nbsp;');
         sparse_score.splice(12, 0, "<br/>");
         sparse_score.splice(25, 0, "<br/>");
         sparse_score.splice(38, 0, "<br/>");
