@@ -113,4 +113,12 @@ class NoteWidget {
 
         if (this.onUpdate) this.onUpdate();
     }
+
+    ping(duration = 300) {
+        this.elem.find('.icon.buttons')
+            .css('margin-right', '10px')
+            .animate({
+                marginRight: 0
+            }, duration);
+    }
 }

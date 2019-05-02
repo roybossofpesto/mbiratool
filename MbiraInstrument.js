@@ -30,13 +30,7 @@ class MbiraInstrument {
                 if (next_note) mbira_synth.triggerAttackRelease(Tone.Frequency(next_note), "16n", time);
                 // if (note) mbira_synth.triggerAttackRelease(Tone.Frequency(note).transpose(transpose), "16n", time);
             }
-            Tone.Draw.schedule(() => {
-                widget.elem.find('.icon.buttons')
-                    .css('margin-right', '10px')
-                    .animate({
-                        marginRight: 0
-                    }, 300);
-            }, time);
+            Tone.Draw.schedule(() => widget.ping(), time);
         }, this.grid.widgets, "8t").start();
 
         // Mbira mute
