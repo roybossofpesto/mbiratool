@@ -66,6 +66,15 @@
             // mbira_bb.grid.playing = false;
             // mbira_aa.grid.muted = true;
 
+            /*
+            const am_synth = new Tone.AMSynth().toMaster();
+            const noise_synth = new Tone.NoiseSynth();
+            // noise_synth.start();
+            am_synth.set('modulator', noise_synth);
+            am_synth.set('carrier', auto_wah);
+            console.log(am_synth.get());
+            */
+
             { // Hosho synth and loop
                 const hosho_synth = new Tone.NoiseSynth({
                     noise: {
@@ -73,9 +82,9 @@
                     },
                     envelope: {
                         attack: 1e-2,
-                        decay: 0.4,
-                        sustain: .1,
-                        release: .2,
+                        decay: 2,
+                        sustain: 1.,
+                        release: 1e-2,
                     },
                     volume: -13,
                 }).toMaster();
@@ -88,8 +97,8 @@
                     // if ((index + 5) % 6 == 2 * hosho_beat) hosho_synth.triggerAttackRelease("16n", time);
                     // if ((index + 0) % 6 == 2 * hosho_beat) hosho_synth.triggerAttackRelease("2n", time);
                     if ((index + 0) % 6 == 2 * hosho_beat) hosho_synth.triggerAttackRelease("64n", time);
-                    if ((index + 3) % 6 == 2 * hosho_beat) hosho_synth.triggerAttackRelease("64n", time, .5);
-                    if ((index + 4) % 6 == 2 * hosho_beat) hosho_synth.triggerAttackRelease("64n", time, .5);
+                    if ((index + 3) % 6 == 2 * hosho_beat) hosho_synth.triggerAttackRelease("64n", time, .2);
+                    if ((index + 2) % 6 == 2 * hosho_beat) hosho_synth.triggerAttackRelease("16n", time, .5);
                 }, [...Array(6).keys()], '16t').start();
 
                 const beat_buttons = $('.hosho.buttons .beat');
