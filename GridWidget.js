@@ -12,6 +12,7 @@ class GridWidget {
                 <div class="menu">
                     <div class="set_chords_633 item">Pattern 633</div>
                     <div class="set_chords_444 item">Pattern 444</div>
+                    <div class="set_chords_1315 item">Pattern 1315</div>
                     <div class="divider"></div>
                     <div class="increment_chords item">Transpose +</div>
                     <div class="decrement_chords item">Transpose -</div>
@@ -49,8 +50,25 @@ class GridWidget {
             <div class="ui dropdown icon item">
                 Deltas
                 <div class="menu">
-                    <div class="set_all_first_deltas item">All 1st</div>
-                    <div class="clear_deltas item">All &emptyset;</div>
+                    <div class="shift_left_deltas item"><i class="ui left arrow icon"></i>Shift Left</div>
+                    <div class="shift_right_deltas item"><i class="ui right arrow icon"></i>Shift Right</div>
+                    <div class="divider"></div>
+                    <div class="set_all_first_deltas item">1</div>
+                    <!--    <div class="clear_deltas item">All &emptyset;</div> -->
+                    <div class="set_deltas_repeat_one_three item">13</div>
+                    <div class="set_deltas_repeat_one_five item">15</div>
+                    <div class="set_deltas_repeat_one_one_three item">113</div>
+                    <div class="set_deltas_repeat_one_one_five item">115</div>
+                    <div class="set_deltas_repeat_one_three_five item">135</div>
+                    <div class="set_deltas_repeat_one_five_three item">153</div>
+                    <div class="set_deltas_repeat_one_one_five_five item">1155</div>
+                    <div class="set_deltas_repeat_one_one_three_five item">1135</div>
+                    <div class="set_deltas_repeat_one_one_five_five item">1153</div>
+                    <div class="set_deltas_repeat_one_three_one_five item">1315</div>
+                    <div class="set_deltas_repeat_one_five_one_three item">1513</div>
+                    <div class="set_deltas_repeat_one_five_one_three_doubletime item">11551133</div>
+
+
                 </div>
             </div>
             <div class="ui dropdown icon item">
@@ -121,6 +139,13 @@ class GridWidget {
             0, 0, 0, 0, 0, 0, 2, 2, 2, 5, 5, 5,
             0, 0, 0, 0, 0, 0, 3, 3, 3, 5, 5, 5,
             1, 1, 1, 1, 1, 1, 3, 3, 3, 5, 5, 5, 0,
+        ];
+
+        const chords_1315 = [
+            0, 0, 0, 2, 2, 2, 0, 0, 0, 4, 4, 4,
+            0, 0, 0, 2, 2, 2, 0, 0, 0, 5, 5, 5,
+            0, 0, 0, 3, 3, 3, 0, 0, 0, 5, 5, 5,
+            1, 1, 1, 3, 3, 3, 1, 1, 1, 5, 5, 5,
         ];
 
         const chords_444 = [];
@@ -226,6 +251,7 @@ class GridWidget {
             menus.find('.decrement_chords').click(widget_action((widget, index) => widget.chord += 6));
             menus.find('.set_chords_444').click(set_chords_action(chords_444));
             menus.find('.set_chords_633').click(set_chords_action(chords_633));
+            menus.find('.set_chords_1315').click(set_chords_action(chords_1315));
         }
 
         { // octave tools
@@ -259,8 +285,40 @@ class GridWidget {
         }
 
         { // delta tools
-            menus.find('.clear_deltas').click(widget_action((widget, index) => widget.delta = -1));
+            const repeat_deltas_action = deltas => set_action('delta', deltas);
+            //menus.find('.clear_deltas').click(widget_action((widget, index) => widget.delta = -1));
+            menus.find('.set_deltas_repeat_one_three').click(repeat_deltas_action([0, 2]));
+            menus.find('.set_deltas_repeat_one_five').click(repeat_deltas_action([0, 4]));
+            menus.find('.set_deltas_repeat_one_one_three').click(repeat_deltas_action([0, 0, 2]));
+            menus.find('.set_deltas_repeat_one_one_five').click(repeat_deltas_action([0, 0, 4]));
+            menus.find('.set_deltas_repeat_one_three_five').click(repeat_deltas_action([0, 2, 4]));
+            menus.find('.set_deltas_repeat_one_five_three').click(repeat_deltas_action([0, 4, 2]));
+            menus.find('.set_deltas_repeat_one_one_three_five').click(repeat_deltas_action([0, 0, 2, 4]));
+            menus.find('.set_deltas_repeat_one_one_five_three').click(repeat_deltas_action([0, 0, 4, 2]));
+            menus.find('.set_deltas_repeat_one_one_five_five').click(repeat_deltas_action([0, 0, 4, 4]));
+            menus.find('.set_deltas_repeat_one_three_one_five').click(repeat_deltas_action([0, 2, 0, 4]));
+            menus.find('.set_deltas_repeat_one_five_one_three').click(repeat_deltas_action([0, 4, 0, 2]));
+            menus.find('.set_deltas_repeat_one_five_one_three_doubletime').click(repeat_deltas_action([0, 0, 4, 4, 0, 0, 2, 2]));
+
+
             menus.find('.set_all_first_deltas').click(widget_action((widget, index) => widget.delta = 0));
+
+            menus.find('.shift_right_deltas').click(() => {
+                let prev = this.widgets[this.widgets.length - 1].delta;
+                for (let kk = 0; kk < this.widgets.length; kk++) {
+                    const current = this.widgets[kk].delta;
+                    this.widgets[kk].delta = prev;
+                    prev = current;
+                }
+            });
+            menus.find('.shift_left_deltas').click(() => {
+                let prev = this.widgets[0].delta;
+                for (let kk = this.widgets.length - 1; kk >= 0; kk--) {
+                    const current = this.widgets[kk].delta;
+                    this.widgets[kk].delta = prev;
+                    prev = current;
+                }
+            });
         }
 
         { // gate tools
