@@ -132,8 +132,20 @@ class NoteWidget {
             this.__delta_dropdown.dropdown('set selected', '-1');
     }
 
+    get payload() {
+        return {
+            note: this.note,
+            enabled: this.enabled
+        };
+    }
+
+    set payload(value) {
+        this.note = value.note;
+        this.enabled = value.enabled;
+    }
+
     update() {
-        // console.log('NoteWidget', 'update', this.chord, this.delta, this.octave, this.enabled, this.note);
+        // console.log('NoteWidget', 'update', this.chord, this.delta, this.octave, this.enabled, this.payload);
         const octave_backcolor = chord_colors[this.__chord];
         this.__octave_dropdown.css('background-color', octave_backcolor.css());
 
@@ -144,7 +156,7 @@ class NoteWidget {
 
         this.__enabled_button.css('background-color', this.__enabled ? octave_backcolor.css() : "black");
 
-        if (this.onUpdate) this.onUpdate(this.note, this.enabled);
+        if (this.onUpdate) this.onUpdate(this.payload);
     }
 
     ping(duration = 300) {

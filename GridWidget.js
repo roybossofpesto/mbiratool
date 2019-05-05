@@ -132,10 +132,11 @@ class GridWidget {
             class: "ui twelve column center aligned grid segment",
         });
         const status = $($.parseHTML(`
-        <div class="ui bottom attached horizontal segments">
-            <div style="font-family: monospace" class="ui segment"><p class="score_label"></p></div>
+        <div class="ui horizontal segments">
+            <div style="font-family: monospace;" class="ui score_label segment"></div>
             <div class="ui segment"></div>
         </div>
+        <div style="font-family: monospace;" class="ui bottom attached score_hash segment"></div>
         `));
 
         const chords_111_111_333_555 = [
@@ -153,7 +154,7 @@ class GridWidget {
         ];
 
         const chords_111_333_555_555 = [
-         5, 0, 0, 0, 2, 2, 2, 4, 4, 4, 4, 4, 4,
+            5, 0, 0, 0, 2, 2, 2, 4, 4, 4, 4, 4, 4,
             0, 0, 0, 2, 2, 2, 5, 5, 5, 5, 5, 5,
             0, 0, 0, 3, 3, 3, 5, 5, 5, 5, 5, 5,
             1, 1, 1, 3, 3, 3, 5, 5, 5, 5, 5,
@@ -189,20 +190,14 @@ class GridWidget {
         this.widgets = chords_1111_3333_5555.map((chord, index) => {
             const widget = new NoteWidget();
             widget.chord = chord;
-            widget.onUpdate = (note, enabled) => {
-                this.score[index] = {
-                    note: note,
-                    enabled: enabled
-                };
+            widget.onUpdate = (payload) => {
+                this.score[index] = payload
                 this.update();
             }
             this.grid.append(widget.elem);
             return widget;
         });
-        this.score = this.widgets.map(widget => ({
-            note: widget.note,
-            enabled: widget.enabled,
-        }));
+        this.score = this.widgets.map(widget => widget.payload);
 
         { // Add Song
             const add_song_button = menus.find('.add_song.button');
@@ -214,12 +209,8 @@ class GridWidget {
                     description: 'maxLength[256]',
                 },
                 onSuccess: (evt, song) => {
-                    song.notes = this.score;
-
-                    const songs = JSON.parse(localStorage.getItem('mbira_songs')) || [];
-                    songs.push(song);
-                    localStorage.setItem('mbira_songs', JSON.stringify(songs));
-
+                    song.score = this.score;
+                    storage.addSong(song);
                     add_song_form.form('clear');
                     add_song_modal.modal('hide');
                 }
@@ -250,7 +241,7 @@ class GridWidget {
                 cache: false,
                 onSelect: (selection) => {
                     // console.log('got song', selection.title, selection.notes)
-                    this.widgets.forEach((widget, index) => widget.note = selection.notes[index]);
+                    this.widgets.forEach((widget, index) => widget.payload = selection.score[index]);
                 },
             });
 
@@ -376,6 +367,8 @@ class GridWidget {
         this.elem.append(this.grid);
         this.elem.append(status);
 
+        this.__score_label = this.elem.find('.score_label');
+        this.__score_hash = this.elem.find('.score_hash');
         this.update();
     }
 
@@ -428,6 +421,8 @@ class GridWidget {
         sparse_score = sparse_score.join(' ');
         // console.log(sparse_score);
 
-        this.elem.find('.score_label').html(sparse_score);
+        this.__score_label.html(sparse_score);
+
+        getScoreHash(this.score).then((score_hash) => this.__score_hash.text(score_hash));
     }
 }
