@@ -131,11 +131,12 @@ class GridWidget {
         this.grid = $('<div>', {
             class: "ui twelve column center aligned grid segment",
         });
-        const label = $('<div>', {
-            class: "ui bottom attached left aligned score_label segment",
-            style: "font-family: monospace;",
-            text: "coucou",
-        });
+        const status = $($.parseHTML(`
+        <div class="ui bottom attached horizontal segments">
+            <div style="font-family: monospace" class="ui segment"><p class="score_label"></p></div>
+            <div class="ui segment"></div>
+        </div>
+        `));
 
         const chords_111_111_333_555 = [
             0, 0, 0, 0, 0, 2, 2, 2, 4, 4, 4,
@@ -178,7 +179,6 @@ class GridWidget {
             0, 0, 0, 5, 5, 5, 3, 3, 3, 5, 5, 5,
             1, 1, 1, 5, 5, 5, 3, 3, 3, 5, 5, 5,
         ];
-
 
         const chords_1111_3333_5555 = [];
         [0, 2, 4, 0, 2, 5, 0, 3, 5, 1, 3, 5].forEach((value, index) => {
@@ -374,7 +374,7 @@ class GridWidget {
         });
         this.elem.append(menus);
         this.elem.append(this.grid);
-        this.elem.append(label);
+        this.elem.append(status);
 
         this.update();
     }
