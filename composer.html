@@ -66,6 +66,11 @@
             // mbira_bb.grid.playing = false;
             // mbira_aa.grid.muted = true;
 
+            mbira_aa.grid.elem.appendTo('.instrument.container');
+            mbira_bb.grid.elem.appendTo('.instrument.container');
+
+
+
             /*
             const am_synth = new Tone.AMSynth().toMaster();
             const noise_synth = new Tone.NoiseSynth();
@@ -165,14 +170,14 @@
         });
     </script>
     <style media="screen">
-        .ui.master.container {
-            padding: 3em 0;
+        .ui.container {
+            margin: 1rem 0;
         }
     </style>
 </head>
 
 <body>
-    <div class="ui master container">
+    <div class="ui container">
         <div class="ui grid">
             <div class="eight wide column">
                 <div class="ui bpm icon buttons">
@@ -207,6 +212,8 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="ui instrument container">
     </div>
 </body>
 

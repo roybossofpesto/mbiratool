@@ -4,7 +4,6 @@ class MbiraInstrument {
     constructor(effects) {
         // create grid
         this.grid = new GridWidget();
-        this.grid.elem.appendTo('.master.container');
 
         // Mbira synth
         const mbira_synth = new Tone.PolySynth(24, Tone.Synth).connect(effects.auto_panner);
