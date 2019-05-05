@@ -1,9 +1,9 @@
 'use strict';
 
 class MbiraInstrument {
-    constructor(effects) {
+    constructor(effects, storage) {
         // create grid
-        this.grid = new GridWidget();
+        this.grid = new GridWidget(storage);
 
         // Mbira synth
         const mbira_synth = new Tone.PolySynth(24, Tone.Synth).connect(effects.auto_panner);

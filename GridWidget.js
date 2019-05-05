@@ -1,7 +1,7 @@
 "use strict";
 
 class GridWidget {
-    constructor() {
+    constructor(storage) {
         this.__visible = false;
         this.__playing = true;
 
