@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="semantic.min.css">
+
+    <script src="jquery.min.js" charset="utf-8"></script>
+    <script src="semantic.min.js" charset="utf-8"></script>
+    <script src="Tone.js" charset="utf-8"></script>
+
+    <title>mbira composer</title>
+    <script type="text/javascript">
+        "use strict";
+
+        $().ready(() => {
+            Tone.Transport.bpm.value = 60;
+            console.log('transport', Tone.Transport);
+        });
+    </script>
+    <style media="screen">
+        .ui.container {
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="ui container">
+        <div class="ui grid">
+            <div class="eight wide column">
+                <div class="ui bpm icon buttons">
+                    <div class="ui decrement button"><i class="minus icon"></i></div>
+                    <div class="ui value button top center pointing dropdown"><span>060</span>
+                        <div class="menu">
+                            <div class="set_bpm item" data-value="60">60</div>
+                            <div class="set_bpm item" data-value="90">90</div>
+                            <div class="set_bpm item" data-value="120">120</div>
+                        </div>
+                    </div>
+                    <div class="ui increment button"><i class="plus icon"></i></div>
+                </div>
+                <div class="ui icon transport buttons">
+                    <div class="ui start button"><i class="play icon"></i></div>
+                    <div class="ui pause button"><i class="pause icon"></i></div>
+                    <div class="ui stop active button"><i class="stop icon"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ui instrument container">
+    </div>
+</body>
