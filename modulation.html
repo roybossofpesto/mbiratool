@@ -19,8 +19,11 @@
             Tone.Transport.bpm.value = 60;
             console.log('transport', Tone.Transport);
 
-            const mbira_synth = new Tone.PolySynth(24, Tone.Synth).toMaster();
+            const mbira_synth = new Tone.PolySynth(24, Tone.Synth);
             mbira_synth.set({
+                oscillator: {
+                    type: "triangle",
+                },
                 envelope: {
                     attack: 1e-2,
                     attackCurve: "exponential",
@@ -29,22 +32,50 @@
                     release: 1.5,
                     releaseCurve: "ripple",
                 },
-                volume: -20,
+                volume: 0,
             });
+            console.log('mbira_synth', mbira_synth.get());
+
+            const noise = new Tone.Noise('brown');
+            noise.set({
+                volume: -3,
+            });
+            console.log('noise', noise.get());
+
+            const modulation_filter = new Tone.Filter(2000, "lowpass");
+            const modulation_scale = new Tone.WaveShaper((value) => Math.abs(value) > .18 ? value : 0);
+            const modulation_gain = new Tone.Gain();
+
+            // mbira_synth.toMaster();
+            mbira_synth.fan(modulation_scale, Tone.Master);
+            modulation_scale.connect(modulation_gain.gain);
+            noise.chain(modulation_gain, modulation_filter, Tone.Master);
 
             { // Note
                 $('.play_note.button').click(function() {
                     const note = $(this).data('note');
                     const velocity = $(this).data('velocity');
                     const duration = $(this).data('duration');
-                    mbira_synth.triggerAttackRelease(note, duration, Tone.now(), velocity);
+                    const time = Tone.now();
+                    console.log(note, duration, time, velocity);
+                    mbira_synth.triggerAttackRelease(note, duration, time, velocity);
+                    // mbira_synth.triggerAttack(note, Tone.now(), velocity);
                 });
             }
 
             { // Tone transport
-                $('.transport.buttons .start').click(() => Tone.Transport.start());
-                $('.transport.buttons .pause').click(() => Tone.Transport.pause());
-                $('.transport.buttons .stop').click(() => Tone.Transport.stop());
+                $('.transport.buttons .start').click(() => {
+                    Tone.Transport.start();
+                    noise.start();
+                });
+                $('.transport.buttons .pause').click(() => {
+                    Tone.Transport.pause();
+                    noise.stop();
+                });
+                $('.transport.buttons .stop').click(() => {
+                    Tone.Transport.stop();
+                    noise.stop();
+                });
 
                 /*$(document).keydown((evt) => {
                     if (evt.keyCode != 32) return;
@@ -120,8 +151,20 @@
         </div>
     </div>
     <div class="ui container">
-        <div class="ui button play_note" data-note="C4" data-velocity="1" data-duration="4n">AA</div>
-        <div class="ui button play_note" data-note="C4" data-velocity=".5" data-duration="4n">BB</div>
-        <div class="ui button play_note" data-note="C4" data-velocity=".25" data-duration="4n">CC</div>
+        <div class="ui buttons">
+            <div class="ui button play_note" data-note="C4" data-velocity="1" data-duration="4n">C4 v1</div>
+            <div class="ui button play_note" data-note="C4" data-velocity="0.5" data-duration="4n">C4 v.5</div>
+            <div class="ui button play_note" data-note="C4" data-velocity="0.25" data-duration="4n">C4 v.25</div>
+        </div>
+        <div class="ui buttons">
+            <div class="ui button play_note" data-note="C5" data-velocity="1" data-duration="4n">C5 v1</div>
+            <div class="ui button play_note" data-note="C5" data-velocity="0.5" data-duration="4n">C5 v.5</div>
+            <div class="ui button play_note" data-note="C5" data-velocity="0.25" data-duration="4n">C5 v.25</div>
+        </div>
+        <div class="ui buttons">
+            <div class="ui button play_note" data-note="C6" data-velocity="1" data-duration="4n">C6 v1</div>
+            <div class="ui button play_note" data-note="C6" data-velocity="0.5" data-duration="4n">C6 v.5</div>
+            <div class="ui button play_note" data-note="C6" data-velocity="0.25" data-duration="4n">C6 v.25</div>
+        </div>
     </div>
 </body>
