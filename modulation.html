@@ -11,13 +11,82 @@
     <script src="semantic.min.js" charset="utf-8"></script>
     <script src="Tone.js" charset="utf-8"></script>
 
-    <title>mbira composer</title>
+    <title>buzzer modulation</title>
     <script type="text/javascript">
         "use strict";
 
         $().ready(() => {
             Tone.Transport.bpm.value = 60;
             console.log('transport', Tone.Transport);
+
+            const mbira_synth = new Tone.PolySynth(24, Tone.Synth).toMaster();
+            mbira_synth.set({
+                envelope: {
+                    attack: 1e-2,
+                    attackCurve: "exponential",
+                    decay: 1.,
+                    sustain: .3,
+                    release: 1.5,
+                    releaseCurve: "ripple",
+                },
+                volume: -20,
+            });
+
+            { // Note
+                $('.play_note.button').click(function() {
+                    const note = $(this).data('note');
+                    const velocity = $(this).data('velocity');
+                    const duration = $(this).data('duration');
+                    mbira_synth.triggerAttackRelease(note, duration, Tone.now(), velocity);
+                });
+            }
+
+            { // Tone transport
+                $('.transport.buttons .start').click(() => Tone.Transport.start());
+                $('.transport.buttons .pause').click(() => Tone.Transport.pause());
+                $('.transport.buttons .stop').click(() => Tone.Transport.stop());
+
+                /*$(document).keydown((evt) => {
+                    if (evt.keyCode != 32) return;
+                    const state = Tone.Transport.state;
+                    if (state == "paused" || state == "stopped") Tone.Transport.start();
+                    else Tone.Transport.pause();
+                });*/
+
+                Tone.Transport.on('start', () => {
+                    $('.transport.buttons .button').removeClass('active');
+                    $('.transport.buttons .start').addClass('active');
+                });
+                Tone.Transport.on('pause', () => {
+                    $('.transport.buttons .button').removeClass('active');
+                    $('.transport.buttons .pause').addClass('active');
+                });
+                Tone.Transport.on('stop', () => {
+                    $('.transport.buttons .button').removeClass('active');
+                    $('.transport.buttons .stop').addClass('active');
+                });
+            }
+
+            { // Bpm
+                const label = $('.bpm.buttons .value span');
+                const updateLabel = () => {
+                    const displayed_bpm = Tone.Transport.bpm.value;
+                    label.text(displayed_bpm.toFixed(0).padStart(3, '0'));
+                }
+                $('.bpm.buttons .increment').click(() => {
+                    Tone.Transport.bpm.value += 1;
+                    updateLabel();
+                })
+                $('.bpm.buttons .decrement').click(() => {
+                    Tone.Transport.bpm.value -= 1;
+                    updateLabel();
+                })
+                $('.bpm.buttons .dropdown').dropdown();
+                $('.bpm.buttons .set_bpm').click(function() {
+                    Tone.Transport.bpm.value = $(this).data('value');
+                    updateLabel();
+                });
+            }
         });
     </script>
     <style media="screen">
@@ -50,6 +119,9 @@
             </div>
         </div>
     </div>
-    <div class="ui instrument container">
+    <div class="ui container">
+        <div class="ui button play_note" data-note="C4" data-velocity="1" data-duration="4n">AA</div>
+        <div class="ui button play_note" data-note="C4" data-velocity=".5" data-duration="4n">BB</div>
+        <div class="ui button play_note" data-note="C4" data-velocity=".25" data-duration="4n">CC</div>
     </div>
 </body>
