@@ -3,7 +3,7 @@
 class GridWidget {
     constructor() {
         this.__visible = false;
-        this.__playing = false;
+        this.__playing = true;
 
         const menus = $($.parseHTML(`
         <div class="ui top attached menu">
@@ -321,7 +321,7 @@ class GridWidget {
 
     set playing(enabled) {
         this.__playing = enabled;
-        console.log('GridWidget.playing', this.__playing, this.onMute);
+        // console.log('GridWidget.playing', this.__playing, this.onMute);
         this.mute_button.toggleClass('active', this.__playing)
         this.mute_button.find('i').attr('class', this.__playing ? 'icon volume up' : 'icon volume off');
         if (this.onMute) this.onMute(this.__playing);

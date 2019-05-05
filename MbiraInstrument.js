@@ -20,10 +20,9 @@ class MbiraInstrument {
         });
         console.log("mbira_synth", mbira_synth.get());
 
-        let enable_loop = true;
         // Mbira loop
         const mbira_loop = new Tone.Sequence((time, widget) => {
-            if (enable_loop) {
+            if (this.grid.playing) {
                 // const transpose = transpose_coarse + transpose_fine / 100.;
                 const next_note = widget.enabled && widget.note ? widget.note.note : null;
                 if (next_note) mbira_synth.triggerAttackRelease(Tone.Frequency(next_note), "16n", time);
@@ -31,12 +30,5 @@ class MbiraInstrument {
             }
             Tone.Draw.schedule(() => widget.ping(), time);
         }, this.grid.widgets, "8t").start();
-
-        // Mbira mute
-        // grid.onMute = (enabled) => {
-        //     enable_loop = enabled;
-        // };
-
-        this.grid.onMute = (enabled) => enable_loop = enabled;
     }
 }
