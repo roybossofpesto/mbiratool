@@ -10,8 +10,13 @@ class GridWidget {
             <div class="ui dropdown icon item">
                 Chords
                 <div class="menu">
-                    <div class="set_chords_633 item">Pattern 633</div>
-                    <div class="set_chords_444 item">Pattern 444</div>
+                    <div class="set_chords_1111_3333_5555 item">1111 3333 5555</div>
+                    <div class="set_chords_111_111_333_555 item">111 111 333 555</div>
+                    <div class="set_chords_111_333_333_555 item">111 333 333 555</div>
+                    <div class="set_chords_111_333_555_555 item">111 333 555 555</div>
+                    <div class="set_chords_111_333_111_555 item">111 333 111 555</div>
+                    <div class="set_chords_111_333_555_333 item">111 333 555 333</div>
+                    <div class="set_chords_111_555_333_555 item">111 555 333 555</div>
                     <div class="divider"></div>
                     <div class="increment_chords item">Transpose +</div>
                     <div class="decrement_chords item">Transpose -</div>
@@ -49,16 +54,35 @@ class GridWidget {
             <div class="ui dropdown icon item">
                 Deltas
                 <div class="menu">
-                    <div class="set_all_first_deltas item">All 1st</div>
-                    <div class="clear_deltas item">All &emptyset;</div>
+                    <div class="shift_left_deltas item"><i class="ui left arrow icon"></i>Shift Left</div>
+                    <div class="shift_right_deltas item"><i class="ui right arrow icon"></i>Shift Right</div>
+                    <div class="divider"></div>
+                    <div class="set_all_first_deltas item">1</div>
+                    <!--    <div class="clear_deltas item">All &emptyset;</div> -->
+                    <div class="set_deltas_repeat_one_three item">13</div>
+                    <div class="set_deltas_repeat_one_five item">15</div>
+                    <div class="set_deltas_repeat_one_one_three item">113</div>
+                    <div class="set_deltas_repeat_one_one_five item">115</div>
+                    <div class="set_deltas_repeat_one_three_five item">135</div>
+                    <div class="set_deltas_repeat_one_five_three item">153</div>
+                    <div class="set_deltas_repeat_one_one_five_five item">1155</div>
+                    <div class="set_deltas_repeat_one_one_three_five item">1135</div>
+                    <div class="set_deltas_repeat_one_one_five_five item">1153</div>
+                    <div class="set_deltas_repeat_one_three_one_five item">1315</div>
+                    <div class="set_deltas_repeat_one_five_one_three item">1513</div>
+                    <div class="set_deltas_repeat_one_five_one_three_doubletime item">11551133</div>
+
+
                 </div>
             </div>
             <div class="ui dropdown icon item">
                 Gates
                 <div class="menu">
-                    <div class="set_left_hand_gates item">Left hand</div>
-                    <div class="set_right_hand_gates item">Right hand</div>
-                    <div class="set_gates item">All</div>
+                    <div class="set_gates item">1</div>
+                    <div class="set_on_off_gates item">10</div>
+                    <div class="set_off_on_gates item">01</div>
+                    <div class="set_on_off_on_gates item">101</div>
+                    <div class="set_on_on_off_gates item">110</div>
                 </div>
             </div>
             <div class="ui dropdown icon item">
@@ -116,20 +140,56 @@ class GridWidget {
             text: "coucou",
         });
 
-        const chords_633 = [
+        const chords_111_111_333_555 = [
             0, 0, 0, 0, 0, 2, 2, 2, 4, 4, 4,
             0, 0, 0, 0, 0, 0, 2, 2, 2, 5, 5, 5,
             0, 0, 0, 0, 0, 0, 3, 3, 3, 5, 5, 5,
             1, 1, 1, 1, 1, 1, 3, 3, 3, 5, 5, 5, 0,
         ];
 
-        const chords_444 = [];
+        const chords_111_333_333_555 = [
+            0, 0, 0, 2, 2, 2, 2, 2, 2, 4, 4, 4,
+            0, 0, 0, 2, 2, 2, 2, 2, 2, 5, 5, 5,
+            0, 0, 0, 3, 3, 3, 3, 3, 3, 5, 5, 5,
+            1, 1, 1, 3, 3, 3, 3, 3, 3, 5, 5, 5,
+        ];
+
+        const chords_111_333_555_555 = [
+         5, 0, 0, 0, 2, 2, 2, 4, 4, 4, 4, 4, 4,
+            0, 0, 0, 2, 2, 2, 5, 5, 5, 5, 5, 5,
+            0, 0, 0, 3, 3, 3, 5, 5, 5, 5, 5, 5,
+            1, 1, 1, 3, 3, 3, 5, 5, 5, 5, 5,
+        ];
+
+        const chords_111_333_111_555 = [
+            0, 0, 0, 2, 2, 2, 0, 0, 0, 4, 4, 4,
+            0, 0, 0, 2, 2, 2, 0, 0, 0, 5, 5, 5,
+            0, 0, 0, 3, 3, 3, 0, 0, 0, 5, 5, 5,
+            1, 1, 1, 3, 3, 3, 1, 1, 1, 5, 5, 5,
+        ];
+
+        const chords_111_333_555_333 = [
+            0, 0, 0, 2, 2, 2, 4, 4, 4, 2, 2, 2,
+            0, 0, 0, 2, 2, 2, 5, 5, 5, 2, 2, 2,
+            0, 0, 0, 3, 3, 3, 5, 5, 5, 3, 3, 3,
+            1, 1, 1, 3, 3, 3, 5, 5, 5, 3, 3, 3,
+        ];
+
+        const chords_111_555_333_555 = [
+            0, 0, 0, 4, 4, 4, 2, 2, 2, 4, 4, 4,
+            0, 0, 0, 5, 5, 5, 2, 2, 2, 5, 5, 5,
+            0, 0, 0, 5, 5, 5, 3, 3, 3, 5, 5, 5,
+            1, 1, 1, 5, 5, 5, 3, 3, 3, 5, 5, 5,
+        ];
+
+
+        const chords_1111_3333_5555 = [];
         [0, 2, 4, 0, 2, 5, 0, 3, 5, 1, 3, 5].forEach((value, index) => {
             for (let kk = 0; kk < 4; kk++)
-                chords_444.push(value);
+                chords_1111_3333_5555.push(value);
         });
 
-        this.widgets = chords_444.map((chord, index) => {
+        this.widgets = chords_1111_3333_5555.map((chord, index) => {
             const widget = new NoteWidget();
             widget.chord = chord;
             widget.onUpdate = (note, enabled) => {
@@ -224,8 +284,13 @@ class GridWidget {
             const set_chords_action = chords => set_action('chord', chords);
             menus.find('.increment_chords').click(widget_action((widget, index) => widget.chord++));
             menus.find('.decrement_chords').click(widget_action((widget, index) => widget.chord += 6));
-            menus.find('.set_chords_444').click(set_chords_action(chords_444));
-            menus.find('.set_chords_633').click(set_chords_action(chords_633));
+            menus.find('.set_chords_1111_3333_5555').click(set_chords_action(chords_1111_3333_5555));
+            menus.find('.set_chords_111_111_333_555').click(set_chords_action(chords_111_111_333_555));
+            menus.find('.set_chords_111_333_333_555').click(set_chords_action(chords_111_333_333_555));
+            menus.find('.set_chords_111_333_555_555').click(set_chords_action(chords_111_333_555_555));
+            menus.find('.set_chords_111_333_111_555').click(set_chords_action(chords_111_333_111_555));
+            menus.find('.set_chords_111_333_555_333').click(set_chords_action(chords_111_333_555_333));
+            menus.find('.set_chords_111_555_333_555').click(set_chords_action(chords_111_555_333_555));
         }
 
         { // octave tools
@@ -259,15 +324,46 @@ class GridWidget {
         }
 
         { // delta tools
-            menus.find('.clear_deltas').click(widget_action((widget, index) => widget.delta = -1));
+            const repeat_deltas_action = deltas => set_action('delta', deltas);
+            //menus.find('.clear_deltas').click(widget_action((widget, index) => widget.delta = -1));
+            menus.find('.set_deltas_repeat_one_three').click(repeat_deltas_action([0, 2]));
+            menus.find('.set_deltas_repeat_one_five').click(repeat_deltas_action([0, 4]));
+            menus.find('.set_deltas_repeat_one_one_three').click(repeat_deltas_action([0, 0, 2]));
+            menus.find('.set_deltas_repeat_one_one_five').click(repeat_deltas_action([0, 0, 4]));
+            menus.find('.set_deltas_repeat_one_three_five').click(repeat_deltas_action([0, 2, 4]));
+            menus.find('.set_deltas_repeat_one_five_three').click(repeat_deltas_action([0, 4, 2]));
+            menus.find('.set_deltas_repeat_one_one_three_five').click(repeat_deltas_action([0, 0, 2, 4]));
+            menus.find('.set_deltas_repeat_one_one_five_three').click(repeat_deltas_action([0, 0, 4, 2]));
+            menus.find('.set_deltas_repeat_one_one_five_five').click(repeat_deltas_action([0, 0, 4, 4]));
+            menus.find('.set_deltas_repeat_one_three_one_five').click(repeat_deltas_action([0, 2, 0, 4]));
+            menus.find('.set_deltas_repeat_one_five_one_three').click(repeat_deltas_action([0, 4, 0, 2]));
+            menus.find('.set_deltas_repeat_one_five_one_three_doubletime').click(repeat_deltas_action([0, 0, 4, 4, 0, 0, 2, 2]));
             menus.find('.set_all_first_deltas').click(widget_action((widget, index) => widget.delta = 0));
+            menus.find('.shift_right_deltas').click(() => {
+                let prev = this.widgets[this.widgets.length - 1].delta;
+                for (let kk = 0; kk < this.widgets.length; kk++) {
+                    const current = this.widgets[kk].delta;
+                    this.widgets[kk].delta = prev;
+                    prev = current;
+                }
+            });
+            menus.find('.shift_left_deltas').click(() => {
+                let prev = this.widgets[0].delta;
+                for (let kk = this.widgets.length - 1; kk >= 0; kk--) {
+                    const current = this.widgets[kk].delta;
+                    this.widgets[kk].delta = prev;
+                    prev = current;
+                }
+            });
         }
 
         { // gate tools
             const set_enabled_action = gates => set_action('enabled', gates);
             menus.find('.set_gates').click(widget_action((widget, index) => widget.enabled = true));
-            menus.find('.set_left_hand_gates').click(set_enabled_action([true, false]));
-            menus.find('.set_right_hand_gates').click(set_enabled_action([false, true]));
+            menus.find('.set_on_off_gates').click(set_enabled_action([true, false]));
+            menus.find('.set_off_on_gates').click(set_enabled_action([false, true]));
+            menus.find('.set_on_off_on_gates').click(set_enabled_action([true, false, true]));
+            menus.find('.set_on_on_off_gates').click(set_enabled_action([true, true, false]));
         }
 
         { // song tools
