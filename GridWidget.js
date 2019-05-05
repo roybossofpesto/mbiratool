@@ -136,7 +136,7 @@ class GridWidget {
             <div style="font-family: monospace;" class="ui score_label segment"></div>
             <div class="ui segment"></div>
         </div>
-        <div style="font-family: monospace;" class="ui bottom attached score_hash segment"></div>
+        <div style="font-family: monospace;" class="ui bottom attached category_hash segment"></div>
         `));
 
         const chords_111_111_333_555 = [
@@ -368,7 +368,7 @@ class GridWidget {
         this.elem.append(status);
 
         this.__score_label = this.elem.find('.score_label');
-        this.__score_hash = this.elem.find('.score_hash');
+        this.__category_hash = this.elem.find('.category_hash');
         this.update();
     }
 
@@ -423,6 +423,6 @@ class GridWidget {
 
         this.__score_label.html(sparse_score);
 
-        getScoreHash(this.score).then((score_hash) => this.__score_hash.text(score_hash));
+        getScoreCategoryHash(this.score).then((category_hash) => this.__category_hash.text(category_hash));
     }
 }
