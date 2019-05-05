@@ -4,6 +4,7 @@ class GridWidget {
     constructor(storage) {
         this.__visible = false;
         this.__playing = true;
+        this.__storage = storage;
 
         const menus = $($.parseHTML(`
         <div class="ui top attached menu">
@@ -134,7 +135,7 @@ class GridWidget {
         const status = $($.parseHTML(`
         <div class="ui horizontal segments">
             <div style="font-family: monospace;" class="ui score_label segment"></div>
-            <div class="ui segment"></div>
+            <div style="overflow: auto; width: 300px;" class="ui similar_songs segment"></div>
         </div>
         <div style="font-family: monospace;" class="ui bottom attached category_hash segment"></div>
         `));
@@ -210,9 +211,13 @@ class GridWidget {
                 },
                 onSuccess: (evt, song) => {
                     song.score = this.score;
-                    storage.addSong(song);
-                    add_song_form.form('clear');
-                    add_song_modal.modal('hide');
+                    this.__storage
+                        .addSong(song)
+                        .then((stat) => {
+                            console.log(stat);
+                            add_song_form.form('clear');
+                            add_song_modal.modal('hide');
+                        });
                 }
             });
             add_song_button.click(() => {
@@ -225,16 +230,19 @@ class GridWidget {
             song_search.search({
                 apiSettings: {
                     responseAsync: (settings, cb) => {
-                        const query = settings.urlData.query.toLowerCase();
-
-                        let songs = JSON.parse(localStorage.getItem('mbira_songs')) || [];
-                        songs = songs.filter(song => song.title.toLowerCase().startsWith(query));
-
-                        const response = {
-                            success: songs.length > 0,
-                            results: songs,
-                        };
-                        cb(response);
+                        // const query = settings.urlData.query.toLowerCase();
+                        //
+                        // let songs = JSON.parse(localStorage.getItem('mbira_songs')) || [];
+                        // songs = songs.filter(song => song.title.toLowerCase().startsWith(query));
+                        //
+                        // const response = {
+                        //     success: songs.length > 0,
+                        //     results: songs,
+                        // };
+                        // cb(response);
+                        cb({
+                            success: false
+                        });
                     },
                 },
                 minCharacters: 0,
@@ -369,6 +377,7 @@ class GridWidget {
 
         this.__score_label = this.elem.find('.score_label');
         this.__category_hash = this.elem.find('.category_hash');
+        this.__similar_list = this.elem.find('.similar_songs');
         this.update();
     }
 
@@ -423,6 +432,15 @@ class GridWidget {
 
         this.__score_label.html(sparse_score);
 
-        getScoreCategoryHash(this.score).then((category_hash) => this.__category_hash.text(category_hash));
+        this.__storage
+            .getCategory(this.score)
+            .then((category) => {
+                this.__similar_list.html('');
+                category.songs.forEach(song => this.__similar_list.append($('<a>', {
+                    class: "ui label",
+                    text: song.title,
+                })));
+                this.__category_hash.text(category.hash)
+            });
     }
 }

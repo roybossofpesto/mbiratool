@@ -19,7 +19,7 @@ const getStringHash = async (str) => {
         });
 };
 
-const getScoreCategoryHash = async (score) => {
+const getCategoryHash = async (score) => {
     const sparse_score = score.map(elem => !elem.enabled || elem.note == null ? ' ' : elem.note.note).join('');
     return getStringHash(sparse_score);
 };
@@ -39,19 +39,38 @@ class SongStorage {
         console.log(isObject(this.songs), this.songs)
     }
 
-    addSong(song) {
-        getScoreCategoryHash(song.score).then(async (category_hash) => {
-            if (!this.songs.hasOwnProperty(category_hash)) this.songs[category_hash] = {};
-            const song_hash = await getSongHash(song);
-            song.song_hash = song_hash;
-            song.category_hash = category_hash;
-            this.songs[category_hash][song_hash] = song;
-            console.log('addSong', song, category_hash, this.songs);
-            this.sync();
-        })
+    async addSong(song) {
+        return getCategoryHash(song.score)
+            .then(async (category_hash) => {
+                if (!this.songs.hasOwnProperty(category_hash)) this.songs[category_hash] = {};
+                const song_hash = await getSongHash(song);
+                song.song_hash = song_hash;
+                song.category_hash = category_hash;
+                this.songs[category_hash][song_hash] = song;
+                console.log('addSong', song, category_hash, this.songs);
+                return this.synchronise();
+            })
     }
 
-    sync() {
+    async synchronise() {
         localStorage.setItem('mbira_songs', JSON.stringify(this.songs));
+        const category_keys = Object.keys(this.songs);
+        return {
+            ncategory: category_keys.length,
+            nsong: category_keys.reduce((previous, key) => previous + Object.keys(this.songs[key]).length, 0),
+        }
+    }
+
+    async getCategory(score) {
+        return getCategoryHash(score)
+            .then((category_hash) => {
+                const category = {
+                    hash: category_hash,
+                    songs: [],
+                };
+                if (this.songs.hasOwnProperty(category_hash))
+                    category.songs = Object.values(this.songs[category_hash]);
+                return category;
+            })
     }
 }
