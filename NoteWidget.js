@@ -22,7 +22,7 @@ class NoteWidget {
                     </div>
                 </div>
                 <div class="ui icon top left pointing dropdown mini black button octave">
-                    <div class="default text">&#x2582;</div>
+                    <div class="default text">&#x2585;</div>
                     <div class="menu">
                         <div class="item" data-value="6">&#x2588;</div>
                         <div class="item" data-value="5">&#x2585;</div>
@@ -40,14 +40,16 @@ class NoteWidget {
         this.__enabled_button.click(() => {
             self.__enabled = !self.__enabled;
             self.update();
-        })
+        });
 
         this.__octave_dropdown = dual_button.find('.ui.dropdown.octave');
         this.__octave_dropdown.dropdown({
             on: 'hover',
             duration: 0,
             onChange: function() {
-                self.__octave = parseInt($(this).dropdown('get value'));
+                const value = parseInt($(this).dropdown('get value'));
+                if (value == self.__octave) return;
+                self.__octave = value;
                 self.update();
             },
         });
@@ -57,7 +59,9 @@ class NoteWidget {
             on: 'hover',
             duration: 0,
             onChange: function() {
-                self.__delta = parseInt($(this).dropdown('get value'));
+                const value = parseInt($(this).dropdown('get value'));
+                if (value == self.__delta) return;
+                self.__delta = value;
                 self.update();
             },
         });
@@ -70,8 +74,9 @@ class NoteWidget {
     }
 
     set delta(value) {
-        this.__delta = value;
-        this.__delta_dropdown.dropdown('set selected', this.__delta.toString());
+        if (value == undefined) return;
+        if (value == this.__delta) return;
+        this.__delta_dropdown.dropdown('set selected', value.toString());
     }
 
     get octave() {
@@ -79,8 +84,9 @@ class NoteWidget {
     }
 
     set octave(value) {
-        this.__octave = value;
-        this.__octave_dropdown.dropdown('set selected', this.__octave.toString());
+        if (value == undefined) return;
+        if (value == this.__octave) return;
+        this.__octave_dropdown.dropdown('set selected', value.toString());
     }
 
     get chord() {
@@ -88,7 +94,9 @@ class NoteWidget {
     }
 
     set chord(value) {
-        this.__chord = wrap(value);
+        value = wrap(value);
+        if (value == this.__chord) return;
+        this.__chord = value;
         this.update();
     }
 
@@ -97,7 +105,9 @@ class NoteWidget {
     }
 
     set enabled(value) {
-        this.__enabled = (value == true);
+        value = (value == true);
+        if (value == this.__enabled) return;
+        this.__enabled = value;
         this.update();
     }
 
@@ -106,20 +116,24 @@ class NoteWidget {
     }
 
     set note(value) {
-        if (value) {
-            this.__chord = wrap(value.chord);
+        if (value != null && value.chord != undefined && value.delta != undefined && value.octave != undefined) {
+            value.chord = wrap(value.chord);
+            const should_update =
+                value.chord != this.__chord ||
+                value.delta != this.__delta ||
+                value.octave != this.__octave;
+            this.__chord = value.chord;
             this.__delta = value.delta;
             this.__octave = value.octave;
             this.__delta_dropdown.dropdown('set selected', this.__delta.toString());
             this.__octave_dropdown.dropdown('set selected', this.__octave.toString());
-        } else {
-            this.__delta = -1;
-            this.__delta_dropdown.dropdown('set selected', this.__delta.toString());
-        }
+            if (should_update) this.update();
+        } else
+            this.__delta_dropdown.dropdown('set selected', '-1');
     }
 
     update() {
-        // console.log('NoteWidget', 'update', this.delta, this.octave, this.index, this.note);
+        // console.log('NoteWidget', 'update', this.chord, this.delta, this.octave, this.enabled, this.note);
         const octave_backcolor = chord_colors[this.__chord];
         this.__octave_dropdown.css('background-color', octave_backcolor.css());
 

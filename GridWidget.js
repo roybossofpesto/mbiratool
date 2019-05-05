@@ -30,7 +30,7 @@ class GridWidget {
                     <div class="shift_left_octaves item"><i class="ui left arrow icon"></i>Shift Left</div>
                     <div class="shift_right_octaves item"><i class="ui right arrow icon"></i>Shift Right</div>
                     <div class="divider"></div>
-                    <div class="clear_octaves item">All &#x2582;</div>
+                    <div class="set_zero_octaves item">All &#x2585;</div>
                     <div class="set_minus_zero_octaves item">Repeat &#x2582;&#x2585;</div>
                     <div class="dropdown item">
                         3 Pattern
@@ -58,7 +58,6 @@ class GridWidget {
                     <div class="shift_right_deltas item"><i class="ui right arrow icon"></i>Shift Right</div>
                     <div class="divider"></div>
                     <div class="set_all_first_deltas item">1</div>
-                    <!--    <div class="clear_deltas item">All &emptyset;</div> -->
                     <div class="set_deltas_repeat_one_three item">13</div>
                     <div class="set_deltas_repeat_one_five item">15</div>
                     <div class="set_deltas_repeat_one_one_three item">113</div>
@@ -71,8 +70,6 @@ class GridWidget {
                     <div class="set_deltas_repeat_one_three_one_five item">1315</div>
                     <div class="set_deltas_repeat_one_five_one_three item">1513</div>
                     <div class="set_deltas_repeat_one_five_one_three_doubletime item">11551133</div>
-
-
                 </div>
             </div>
             <div class="ui dropdown icon item">
@@ -295,7 +292,7 @@ class GridWidget {
 
         { // octave tools
             const repeat_octaves_action = octaves => set_action('octave', octaves);
-            menus.find('.clear_octaves').click(widget_action((widget, index) => widget.octave = 5));
+            menus.find('.set_zero_octaves').click(widget_action((widget, index) => widget.octave = 5));
             menus.find('.set_minus_zero_octaves').click(repeat_octaves_action([4, 5]));
             menus.find('.set_minus_zero_plus_octaves').click(repeat_octaves_action([4, 5, 6]));
             menus.find('.set_plus_zero_minus_octaves').click(repeat_octaves_action([6, 5, 4]));
