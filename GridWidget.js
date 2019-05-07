@@ -11,6 +11,9 @@ class GridWidget {
             <div class="ui dropdown icon item">
                 Chords
                 <div class="menu">
+                    <div class="increment_chords item"><i class="ui up arrow icon"></i>Shift Up</div>
+                    <div class="decrement_chords item"><i class="ui down arrow icon"></i>Shift Down</div>
+                    <div class="divider"></div>
                     <div class="set_chords_1111_3333_5555 item">1111 3333 5555</div>
                     <div class="set_chords_111_111_333_555 item">111 111 333 555</div>
                     <div class="set_chords_111_333_333_555 item">111 333 333 555</div>
@@ -18,9 +21,6 @@ class GridWidget {
                     <div class="set_chords_111_333_111_555 item">111 333 111 555</div>
                     <div class="set_chords_111_333_555_333 item">111 333 555 333</div>
                     <div class="set_chords_111_555_333_555 item">111 555 333 555</div>
-                    <div class="divider"></div>
-                    <div class="increment_chords item">Transpose +</div>
-                    <div class="decrement_chords item">Transpose -</div>
                 </div>
             </div>
             <div class="ui dropdown icon item">
@@ -67,7 +67,7 @@ class GridWidget {
                     <div class="set_deltas_repeat_one_five_three item">153</div>
                     <div class="set_deltas_repeat_one_one_five_five item">1155</div>
                     <div class="set_deltas_repeat_one_one_three_five item">1135</div>
-                    <div class="set_deltas_repeat_one_one_five_five item">1153</div>
+                    <div class="set_deltas_repeat_one_one_five_three item">1153</div>
                     <div class="set_deltas_repeat_one_three_one_five item">1315</div>
                     <div class="set_deltas_repeat_one_five_one_three item">1513</div>
                     <div class="set_deltas_repeat_one_five_one_three_doubletime item">11551133</div>
@@ -76,11 +76,13 @@ class GridWidget {
             <div class="ui dropdown icon item">
                 Gates
                 <div class="menu">
-                    <div class="set_gates item">1</div>
-                    <div class="set_on_off_gates item">10</div>
-                    <div class="set_off_on_gates item">01</div>
-                    <div class="set_on_off_on_gates item">101</div>
-                    <div class="set_on_on_off_gates item">110</div>
+                    <div class="invert_gates item"><i class="ui recycle icon"></i>Invert</div>
+                    <div class="shift_left_gates item"><i class="ui left arrow icon"></i>Shift Left</div>
+                    <div class="shift_right_gates item"><i class="ui right arrow icon"></i>Shift Right</div>
+                    <div class="divider"></div>
+                    <div class="set_gates item">On</div>
+                    <div class="set_on_off_gates item">On Off</div>
+                    <div class="set_on_on_off_gates item">On On Off</div>
                 </div>
             </div>
             <div class="ui dropdown icon item">
@@ -342,9 +344,24 @@ class GridWidget {
             const set_enabled_action = gates => set_action('enabled', gates);
             menus.find('.set_gates').click(widget_action((widget, index) => widget.enabled = true));
             menus.find('.set_on_off_gates').click(set_enabled_action([true, false]));
-            menus.find('.set_off_on_gates').click(set_enabled_action([false, true]));
-            menus.find('.set_on_off_on_gates').click(set_enabled_action([true, false, true]));
             menus.find('.set_on_on_off_gates').click(set_enabled_action([true, true, false]));
+            menus.find('.invert_gates').click(widget_action((widget, index) => widget.enabled = !widget.enabled));
+            menus.find('.shift_right_gates').click(() => {
+                let prev = this.__widgets[this.__widgets.length - 1].enabled;
+                for (let kk = 0; kk < this.__widgets.length; kk++) {
+                    const current = this.__widgets[kk].enabled;
+                    this.__widgets[kk].enabled = prev;
+                    prev = current;
+                }
+            });
+            menus.find('.shift_left_gates').click(() => {
+                let prev = this.__widgets[0].enabled;
+                for (let kk = this.__widgets.length - 1; kk >= 0; kk--) {
+                    const current = this.__widgets[kk].enabled;
+                    this.__widgets[kk].enabled = prev;
+                    prev = current;
+                }
+            });
         }
 
         { // song tools
