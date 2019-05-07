@@ -188,18 +188,21 @@ class GridWidget {
                 chords_1111_3333_5555.push(value);
         });
 
-        this.__widgets = chords_1111_3333_5555.map((chord, index) => {
-            const widget = new NoteWidget();
-            widget.chord = chord;
-            widget.onUpdate = (payload) => {
-                this.__score[index] = payload
-                this.__song_search.search('set value', '');
-                this.update();
-            }
-            this.__grid.append(widget.elem);
-            return widget;
-        });
-        this.__score = this.__widgets.map(widget => widget.payload);
+        { // create widgets and score
+            const debounced_update = debounce(() => this.update(), 0);
+            this.__widgets = chords_1111_3333_5555.map((chord, index) => {
+                const widget = new NoteWidget();
+                widget.chord = chord;
+                widget.onUpdate = (payload) => {
+                    this.__score[index] = payload
+                    this.__song_search.search('set value', '');
+                    debounced_update();
+                }
+                this.__grid.append(widget.elem);
+                return widget;
+            });
+            this.__score = this.__widgets.map(widget => widget.payload);
+        }
 
         { // Add Song
             const add_song_button = menus.find('.add_song.button');
@@ -417,6 +420,7 @@ class GridWidget {
     }
 
     update() {
+        console.log('update');
         let sparse_score = this.__score.map(elem => elem.enabled ? elem.note == null ? '__' : elem.note.note : '&nbsp;&nbsp;');
         sparse_score.splice(12, 0, "<br/>");
         sparse_score.splice(25, 0, "<br/>");
