@@ -1,7 +1,7 @@
 "use strict";
 
 const nema_left_hand = (aa, bb, cc, index = 0) => { // Nemamoussassa left hand
-    console.log('NemaLeftHand', aa, bb, cc, index);
+    // console.log('NemaLeftHand', aa, bb, cc, index);
     if (index != 0) return [];
     let foo = [
         //////
@@ -40,7 +40,7 @@ const nema_left_hand = (aa, bb, cc, index = 0) => { // Nemamoussassa left hand
 };
 
 const nema_full = (aa, bb, cc, index = 0) => { // Nemamoussassa left hand & right hand
-    console.log('NemaFull', aa, bb, cc, index);
+    // console.log('NemaFull', aa, bb, cc, index);
     if (index != 0) return [];
     let foo = [
         //////

@@ -420,7 +420,6 @@ class GridWidget {
     }
 
     update() {
-        console.log('update');
         let sparse_score = this.__score.map(elem => elem.enabled ? elem.note == null ? '__' : elem.note.note : '&nbsp;&nbsp;');
         sparse_score.splice(12, 0, "<br/>");
         sparse_score.splice(25, 0, "<br/>");
