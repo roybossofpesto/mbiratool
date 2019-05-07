@@ -36,7 +36,25 @@ class SongStorage {
     constructor() {
         this.songs = JSON.parse(localStorage.getItem('mbira_songs')) || {};
         if (!isObject(this.songs)) this.songs = {};
-        console.log(isObject(this.songs), this.songs)
+        // console.log(isObject(this.songs), this.songs)
+    }
+
+    get searchSettings() {
+        return {
+            responseAsync: (settings, cb) => {
+                const query = settings.urlData.query.toLowerCase();
+
+                const results = Object.values(this.songs)
+                    .map(category => Object.values(category).filter(song => song.title.toLowerCase().startsWith(query)))
+                    .flat();
+
+                const response = {
+                    success: results.length > 0,
+                    results: results,
+                };
+                cb(response);
+            },
+        }
     }
 
     async addSong(song) {

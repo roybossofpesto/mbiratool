@@ -129,7 +129,7 @@ class GridWidget {
             </div>
         </div>
         `));
-        this.grid = $('<div>', {
+        this.__grid = $('<div>', {
             class: "ui twelve column center aligned grid segment",
         });
         const status = $($.parseHTML(`
@@ -188,17 +188,18 @@ class GridWidget {
                 chords_1111_3333_5555.push(value);
         });
 
-        this.widgets = chords_1111_3333_5555.map((chord, index) => {
+        this.__widgets = chords_1111_3333_5555.map((chord, index) => {
             const widget = new NoteWidget();
             widget.chord = chord;
             widget.onUpdate = (payload) => {
-                this.score[index] = payload
+                this.__score[index] = payload
+                this.__song_search.search('set value', '');
                 this.update();
             }
-            this.grid.append(widget.elem);
+            this.__grid.append(widget.elem);
             return widget;
         });
-        this.score = this.widgets.map(widget => widget.payload);
+        this.__score = this.__widgets.map(widget => widget.payload);
 
         { // Add Song
             const add_song_button = menus.find('.add_song.button');
@@ -210,14 +211,15 @@ class GridWidget {
                     description: 'maxLength[256]',
                 },
                 onSuccess: (evt, song) => {
-                    song.score = this.score;
+                    song.score = this.__score;
                     this.__storage
                         .addSong(song)
                         .then((stat) => {
-                            console.log(stat);
+                            console.log('addSong', stat);
                             add_song_form.form('clear');
                             add_song_modal.modal('hide');
-                        });
+                            this.update();
+                        })
                 }
             });
             add_song_button.click(() => {
@@ -226,41 +228,19 @@ class GridWidget {
         }
 
         { // Search song
-            const song_search = menus.find('.song.search');
-            song_search.search({
-                apiSettings: {
-                    responseAsync: (settings, cb) => {
-                        // const query = settings.urlData.query.toLowerCase();
-                        //
-                        // let songs = JSON.parse(localStorage.getItem('mbira_songs')) || [];
-                        // songs = songs.filter(song => song.title.toLowerCase().startsWith(query));
-                        //
-                        // const response = {
-                        //     success: songs.length > 0,
-                        //     results: songs,
-                        // };
-                        // cb(response);
-                        cb({
-                            success: false
-                        });
-                    },
-                },
+            this.__song_search = menus.find('.song.search');
+            this.__song_search.search({
+                apiSettings: storage.searchSettings,
                 minCharacters: 0,
                 cache: false,
-                onSelect: (selection) => {
-                    // console.log('got song', selection.title, selection.notes)
-                    this.widgets.forEach((widget, index) => widget.payload = selection.score[index]);
-                },
+                onSelect: (selection) => this.score = selection.score,
             });
 
-            song_search.find('.search_all').click(() => {
-                song_search.search('set value', '');
-                song_search.search('query');
+            this.__song_search.find('.search_all').click(() => {
+                this.__song_search.search('set value', '');
+                this.__song_search.search('query');
             })
         }
-
-        const widget_action = cb => () => this.widgets.forEach(cb);
-        const set_action = (key, values) => widget_action((widget, index) => widget[key] = values[index % values.length]);
 
         menus.find('.ui.dropdown').dropdown({
             on: 'hover'
@@ -275,6 +255,9 @@ class GridWidget {
         this.collapse_button.click(() => {
             this.visible = !this.collapse_button.hasClass('active');
         })
+
+        const widget_action = cb => () => this.__widgets.forEach(cb);
+        const set_action = (key, values) => widget_action((widget, index) => widget[key] = values[index % values.length]);
 
         { // chord tools
             const set_chords_action = chords => set_action('chord', chords);
@@ -301,22 +284,21 @@ class GridWidget {
             menus.find('.increment_octaves').click(widget_action((widget, index) => widget.octave = 4 + (widget.octave - 3) % 3));
             menus.find('.decrement_octaves').click(widget_action((widget, index) => widget.octave = 4 + (widget.octave - 2) % 3));
             menus.find('.shift_right_octaves').click(() => {
-                let prev = this.widgets[this.widgets.length - 1].octave;
-                for (let kk = 0; kk < this.widgets.length; kk++) {
-                    const current = this.widgets[kk].octave;
-                    this.widgets[kk].octave = prev;
+                let prev = this.__widgets[this.__widgets.length - 1].octave;
+                for (let kk = 0; kk < this.__widgets.length; kk++) {
+                    const current = this.__widgets[kk].octave;
+                    this.__widgets[kk].octave = prev;
                     prev = current;
                 }
             });
             menus.find('.shift_left_octaves').click(() => {
-                let prev = this.widgets[0].octave;
-                for (let kk = this.widgets.length - 1; kk >= 0; kk--) {
-                    const current = this.widgets[kk].octave;
-                    this.widgets[kk].octave = prev;
+                let prev = this.__widgets[0].octave;
+                for (let kk = this.__widgets.length - 1; kk >= 0; kk--) {
+                    const current = this.__widgets[kk].octave;
+                    this.__widgets[kk].octave = prev;
                     prev = current;
                 }
             });
-
         }
 
         { // delta tools
@@ -336,18 +318,18 @@ class GridWidget {
             menus.find('.set_deltas_repeat_one_five_one_three_doubletime').click(repeat_deltas_action([0, 0, 4, 4, 0, 0, 2, 2]));
             menus.find('.set_all_first_deltas').click(widget_action((widget, index) => widget.delta = 0));
             menus.find('.shift_right_deltas').click(() => {
-                let prev = this.widgets[this.widgets.length - 1].delta;
-                for (let kk = 0; kk < this.widgets.length; kk++) {
-                    const current = this.widgets[kk].delta;
-                    this.widgets[kk].delta = prev;
+                let prev = this.__widgets[this.__widgets.length - 1].delta;
+                for (let kk = 0; kk < this.__widgets.length; kk++) {
+                    const current = this.__widgets[kk].delta;
+                    this.__widgets[kk].delta = prev;
                     prev = current;
                 }
             });
             menus.find('.shift_left_deltas').click(() => {
-                let prev = this.widgets[0].delta;
-                for (let kk = this.widgets.length - 1; kk >= 0; kk--) {
-                    const current = this.widgets[kk].delta;
-                    this.widgets[kk].delta = prev;
+                let prev = this.__widgets[0].delta;
+                for (let kk = this.__widgets.length - 1; kk >= 0; kk--) {
+                    const current = this.__widgets[kk].delta;
+                    this.__widgets[kk].delta = prev;
                     prev = current;
                 }
             });
@@ -372,7 +354,7 @@ class GridWidget {
             class: "ui segments"
         });
         this.elem.append(menus);
-        this.elem.append(this.grid);
+        this.elem.append(this.__grid);
         this.elem.append(status);
 
         this.__score_label = this.elem.find('.score_label');
@@ -398,8 +380,8 @@ class GridWidget {
         // console.log('GridWidget.visible', this.__visible)
         this.collapse_button.toggleClass('active', this.__visible);
         this.collapse_button.find('i').attr('class', this.__visible ? 'eye icon' : 'eye slash icon');
-        if (this.__visible) this.grid.show();
-        else this.grid.hide();
+        if (this.__visible) this.__grid.show();
+        else this.__grid.hide();
     }
 
     get muted() {
@@ -422,8 +404,20 @@ class GridWidget {
         if (this.onMute) this.onMute(this.__playing);
     }
 
+    get widgets() {
+        return this.__widgets;
+    }
+
+    get score() {
+        return this.__score;
+    }
+
+    set score(value) {
+        this.__widgets.forEach((widget, index) => widget.payload = value[index]);
+    }
+
     update() {
-        let sparse_score = this.score.map(elem => elem.enabled ? elem.note == null ? '__' : elem.note.note : '&nbsp;&nbsp;');
+        let sparse_score = this.__score.map(elem => elem.enabled ? elem.note == null ? '__' : elem.note.note : '&nbsp;&nbsp;');
         sparse_score.splice(12, 0, "<br/>");
         sparse_score.splice(25, 0, "<br/>");
         sparse_score.splice(38, 0, "<br/>");
@@ -433,7 +427,7 @@ class GridWidget {
         this.__score_label.html(sparse_score);
 
         this.__storage
-            .getCategory(this.score)
+            .getCategory(this.__score)
             .then((category) => {
                 this.__similar_list.html('');
                 category.songs.forEach(song => this.__similar_list.append($('<a>', {
