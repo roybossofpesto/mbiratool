@@ -57,6 +57,11 @@ class SongStorage {
         }
     }
 
+    async removeSong(song) {
+        delete this.songs[song.category_hash][song.song_hash];
+        return this.synchronise();
+    }
+
     async addSong(song) {
         return getCategoryHash(song.score)
             .then(async (category_hash) => {

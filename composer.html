@@ -42,6 +42,7 @@
                     </div>
                 </div>
                 `));
+                card.find('.delete').click(() => storage.removeSong(song).then(() => card.remove()));
                 card.appendTo('.song.cards');
             };
 
