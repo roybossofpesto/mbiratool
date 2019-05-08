@@ -136,7 +136,7 @@ class GridWidget {
         });
         const status = $($.parseHTML(`
         <div class="ui segment">
-            <div class="ui right floated bulleted horizontal link list similar_songs"></div>
+            <div class="ui right floated horizontal link list similar_songs"></div>
             <p style="font-family: monospace;" class="score_label"></p>
         </div>
         <div style="font-family: monospace;" class="ui bottom attached category_hash segment"></div>
@@ -451,10 +451,12 @@ class GridWidget {
             .getCategory(this.__score)
             .then((category) => {
                 this.__similar_list.html('');
-                category.songs.forEach(song => this.__similar_list.append($('<div>', {
-                    class: "item",
-                    text: song.title,
-                })));
+                category.songs.forEach(song => this.__similar_list
+                    .append($($.parseHTML(`
+                    <div class="item">
+                        <div class="ui label"><i class="icon music"></i>${song.title}</div>
+                    </div>
+                    `))));
                 this.__category_hash.text(category.hash)
             });
     }
