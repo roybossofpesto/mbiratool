@@ -137,7 +137,10 @@ class GridWidget {
         const status = $($.parseHTML(`
         <div class="ui horizontal segments">
             <div style="font-family: monospace;" class="ui score_label segment"></div>
-            <div style="overflow: auto; width: 300px;" class="ui similar_songs segment"></div>
+            <div class="ui right aligned segment">
+                <div class="ui horizontal link list similar_songs">
+                </div>
+            </div>
         </div>
         <div style="font-family: monospace;" class="ui bottom attached category_hash segment"></div>
         `));
@@ -219,8 +222,8 @@ class GridWidget {
                     song.score = this.__score;
                     this.__storage
                         .addSong(song)
-                        .then((stat) => {
-                            console.log('addSong', stat);
+                        .then((stats) => {
+                            console.log('GridWidget.addedSong', stats);
                             add_song_form.form('clear');
                             add_song_modal.modal('hide');
                             this.update();
@@ -236,6 +239,7 @@ class GridWidget {
             this.__song_search = menus.find('.song.search');
             this.__song_search.search({
                 apiSettings: storage.searchSettings,
+                maxResults: 10,
                 minCharacters: 0,
                 cache: false,
                 onSelect: (selection) => this.score = selection.score,
@@ -451,7 +455,7 @@ class GridWidget {
             .then((category) => {
                 this.__similar_list.html('');
                 category.songs.forEach(song => this.__similar_list.append($('<a>', {
-                    class: "ui label",
+                    class: "item",
                     text: song.title,
                 })));
                 this.__category_hash.text(category.hash)

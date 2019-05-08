@@ -28,15 +28,15 @@ const getSongHash = async (song) => {
     return getStringHash(JSON.stringify(song));
 }
 
-const isObject = (a) => {
-    return (!!a) && (a.constructor === Object);
-};
-
 class SongStorage {
     constructor() {
         this.songs = JSON.parse(localStorage.getItem('mbira_songs')) || {};
         if (!isObject(this.songs)) this.songs = {};
         // console.log(isObject(this.songs), this.songs)
+    }
+
+    forEachSong(cb) {
+        Object.values(this.songs).forEach(category => Object.values(category).forEach(cb));
     }
 
     get searchSettings() {
@@ -65,8 +65,10 @@ class SongStorage {
                 song.song_hash = song_hash;
                 song.category_hash = category_hash;
                 this.songs[category_hash][song_hash] = song;
-                console.log('addSong', song, category_hash, this.songs);
-                return this.synchronise();
+                const stats = await this.synchronise();
+                stats.song = song;
+                if (this.onAddedSong) this.onAddedSong(song);
+                return stats;
             })
     }
 

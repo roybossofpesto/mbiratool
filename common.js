@@ -23,6 +23,10 @@ const delta_brighten = (color, delta) => color.brighten(
     -10);
 
 // adapted from lodash
+const isObject = (a) => {
+    return (!!a) && (a.constructor === Object);
+};
+
 const debounce = (func, wait, options) => {
     let lastArgs,
         lastThis,

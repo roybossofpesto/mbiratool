@@ -25,6 +25,29 @@
         "use strict";
 
         $().ready(() => {
+
+            const storage = new SongStorage();
+
+            const create_card_song = (song) => {
+                const card = $($.parseHTML(`
+                <div class="ui card">
+                    <div class="content">
+                        <i class="right floated ui music icon"></i>
+                        <div class="header">${song.title}</div>
+                        <div class="description">${song.description}</div>
+                    </div>
+                    <div class="extra content">
+                        <a class="left delete floated"><i class="close icon"></i> Delete</a>
+                        <a class="right floated"><i class="edit icon"></i> Edit</a>
+                    </div>
+                </div>
+                `));
+                card.appendTo('.song.cards');
+            };
+
+            storage.forEachSong(create_card_song);
+            storage.onAddedSong =  create_card_song;
+
             Tone.Transport.bpm.value = 60;
             console.log('transport', Tone.Transport);
 
@@ -62,8 +85,6 @@
                 auto_panner: auto_panner,
             };
 
-            const storage = new SongStorage();
-
             const mbira_aa = new MbiraInstrument(effects, storage);
             const mbira_bb = new MbiraInstrument(effects, storage);
             mbira_bb.grid.collapsed = true;
@@ -72,17 +93,6 @@
 
             mbira_aa.grid.elem.appendTo('.instrument.container');
             mbira_bb.grid.elem.appendTo('.instrument.container');
-
-
-
-            /*
-            const am_synth = new Tone.AMSynth().toMaster();
-            const noise_synth = new Tone.NoiseSynth();
-            // noise_synth.start();
-            am_synth.set('modulator', noise_synth);
-            am_synth.set('carrier', auto_wah);
-            console.log(am_synth.get());
-            */
 
             { // Hosho synth and loop
                 const hosho_synth = new Tone.NoiseSynth({
@@ -166,7 +176,7 @@
                     updateLabel();
                 })
                 $('.bpm.buttons .dropdown').dropdown();
-                $('.bpm.buttons .set_bpm').click(function(){
+                $('.bpm.buttons .set_bpm').click(function() {
                     Tone.Transport.bpm.value = $(this).data('value');
                     updateLabel();
                 });
@@ -177,9 +187,11 @@
         .ui.container {
             margin: 1rem 0;
         }
+
         .instrument.container .grid {
             padding: .25rem;
         }
+
         .instrument.container .grid .column {
             padding: .25rem;
         }
@@ -223,7 +235,10 @@
             </div>
         </div>
     </div>
-    <div class="ui instrument container">
+    <div class="ui instrument container"></div>
+    <div class="ui container">
+        <div class="ui song centered cards">
+        </div>
     </div>
 </body>
 
