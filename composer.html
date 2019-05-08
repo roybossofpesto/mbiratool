@@ -29,62 +29,87 @@
             const storage = new SongStorage();
 
             const create_card_song = (song) => {
-                const card = $($.parseHTML(`
-                <div class="ui card">
-                    <div class="content">
-                        <i class="right floated ui music icon"></i>
-                        <div class="header">${song.title}</div>
-                        <div class="description">${song.description}</div>
-                    </div>
-                    <div class="extra content">
-                        <a class="left delete floated"><i class="close icon"></i> Delete</a>
-                        <a class="right floated"><i class="edit icon"></i> Edit</a>
-                    </div>
-                </div>
-                `));
+                const card = $($.parseHTML(
+                    `<div class="ui card">
+                        <div class="content">
+                            <i class="right floated ui music icon"></i>
+                            <div class="header">${song.title}</div>
+                            <div class="description">${song.description}</div>
+                        </div>
+                        <div class="extra content">
+                            <a class="left delete floated"><i class="close icon"></i> Delete</a>
+                            <a class="right floated"><i class="edit icon"></i> Edit</a>
+                        </div>
+                    </div>`
+                ));
                 card.find('.delete').click(() => storage.removeSong(song).then(() => card.remove()));
                 card.appendTo('.song.cards');
             };
 
             storage.forEachSong(create_card_song);
-            storage.onAddedSong =  create_card_song;
+            storage.onAddedSong = create_card_song;
 
             Tone.Transport.bpm.value = 60;
             console.log('transport', Tone.Transport);
 
-            // const phaser = new Tone.Phaser({
-            // 	"frequency" : 15,
-            // 	"octaves" : 5,
-            // 	"baseFrequency" : 1000
-            // }).toMaster();
+            const effects = {};
 
-            // Effects
-            const auto_wah = new Tone.AutoWah({
-                baseFrequency: 50,
-                wet: 0,
-            }).toMaster();
-            $('.effects .auto_wah').click(function() {
-                const enabled = $(this).toggleClass('active').hasClass('active');
-                auto_wah.wet.rampTo(enabled ? .5 : 0, .3);
-            })
-            console.log("auto_wah", auto_wah.get());
+            { // Auto wah
+                const auto_wah = new Tone.AutoWah({
+                    baseFrequency: 50,
+                    wet: 0,
+                }).toMaster();
+                $('.effects .auto_wah').click(function() {
+                    const enabled = $(this).toggleClass('active').hasClass('active');
+                    auto_wah.wet.rampTo(enabled ? .5 : 0, .3);
+                })
+                console.log("auto_wah", auto_wah.get());
+                effects.auto_wah = auto_wah;
+            }
 
-            const auto_panner = new Tone.AutoPanner({
-                frequency: "8n",
-                type: "sine",
-                depth: .8,
-                wet: 0,
-            }).connect(auto_wah).start();
-            $('.effects .auto_panner').click(function() {
-                const enabled = $(this).toggleClass('active').hasClass('active');
-                auto_panner.wet.rampTo(enabled ? 1 : 0, .3);
-            })
-            console.log("auto_panner", auto_panner.get());
+            { // Auto panner
+                const auto_panner = new Tone.AutoPanner({
+                    frequency: "8n",
+                    type: "sine",
+                    depth: .8,
+                    wet: 0,
+                }).connect(effects.auto_wah).start();
+                $('.effects .auto_panner').click(function() {
+                    const enabled = $(this).toggleClass('active').hasClass('active');
+                    auto_panner.wet.rampTo(enabled ? 1 : 0, .3);
+                })
+                console.log("auto_panner", auto_panner.get());
+                effects.auto_panner = auto_panner;
+            }
 
-            const effects = {
-                auto_wah: auto_wah,
-                auto_panner: auto_panner,
-            };
+            { // Buzzer modulation
+                const noise = new Tone.Noise();
+                noise.set({
+                    type: 'pink',
+                    volume: 10,
+                });
+                const modulation_filter = new Tone.Filter();
+                modulation_filter.set({
+                    frequency: 20,
+                    type: "allpass",
+                    rolloff: -12,
+                    Q: 10,
+                })
+                const modulation_scale = new Tone.WaveShaper((value) => Math.abs(value) > .09 ? value : 0);
+                const modulation_gain = new Tone.Gain();
+                modulation_scale.connect(modulation_gain.gain);
+                noise.chain(modulation_filter, modulation_gain, Tone.Master);
+                console.log('buzzer_noise', noise.get());
+                console.log('buzzer_filter', modulation_filter.get());
+                console.log('buzzer_scale', modulation_scale.get());
+                console.log('buzzer_gain', modulation_gain.get());
+                $('.effects .buzzer').click(function() {
+                    const enabled = $(this).toggleClass('active').hasClass('active');
+                    if (enabled) noise.start();
+                    else noise.stop();
+                })
+                effects.buzzer = modulation_scale;
+            }
 
             const mbira_aa = new MbiraInstrument(effects, storage);
             const mbira_bb = new MbiraInstrument(effects, storage);
@@ -129,10 +154,10 @@
                 });
 
                 $('.hosho.buttons .volume.up').click(() => {
-                    hosho_synth.volume.value += 3;
+                    hosho_synth.volume.value += 1;
                 });
                 $('.hosho.buttons .volume.down').click(() => {
-                    hosho_synth.volume.value -= 3;
+                    hosho_synth.volume.value -= 1;
                 });
             }
 
@@ -232,6 +257,7 @@
                 <div class="ui icon effects buttons">
                     <div class="ui auto_panner button"><i class="exchange icon"></i></div>
                     <div class="ui auto_wah button"><i class="mercury icon"></i></div>
+                    <div class="ui buzzer button"><i class="birthday cake icon"></i></div>
                 </div>
             </div>
         </div>

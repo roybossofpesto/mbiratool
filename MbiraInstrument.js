@@ -6,7 +6,7 @@ class MbiraInstrument {
         this.grid = new GridWidget(storage);
 
         // Mbira synth
-        const mbira_synth = new Tone.PolySynth(24, Tone.Synth).connect(effects.auto_panner);
+        const mbira_synth = new Tone.PolySynth(24, Tone.Synth).fan(effects.auto_panner, effects.buzzer);
         mbira_synth.set({
             envelope: {
                 attack: 1e-2,

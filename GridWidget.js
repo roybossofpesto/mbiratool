@@ -93,12 +93,6 @@ class GridWidget {
                 </div>
             </div>
             <div class="right menu">
-                <!--<div class="ui item">
-                    <div class="ui transparent icon input">
-                        <input type="text" placeholder="Song"/>
-                        <i class="music icon"></i>
-                    </div>
-                </div>-->
                 <div class="item icon add_song button"><i class="save icon"></i></div>
                 <div class="ui tiny add_song modal">
                     <div class="icon header">
