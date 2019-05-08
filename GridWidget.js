@@ -135,12 +135,9 @@ class GridWidget {
             class: "ui twelve column center aligned grid segment",
         });
         const status = $($.parseHTML(`
-        <div class="ui horizontal segments">
-            <div style="font-family: monospace;" class="ui score_label segment"></div>
-            <div class="ui right aligned segment">
-                <div class="ui horizontal link list similar_songs">
-                </div>
-            </div>
+        <div class="ui segment">
+            <div class="ui right floated horizontal link list similar_songs"></div>
+            <p style="font-family: monospace;" class="score_label"></p>
         </div>
         <div style="font-family: monospace;" class="ui bottom attached category_hash segment"></div>
         `));
