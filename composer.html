@@ -95,7 +95,7 @@
                     rolloff: -12,
                     Q: 10,
                 })
-                const modulation_scale = new Tone.WaveShaper((value) => Math.abs(value) > .09 ? value : 0);
+                const modulation_scale = new Tone.WaveShaper((value) => Math.abs(value) > -1 ? value : 0);
                 const modulation_gain = new Tone.Gain();
                 modulation_scale.connect(modulation_gain.gain);
                 noise.chain(modulation_filter, modulation_gain, Tone.Master);
@@ -127,8 +127,8 @@
                     },
                     envelope: {
                         attack: 1e-2,
-                        decay: 2,
-                        sustain: 1.,
+                        decay: .5,
+                        sustain: .3,
                         release: .5,
                     },
                     volume: -20,
@@ -189,6 +189,7 @@
 
             { // Bpm
                 const label = $('.bpm.buttons .value span');
+
                 const updateLabel = () => {
                     const displayed_bpm = Tone.Transport.bpm.value;
                     label.text(displayed_bpm.toFixed(0).padStart(3, '0'));
@@ -204,6 +205,32 @@
                 $('.bpm.buttons .dropdown').dropdown();
                 $('.bpm.buttons .set_bpm').click(function() {
                     Tone.Transport.bpm.value = $(this).data('value');
+                    updateLabel();
+                });
+            }
+
+            { // Decay
+                let release = 250;
+
+                const label = $('.release.buttons .value span');
+                const updateLabel = () => {
+                    release = Math.max(release, 0);
+                    label.text(release.toFixed(0).padStart(3, '0'));
+                    mbira_aa.release = release;
+                    mbira_bb.release = release;
+                };
+
+                $('.release.buttons .increment').click(() => {
+                    release += 5;
+                    updateLabel();
+                })
+                $('.release.buttons .decrement').click(() => {
+                    release -= 5;
+                    updateLabel();
+                })
+                $('.release.buttons .dropdown').dropdown();
+                $('.release.buttons .set').click(function() {
+                    release = $(this).data('value');
                     updateLabel();
                 });
             }
@@ -243,6 +270,17 @@
                     <div class="ui start button"><i class="play icon"></i></div>
                     <div class="ui pause button"><i class="pause icon"></i></div>
                     <div class="ui stop active button"><i class="stop icon"></i></div>
+                </div>
+                <div class="ui release icon buttons">
+                    <div class="ui decrement button"><i class="minus icon"></i></div>
+                    <div class="ui value button top center pointing dropdown"><span>250</span>
+                        <div class="menu">
+                            <div class="set item" data-value="100">short</div>
+                            <div class="set item" data-value="250">med</div>
+                            <div class="set item" data-value="500">long</div>
+                        </div>
+                    </div>
+                    <div class="ui increment button"><i class="plus icon"></i></div>
                 </div>
             </div>
             <div class="eight wide right aligned column">
