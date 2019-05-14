@@ -210,27 +210,27 @@
             }
 
             { // Decay
-                let release = 250;
+                let decay = 4000;
 
-                const label = $('.release.buttons .value span');
+                const label = $('.decay.buttons .value span');
                 const updateLabel = () => {
-                    release = Math.max(release, 0);
-                    label.text(release.toFixed(0).padStart(3, '0'));
-                    mbira_aa.release = release;
-                    mbira_bb.release = release;
+                    decay = Math.max(decay, 1);
+                    label.text(decay.toFixed(0).padStart(3, '0'));
+                    mbira_aa.decay = decay;
+                    mbira_bb.decay = decay;
                 };
 
-                $('.release.buttons .increment').click(() => {
-                    release += 5;
+                $('.decay.buttons .increment').click(() => {
+                    decay += 5;
                     updateLabel();
                 })
-                $('.release.buttons .decrement').click(() => {
-                    release -= 5;
+                $('.decay.buttons .decrement').click(() => {
+                    decay -= 5;
                     updateLabel();
                 })
-                $('.release.buttons .dropdown').dropdown();
-                $('.release.buttons .set').click(function() {
-                    release = $(this).data('value');
+                $('.decay.buttons .dropdown').dropdown();
+                $('.decay.buttons .set').click(function() {
+                    decay = $(this).data('value');
                     updateLabel();
                 });
             }
@@ -262,6 +262,7 @@
                             <div class="set_bpm item" data-value="60">60</div>
                             <div class="set_bpm item" data-value="90">90</div>
                             <div class="set_bpm item" data-value="120">120</div>
+                            <div class="set_bpm item" data-value="160">160</div>
                         </div>
                     </div>
                     <div class="ui increment button"><i class="plus icon"></i></div>
@@ -271,14 +272,15 @@
                     <div class="ui pause button"><i class="pause icon"></i></div>
                     <div class="ui stop active button"><i class="stop icon"></i></div>
                 </div>
-                <div class="ui release icon buttons">
+                <div class="ui decay icon buttons">
                     <div class="ui decrement button"><i class="minus icon"></i></div>
-                    <div class="ui value button top center pointing dropdown"><span>250</span>
+                    <div class="ui value button top center pointing dropdown"><span>4000</span>
                         <div class="menu">
-                            <div class="set item" data-value="0">none</div>
+                            <div class="set item" data-value="1">none</div>
                             <div class="set item" data-value="100">short</div>
                             <div class="set item" data-value="250">med</div>
                             <div class="set item" data-value="1000">long</div>
+                            <div class="set item" data-value="9999">lazy</div>
                         </div>
                     </div>
                     <div class="ui increment button"><i class="plus icon"></i></div>

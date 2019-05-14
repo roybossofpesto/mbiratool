@@ -12,7 +12,8 @@ class MbiraInstrument {
                 attack: 1e-2,
                 attackCurve: "exponential",
                 decay: 1.,
-                sustain: .7,
+                decayCurve: "exponential",
+                sustain: 0,
                 release: .25,
                 releaseCurve: "ripple",
             },
@@ -28,19 +29,19 @@ class MbiraInstrument {
                 const next_pitch = next_note ? Tone.Frequency(next_note) : null;
                 const next_velocity = next_pitch ? .5  - (next_pitch - 520) / 1750 : null;
                 // console.log('hhhhh', next_velocity)
-                if (next_pitch && next_velocity) this.mbira_synth.triggerAttackRelease(next_pitch, "16n", time, next_velocity);
+                if (next_pitch && next_velocity) this.mbira_synth.triggerAttackRelease(next_pitch, "1n", time, next_velocity);
             }
             Tone.Draw.schedule(() => widget.ping(), time);
         }, this.grid.widgets, "8t").start();
     }
 
 
-    set release(value) {
+    set decay(value) {
         this.mbira_synth.set({
             envelope: {
-                release: value / 1000.,
+                decay: value / 1000.,
             },
         });
-        console.log(value, "mbira_synth", this.mbira_synth.get());
+        // console.log(value, "mbira_synth", this.mbira_synth.get('envelope.decay'));
     }
 }
