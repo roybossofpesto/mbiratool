@@ -103,7 +103,7 @@
                 console.log('buzzer_filter', modulation_filter.get());
                 console.log('buzzer_scale', modulation_scale.get());
                 console.log('buzzer_gain', modulation_gain.get());
-                $('.effects .buzzer').click(function() {
+                $('.buzzer').click(function() {
                     const enabled = $(this).toggleClass('active').hasClass('active');
                     if (enabled) noise.start();
                     else noise.stop();
@@ -273,6 +273,7 @@
                     <div class="ui stop active button"><i class="stop icon"></i></div>
                 </div>
                 <div class="ui decay icon buttons">
+                    <div class="ui buzzer button"><i class="birthday cake icon"></i></div>
                     <div class="ui decrement button"><i class="minus icon"></i></div>
                     <div class="ui value button top center pointing dropdown"><span>4000</span>
                         <div class="menu">
@@ -280,7 +281,7 @@
                             <div class="set item" data-value="100">short</div>
                             <div class="set item" data-value="250">med</div>
                             <div class="set item" data-value="1000">long</div>
-                            <div class="set item" data-value="9999">lazy</div>
+                            <div class="set item" data-value="99999">lazy</div>
                         </div>
                     </div>
                     <div class="ui increment button"><i class="plus icon"></i></div>
@@ -298,7 +299,6 @@
                 <div class="ui icon effects buttons">
                     <div class="ui auto_panner button"><i class="exchange icon"></i></div>
                     <div class="ui auto_wah button"><i class="mercury icon"></i></div>
-                    <div class="ui buzzer button"><i class="birthday cake icon"></i></div>
                 </div>
             </div>
         </div>
