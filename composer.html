@@ -85,15 +85,15 @@
             { // Buzzer modulation
                 const noise = new Tone.Noise();
                 noise.set({
-                    type: 'pink',
-                    volume: 10,
+                    type: 'brown',
+                    volume: 6,
                 });
                 const modulation_filter = new Tone.Filter();
                 modulation_filter.set({
-                    frequency: 20,
-                    type: "allpass",
-                    rolloff: -12,
-                    Q: 10,
+                    frequency: 80,
+                    type: "highpass",
+                    rolloff: -24,
+                    Q: 0,
                 })
                 const modulation_scale = new Tone.WaveShaper((value) => Math.abs(value) > -1 ? value : 0);
                 const modulation_gain = new Tone.Gain();
@@ -123,15 +123,15 @@
             { // Hosho synth and loop
                 const hosho_synth = new Tone.NoiseSynth({
                     noise: {
-                        type: 'white',
+                        type: 'pink',
                     },
                     envelope: {
                         attack: 1e-2,
                         decay: .5,
                         sustain: .3,
-                        release: .5,
+                        release: .2,
                     },
-                    volume: -20,
+                    volume: -17,
                 }).toMaster();
                 console.log("hosho_synth", hosho_synth.get());
 
@@ -155,6 +155,7 @@
 
                 $('.hosho.buttons .volume.up').click(() => {
                     hosho_synth.volume.value += 1;
+                    console.log(hosho_synth.volume.value)
                 });
                 $('.hosho.buttons .volume.down').click(() => {
                     hosho_synth.volume.value -= 1;
@@ -233,6 +234,8 @@
                     decay = $(this).data('value');
                     updateLabel();
                 });
+
+                updateLabel();
             }
         });
     </script>
