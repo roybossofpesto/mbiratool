@@ -31,22 +31,21 @@ const getSongHash = async (song) => {
 class SongStorage {
     constructor() {
         this.songs = JSON.parse(localStorage.getItem('mbira_songs')) || {};
-        if (!isObject(this.songs)) this.songs = {};
+        if (!_.isObject(this.songs)) this.songs = {};
         // console.log(isObject(this.songs), this.songs)
     }
 
     forEachSong(cb) {
-        Object.values(this.songs).forEach(category => Object.values(category).forEach(cb));
+        _.values(this.songs).forEach(category => _.values(category).forEach(cb));
     }
 
     get searchSettings() {
         return {
             responseAsync: (settings, cb) => {
                 const query = settings.urlData.query.toLowerCase();
+                const start_match_query = song => song.title.toLowerCase().startsWith(query);
 
-                const results = Object.values(this.songs)
-                    .map(category => Object.values(category).filter(song => song.title.toLowerCase().startsWith(query)))
-                    .flat();
+                const results = _.flatten(_.values(this.songs).map(category => _.values(category).filter(start_match_query)));
 
                 const response = {
                     success: results.length > 0,
@@ -79,10 +78,10 @@ class SongStorage {
 
     async synchronise() {
         localStorage.setItem('mbira_songs', JSON.stringify(this.songs));
-        const category_keys = Object.keys(this.songs);
+        const category_keys = _.keys(this.songs);
         return {
             ncategory: category_keys.length,
-            nsong: category_keys.reduce((previous, key) => previous + Object.keys(this.songs[key]).length, 0),
+            nsong: category_keys.reduce((previous, key) => previous + _.keys(this.songs[key]).length, 0),
         }
     }
 
@@ -94,7 +93,7 @@ class SongStorage {
                     songs: [],
                 };
                 if (this.songs.hasOwnProperty(category_hash))
-                    category.songs = Object.values(this.songs[category_hash]);
+                    category.songs = _.values(this.songs[category_hash]);
                 return category;
             })
     }

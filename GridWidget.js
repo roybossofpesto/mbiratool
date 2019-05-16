@@ -185,7 +185,7 @@ class GridWidget {
         });
 
         { // create widgets and score
-            const debounced_update = debounce(() => this.update(), 0);
+            const debounced_update = _.debounce(() => this.update(), 50);
             this.__widgets = chords_1111_3333_5555.map((chord, index) => {
                 const widget = new NoteWidget();
                 widget.chord = chord;
