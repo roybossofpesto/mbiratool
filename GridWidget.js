@@ -131,7 +131,7 @@ class GridWidget {
         const status = $($.parseHTML(`
         <div class="ui segment">
             <div class="ui right floated horizontal link list similar_songs"></div>
-            <p style="font-family: monospace;" class="score_label"></p>
+            <p style="font-family: monospace; font-size: .885em;" class="score_label"></p>
         </div>
         <div style="font-family: monospace;" class="ui bottom attached category_hash segment"></div>
         `));
@@ -428,18 +428,15 @@ class GridWidget {
     }
 
     set score(value) {
-        this.__widgets.forEach((widget, index) => widget.payload = value[index]);
+        console.log('GridWidget.set_score', value)
+        this.__widgets.forEach((widget, index) => {
+            if (index == 0) console.log(value[index]);
+            widget.payload = value[index]
+        });
     }
 
     update() {
-        let sparse_score = this.__score.map(elem => elem.enabled ? elem.note == null ? '__' : elem.note.note : '&nbsp;&nbsp;');
-        sparse_score.splice(12, 0, "<br/>");
-        sparse_score.splice(25, 0, "<br/>");
-        sparse_score.splice(38, 0, "<br/>");
-        sparse_score = sparse_score.join(' ');
-        // console.log(sparse_score);
-
-        this.__score_label.html(sparse_score);
+        this.__score_label.html(compute_sparse_score(this.__score));
 
         this.__storage
             .getCategory(this.__score)

@@ -21,3 +21,12 @@ const delta_brighten = (color, delta) => color.brighten(
     delta == 2 ? 2.5 :
     delta == 0 ? 0 :
     -10);
+
+const compute_sparse_score = (score) => {
+    let sparse_score = score.map(elem => elem.enabled ? elem.note == null ? '__' : elem.note.note : '&nbsp;&nbsp;');
+    sparse_score.splice(12, 0, "<br/>");
+    sparse_score.splice(25, 0, "<br/>");
+    sparse_score.splice(38, 0, "<br/>");
+    sparse_score = sparse_score.join(' ');
+    return sparse_score;
+}

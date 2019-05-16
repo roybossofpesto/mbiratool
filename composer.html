@@ -36,6 +36,9 @@
                             <div class="header">${song.title}</div>
                             <div class="description">${song.description}</div>
                         </div>
+                        <div class="center aligned content">
+                            <p style="font-family: monospace; font-size: .885em;">${compute_sparse_score(song.score)}</p>
+                        </div>
                         <div class="extra content">
                             <a class="left delete floated"><i class="close icon"></i> Delete</a>
                             <a class="right floated"><i class="edit icon"></i> Edit</a>
