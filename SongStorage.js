@@ -44,31 +44,35 @@ class SongStorage {
             responseAsync: (settings, cb) => {
                 const query = settings.urlData.query.toLowerCase();
                 const start_match_query = song => song.title.toLowerCase().startsWith(query);
-                const results = _.flatten(_.values(this.songs).map(category => _.values(category).filter(start_match_query)));
+                const results = _.flatten(_.values(this.songs).map(category => category.filter(start_match_query)));
                 const response = {
                     success: results.length > 0,
                     results: results,
                 };
+                console.log(`found ${response.results.length} match`);
                 cb(response);
             },
         };
     }
 
     async removeSong(song) {
-        delete this.songs[song.category_hash][song.song_hash];
+        this.songs[song.category_hash] = this.songs[song.category_hash].filter(song_ => song != song_);
         return this.synchronise();
     }
 
-    async addSong(song) {
+    async addSong(song_) {
+        const song = _.cloneDeep(song_);
+        console.log('addingSong', song)
         return getCategoryHash(song.score)
             .then(async (category_hash) => {
                 if (!_.has(this.songs, category_hash)) this.songs[category_hash] = []
                 song.song_hash = await getSongHash(song);
                 song.category_hash = category_hash;
                 this.songs[category_hash].push(song);
-                const stats = await this.synchronise();
-                stats.song = song;
+                const sync_promise = this.synchronise();
                 if (this.onAddedSong) this.onAddedSong(song);
+                const stats = await sync_promise;
+                stats.song = song;
                 return stats;
             });
     }

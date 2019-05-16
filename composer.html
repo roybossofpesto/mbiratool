@@ -29,6 +29,7 @@
             const storage = new SongStorage();
 
             const create_card_song = (song) => {
+                // console.log('create_card_song', song)
                 const card = $($.parseHTML(
                     `<div class="ui card">
                         <div class="content">
@@ -50,7 +51,10 @@
             };
 
             storage.forEachSong(create_card_song);
-            storage.onAddedSong = create_card_song;
+            storage.onAddedSong = (song) => {
+                console.log('storage.onAddedSong', song);
+                create_card_song('song');
+            };
 
             Tone.Transport.bpm.value = 60;
             console.info('transport', Tone.Transport);
@@ -311,7 +315,7 @@
     </div>
     <div class="ui instrument container"></div>
     <div class="ui container">
-        <div class="ui song centered cards">
+        <div class="ui song cards">
         </div>
     </div>
 </body>

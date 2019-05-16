@@ -233,7 +233,10 @@ class GridWidget {
                 maxResults: 10,
                 minCharacters: 0,
                 cache: false,
-                onSelect: (selection) => this.score = selection.score,
+                onSelect: (selection) => {
+                    console.log('selected', selection)
+                    this.score = selection.score
+                },
             });
 
             this.__song_search.find('.search_all').click(() => {
@@ -428,18 +431,17 @@ class GridWidget {
     }
 
     set score(value) {
-        console.log('GridWidget.set_score', value)
+        // console.log('GridWidget.set_score', value)
         this.__widgets.forEach((widget, index) => {
-            if (index == 0) console.log(value[index]);
             widget.payload = value[index]
         });
     }
 
     update() {
-        this.__score_label.html(compute_sparse_score(this.__score));
-
+        const current_score = this.__score;
+        this.__score_label.html(compute_sparse_score(current_score));
         this.__storage
-            .getSongs(this.__score)
+            .getSongs(current_score)
             .then(songs => {
                 this.__similar_list.html('');
                 songs.forEach(song => {
@@ -452,8 +454,8 @@ class GridWidget {
                     this.__similar_list.append(elem);
                 })
             }).then(async () => {
-                const category_hash = await getCategoryHash(this.__score);
-                const song_hash = await getSongHash(this.__score);
+                const category_hash = await getCategoryHash(current_score);
+                const song_hash = await getSongHash(current_score);
                 this.__hashes.html(`
                     &nbsp;cat ${category_hash}<br/>
                     song ${song_hash}`)
