@@ -444,11 +444,11 @@ class GridWidget {
             .getSongs(current_score)
             .then(songs => {
                 this.__similar_list.html('');
-                songs.forEach(song => {
+                _.each(songs, song => {
                     const elem = $($.parseHTML(`
                     <div class="item">
                         <div class="ui label" data-html='<code>&nbsp;cat ${song.category_hash}\nsong&nbsp;${song.song_hash}</code>'>
-                            ${song.title}dfsd
+                            ${song.title}
                             <i class="right floated music icon"></i>
                         </div>
                     </div>

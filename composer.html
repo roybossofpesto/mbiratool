@@ -111,7 +111,7 @@
                 const modulation_scale = new Tone.WaveShaper((value) => Math.abs(value) > -1 ? value : 0);
                 const modulation_gain = new Tone.Gain();
                 modulation_scale.connect(modulation_gain.gain);
-                noise.chain(modulation_filter, modulation_gain, Tone.Master);
+                noise.chain(modulation_filter, modulation_gain, effects.auto_wah);
                 console.info('buzzer_noise', noise.get());
                 console.info('buzzer_filter', modulation_filter.get());
                 console.info('buzzer_scale', modulation_scale.get());

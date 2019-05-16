@@ -40,7 +40,7 @@ class SongStorage {
     }
 
     forEachSong(cb) {
-        _.values(this.songs).forEach(category => category.forEach(cb));
+        _.each(_.values(this.songs), category => _.each(category, cb));
     }
 
     get searchSettings() {
