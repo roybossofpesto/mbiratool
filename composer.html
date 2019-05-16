@@ -33,7 +33,10 @@
                 const card = $($.parseHTML(
                     `<div class="ui card">
                         <div class="content">
-                            <i class="right floated ui music icon"></i>
+                            <div class="ui right floated hashes" data-html='<code>&nbsp;cat ${song.category_hash}\nsong&nbsp;${song.song_hash}</code>'>
+                                <i class="music icon"></i>
+                            </div>
+
                             <div class="header">${song.title}</div>
                             <div class="description">${song.description}</div>
                         </div>
@@ -42,11 +45,14 @@
                         </div>
                         <div class="extra content">
                             <a class="left delete floated"><i class="close icon"></i> Delete</a>
-                            <a class="right floated"><i class="edit icon"></i> Edit</a>
+                            <!--<a class="right floated"><i class="edit icon"></i> Edit</a>-->
                         </div>
                     </div>`
                 ));
                 card.find('.delete').click(() => storage.removeSong(song).then(() => card.remove()));
+                card.find('.hashes').popup({
+                    position: "top right",
+                });
                 card.appendTo('.song.cards');
             };
 

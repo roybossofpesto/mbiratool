@@ -447,10 +447,15 @@ class GridWidget {
                 songs.forEach(song => {
                     const elem = $($.parseHTML(`
                     <div class="item">
-                        <div class="ui label" data-html='<code>&nbsp;cat ${song.category_hash}\nsong&nbsp;${song.song_hash}</code>'><i class="icon music"></i>${song.title} </div>
+                        <div class="ui label" data-html='<code>&nbsp;cat ${song.category_hash}\nsong&nbsp;${song.song_hash}</code>'>
+                            ${song.title}dfsd
+                            <i class="right floated music icon"></i>
+                        </div>
                     </div>
                     `));
-                    elem.find('.ui.label').popup();
+                    elem.find('.ui.label').popup({
+                        position: "top right",
+                    });
                     this.__similar_list.append(elem);
                 })
             }).then(async () => {
