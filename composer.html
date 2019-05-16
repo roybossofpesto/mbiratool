@@ -244,6 +244,20 @@
 
                 updateLabel();
             }
+
+            { // SongStorage
+                const clear_button = $('.clear.button');
+                const clear_modal = $('.clear.modal');
+
+                clear_modal.find('.ok.button').click(() => {
+                    storage.clear();
+                    location.reload();
+                })
+
+                clear_button.click(() => {
+                    clear_modal.modal('show');
+                })
+            }
         });
     </script>
     <style media="screen">
@@ -324,7 +338,22 @@
             Songs
         </h4>
         <div class="ui storage buttons">
-            <div class="ui clear left labeled icon button"><i class="delete icon"></i> Delete All</div>
+            <div class="ui clear left labeled icon button"><i class="delete icon"></i> Delete all songs</div>
+            <div class="ui basic tiny clear modal">
+                <div class="ui icon header">
+                    Delete all songs?
+                </div>
+                <div class="actions">
+                    <div class="ui red basic cancel inverted button">
+                        <i class="remove icon"></i>
+                        No
+                    </div>
+                    <div class="ui green ok inverted button">
+                        <i class="checkmark icon"></i>
+                        Yes
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="ui container">

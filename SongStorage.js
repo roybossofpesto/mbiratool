@@ -35,6 +35,10 @@ class SongStorage {
         // console.log(isObject(this.songs), this.songs)
     }
 
+    clear() {
+        localStorage.removeItem('mbira_songs');
+    }
+
     forEachSong(cb) {
         _.values(this.songs).forEach(category => category.forEach(cb));
     }
