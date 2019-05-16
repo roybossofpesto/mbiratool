@@ -53,7 +53,7 @@
             storage.forEachSong(create_card_song);
             storage.onAddedSong = (song) => {
                 console.log('storage.onAddedSong', song);
-                create_card_song('song');
+                create_card_song(song);
             };
 
             Tone.Transport.bpm.value = 60;
@@ -251,6 +251,10 @@
             margin: 1rem 0;
         }
 
+        .ui.divider.header {
+            margin-top: 5rem;
+        }
+
         .instrument.container .grid {
             padding: .25rem;
         }
@@ -314,6 +318,15 @@
         </div>
     </div>
     <div class="ui instrument container"></div>
+    <div class="ui container">
+        <h4 class="ui horizontal divider header">
+            <i class="music icon"></i>
+            Songs
+        </h4>
+        <div class="ui storage buttons">
+            <div class="ui clear left labeled icon button"><i class="delete icon"></i> Delete All</div>
+        </div>
+    </div>
     <div class="ui container">
         <div class="ui song cards">
         </div>
