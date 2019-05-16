@@ -36,7 +36,7 @@ class SongStorage {
     }
 
     forEachSong(cb) {
-        _.values(this.songs).forEach(category => _.values(category).forEach(cb));
+        _.values(this.songs).forEach(category => category.forEach(cb));
     }
 
     get searchSettings() {
@@ -44,9 +44,7 @@ class SongStorage {
             responseAsync: (settings, cb) => {
                 const query = settings.urlData.query.toLowerCase();
                 const start_match_query = song => song.title.toLowerCase().startsWith(query);
-
                 const results = _.flatten(_.values(this.songs).map(category => _.values(category).filter(start_match_query)));
-
                 const response = {
                     success: results.length > 0,
                     results: results,
@@ -64,7 +62,6 @@ class SongStorage {
     async addSong(song) {
         return getCategoryHash(song.score)
             .then(async (category_hash) => {
-                // if (!this.songs.hasOwnProperty(category_hash)) this.songs[category_hash] = {};
                 if (!_.has(this.songs, category_hash)) this.songs[category_hash] = []
                 song.song_hash = await getSongHash(song);
                 song.category_hash = category_hash;
@@ -100,11 +97,10 @@ class SongStorage {
 
     async getSongs(score) {
         return this.getCategory(score)
-            .then(async category => {
-                const song_hash = await getSongHash(score);
-                const songs = [];
-                if (_.has(this.songs, category))
-                    songs = this.songs[category_hash].filter(song => song.song_hash == song_hash);
+            .then(category => {
+                let songs = [];
+                if (_.has(this.songs, category.hash))
+                    songs = this.songs[category.hash];
                 return songs;
             });
     }

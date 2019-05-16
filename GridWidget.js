@@ -442,17 +442,20 @@ class GridWidget {
             .getSongs(this.__score)
             .then(songs => {
                 this.__similar_list.html('');
-                songs.forEach(song => this.__similar_list
-                    .append($($.parseHTML(`
+                songs.forEach(song => {
+                    const elem = $($.parseHTML(`
                     <div class="item">
-                        <div class="ui label"><i class="icon music"></i>${song.title} ${song.song_hash} ${song.category_hash}</div>
+                        <div class="ui label" data-html='<code>&nbsp;cat ${song.category_hash}\nsong&nbsp;${song.song_hash}</code>'><i class="icon music"></i>${song.title} </div>
                     </div>
-                    `))));
+                    `));
+                    elem.find('.ui.label').popup();
+                    this.__similar_list.append(elem);
+                })
             }).then(async () => {
                 const category_hash = await getCategoryHash(this.__score);
                 const song_hash = await getSongHash(this.__score);
                 this.__hashes.html(`
-                    cat&nbsp; ${category_hash}<br/>
+                    &nbsp;cat ${category_hash}<br/>
                     song ${song_hash}`)
             });
     }

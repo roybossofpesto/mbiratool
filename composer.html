@@ -53,7 +53,7 @@
             storage.onAddedSong = create_card_song;
 
             Tone.Transport.bpm.value = 60;
-            console.log('transport', Tone.Transport);
+            console.info('transport', Tone.Transport);
 
             const effects = {};
 
@@ -66,7 +66,7 @@
                     const enabled = $(this).toggleClass('active').hasClass('active');
                     auto_wah.wet.rampTo(enabled ? .5 : 0, .3);
                 })
-                console.log("auto_wah", auto_wah.get());
+                console.info("auto_wah", auto_wah.get());
                 effects.auto_wah = auto_wah;
             }
 
@@ -81,7 +81,7 @@
                     const enabled = $(this).toggleClass('active').hasClass('active');
                     auto_panner.wet.rampTo(enabled ? 1 : 0, .3);
                 })
-                console.log("auto_panner", auto_panner.get());
+                console.info("auto_panner", auto_panner.get());
                 effects.auto_panner = auto_panner;
             }
 
@@ -102,10 +102,10 @@
                 const modulation_gain = new Tone.Gain();
                 modulation_scale.connect(modulation_gain.gain);
                 noise.chain(modulation_filter, modulation_gain, Tone.Master);
-                console.log('buzzer_noise', noise.get());
-                console.log('buzzer_filter', modulation_filter.get());
-                console.log('buzzer_scale', modulation_scale.get());
-                console.log('buzzer_gain', modulation_gain.get());
+                console.info('buzzer_noise', noise.get());
+                console.info('buzzer_filter', modulation_filter.get());
+                console.info('buzzer_scale', modulation_scale.get());
+                console.info('buzzer_gain', modulation_gain.get());
                 $('.buzzer').click(function() {
                     const enabled = $(this).toggleClass('active').hasClass('active');
                     if (enabled) noise.start();
@@ -136,7 +136,7 @@
                     },
                     volume: -17,
                 }).toMaster();
-                console.log("hosho_synth", hosho_synth.get());
+                console.info("hosho_synth", hosho_synth.get());
 
                 let hosho_beat = -1;
                 const hosho_loop = new Tone.Sequence((time, index) => {
@@ -158,7 +158,7 @@
 
                 $('.hosho.buttons .volume.up').click(() => {
                     hosho_synth.volume.value += 1;
-                    console.log(hosho_synth.volume.value)
+                    console.info(hosho_synth.volume.value)
                 });
                 $('.hosho.buttons .volume.down').click(() => {
                     hosho_synth.volume.value -= 1;

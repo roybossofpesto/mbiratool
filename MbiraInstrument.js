@@ -19,7 +19,7 @@ class MbiraInstrument {
             },
             volume: -20,
         });
-        console.log("mbira_synth", this.mbira_synth.get());
+        console.info("mbira_synth", this.mbira_synth.get());
 
         // Mbira loop
         const mbira_loop = new Tone.Sequence((time, widget) => {
