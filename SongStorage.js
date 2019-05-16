@@ -26,7 +26,7 @@ const getCategoryHash = async (score) => {
 
 const getSongHash = async (song) => {
     return getStringHash(JSON.stringify(song));
-}
+};
 
 class SongStorage {
     constructor() {
@@ -53,7 +53,7 @@ class SongStorage {
                 };
                 cb(response);
             },
-        }
+        };
     }
 
     async removeSong(song) {
@@ -64,16 +64,16 @@ class SongStorage {
     async addSong(song) {
         return getCategoryHash(song.score)
             .then(async (category_hash) => {
-                if (!this.songs.hasOwnProperty(category_hash)) this.songs[category_hash] = {};
-                const song_hash = await getSongHash(song);
-                song.song_hash = song_hash;
+                // if (!this.songs.hasOwnProperty(category_hash)) this.songs[category_hash] = {};
+                if (!_.has(this.songs, category_hash)) this.songs[category_hash] = []
+                song.song_hash = await getSongHash(song);
                 song.category_hash = category_hash;
-                this.songs[category_hash][song_hash] = song;
+                this.songs[category_hash].push(song);
                 const stats = await this.synchronise();
                 stats.song = song;
                 if (this.onAddedSong) this.onAddedSong(song);
                 return stats;
-            })
+            });
     }
 
     async synchronise() {
@@ -82,7 +82,7 @@ class SongStorage {
         return {
             ncategory: category_keys.length,
             nsong: category_keys.reduce((previous, key) => previous + _.keys(this.songs[key]).length, 0),
-        }
+        };
     }
 
     async getCategory(score) {
@@ -92,9 +92,20 @@ class SongStorage {
                     hash: category_hash,
                     songs: [],
                 };
-                if (this.songs.hasOwnProperty(category_hash))
-                    category.songs = _.values(this.songs[category_hash]);
+                if (_.has(this.songs, category_hash))
+                    category.songs = this.songs[category_hash];
                 return category;
-            })
+            });
+    }
+
+    async getSongs(score) {
+        return this.getCategory(score)
+            .then(async category => {
+                const song_hash = await getSongHash(score);
+                const songs = [];
+                if (_.has(this.songs, category))
+                    songs = this.songs[category_hash].filter(song => song.song_hash == song_hash);
+                return songs;
+            });
     }
 }

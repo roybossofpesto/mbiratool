@@ -133,7 +133,7 @@ class GridWidget {
             <div class="ui right floated horizontal link list similar_songs"></div>
             <p style="font-family: monospace; font-size: .885em;" class="score_label"></p>
         </div>
-        <div style="font-family: monospace;" class="ui bottom attached category_hash segment"></div>
+        <div style="font-family: monospace;" class="ui bottom attached hashes segment"></div>
         `));
 
         const chords_111_111_333_555 = [
@@ -373,7 +373,7 @@ class GridWidget {
         this.elem.append(status);
 
         this.__score_label = this.elem.find('.score_label');
-        this.__category_hash = this.elem.find('.category_hash');
+        this.__hashes = this.elem.find('.hashes');
         this.__similar_list = this.elem.find('.similar_songs');
         this.update();
     }
@@ -439,16 +439,21 @@ class GridWidget {
         this.__score_label.html(compute_sparse_score(this.__score));
 
         this.__storage
-            .getCategory(this.__score)
-            .then((category) => {
+            .getSongs(this.__score)
+            .then(songs => {
                 this.__similar_list.html('');
-                category.songs.forEach(song => this.__similar_list
+                songs.forEach(song => this.__similar_list
                     .append($($.parseHTML(`
                     <div class="item">
-                        <div class="ui label"><i class="icon music"></i>${song.title}</div>
+                        <div class="ui label"><i class="icon music"></i>${song.title} ${song.song_hash} ${song.category_hash}</div>
                     </div>
                     `))));
-                this.__category_hash.text(category.hash)
+            }).then(async () => {
+                const category_hash = await getCategoryHash(this.__score);
+                const song_hash = await getSongHash(this.__score);
+                this.__hashes.html(`
+                    cat&nbsp; ${category_hash}<br/>
+                    song ${song_hash}`)
             });
     }
 }
