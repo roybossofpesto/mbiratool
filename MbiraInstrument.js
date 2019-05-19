@@ -2,6 +2,8 @@
 
 class MbiraInstrument {
     constructor(effects, storage) {
+        this.transpose = 0;
+
         // create grid
         this.grid = new GridWidget(storage);
 
@@ -26,16 +28,15 @@ class MbiraInstrument {
             if (this.grid.playing) {
                 // const transpose = transpose_coarse + transpose_fine / 100.;
                 const next_note = widget.enabled && widget.note ? widget.note.note : null;
-                const next_pitch = next_note ? Tone.Frequency(next_note) : null;
+                const next_pitch = next_note ? Tone.Frequency(next_note).transpose(this.transpose) : null;
                 const next_velocity = next_pitch ? .5  - (next_pitch - 520) / 1750 : null;
                 const next_length = next_pitch ? (1500 - next_pitch)/1500 : null;
-                // console.log('hhhhh', next_velocity, next_length);
+                // console.log('hhhhh', next_pitch, next_velocity, next_length, this.transpose);
                 if (next_pitch && next_velocity && next_length) this.mbira_synth.triggerAttackRelease(next_pitch, next_length, time, next_velocity);
             }
             Tone.Draw.schedule(() => widget.ping(), time);
         }, this.grid.widgets, "8t").start();
     }
-
 
     set decay(value) {
         this.mbira_synth.set({
