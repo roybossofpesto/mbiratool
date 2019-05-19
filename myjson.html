@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="semantic.min.css">
+
+    <script src="jquery.min.js" charset="utf-8"></script>
+    <script src="semantic.min.js" charset="utf-8"></script>
+
+    <title>myjson test</title>
+    <script type="text/javascript">
+        "use strict";
+
+        $(() => {
+            $('.coucou').click(function() {
+                $(this).addClass('loading');
+                $.ajax({
+                    url: "https://api.myjson.com/bins",
+                    type: "POST",
+                    data: JSON.stringify({
+                        'kikou': [42, true]
+                    }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: (data, textStatus) => {
+                        $(this).removeClass('loading')
+                        console.log('success', data, textStatus);
+                    },
+                });
+            });
+            $('.prout').click(function() {
+                $(this).addClass('loading');
+                $.ajax({
+                    url: "https://api.myjson.com/bins/omsoe",
+                    type: "GET",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: (data, textStatus) => {
+                        $(this).removeClass('loading')
+                        console.log('success', data, textStatus);
+                    },
+                });
+            });
+        });
+    </script>
+    <style media="screen">
+        .ui.container {
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="ui container">
+        <div class="ui primary coucou button">coucou</div>
+        <div class="ui primary prout button">prout</div>
+    </div>
+</body>
+
+</html>
