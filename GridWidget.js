@@ -129,11 +129,13 @@ class GridWidget {
             class: "ui twelve column center aligned grid segment",
         });
         const status = $($.parseHTML(`
-        <div class="ui segment">
-            <div class="ui right floated horizontal link list similar_songs"></div>
-            <p style="font-family: monospace; font-size: .885em;" class="score_label"></p>
+        <div style="padding: .5rem .5rem 1rem .5rem" class="ui bottom attached segment">
+            <div style="margin-right: 0;" class="ui right floated header">
+                <div style="font-family: monospace; font-size: 1rem; font-weight: normal;" class="hashes"></div>
+                <div class="ui horizontal right floated link list similar_songs"></div>
+            </div>
+            <p style="font-family: monospace; font-size: 1rem; font-weight: normal;" class="ui header score_label"></p>
         </div>
-        <div style="font-family: monospace;" class="ui bottom attached hashes segment"></div>
         `));
 
         const chords_111_111_333_555 = [
@@ -454,7 +456,7 @@ class GridWidget {
                     </div>
                     `));
                     elem.find('.ui.label').popup({
-                        position: "top right",
+                        position: "bottom right",
                     });
                     this.__similar_list.append(elem);
                 })
