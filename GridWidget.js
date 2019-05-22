@@ -129,7 +129,7 @@ class GridWidget {
             class: "ui twelve column center aligned grid segment",
         });
         const status = $($.parseHTML(`
-        <div style="padding: .5rem .5rem 1rem .5rem" class="ui bottom attached segment">
+        <div style="padding: .5rem" class="ui bottom attached segment">
             <div style="margin-right: 0;" class="ui right floated header">
                 <div style="font-family: monospace; font-size: 1rem; font-weight: normal;" class="hashes"></div>
                 <div class="ui horizontal right floated link list similar_songs"></div>
