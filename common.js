@@ -15,12 +15,18 @@ const create_note = (chord, delta, octave) => delta < 0 ? null : {
 const chord_colors = ["#1c96fe", "#feb831", "#aee742", "#b75ac4", "#15cdc2", "#fa2424", "#ff5986"]
     .map(color => chroma(color));
 
-const delta_brighten = (color, delta) => color.brighten(
+const delta_back_brighten = (color, delta) => color.brighten(
     delta == 4 ? 1 :
     delta == 3 ? 1.7 :
     delta == 2 ? 2.5 :
     delta == 0 ? 0 :
     -10);
+
+const delta_front_brighten = (color, delta) =>
+    color == chord_colors[2] && delta == 4 ? chroma('#87be1f') :
+    color == chord_colors[1] && delta == 4 ? chroma('#d49317') : 
+    delta <= 0 || delta == 4 ? chroma("white") :
+    chroma.mix(color, "black");
 
 const compute_sparse_score = (score) => {
     let sparse_score = score.map(elem => elem.enabled ? elem.note == null ? '__' : elem.note.note : '&nbsp;&nbsp;');

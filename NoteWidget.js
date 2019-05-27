@@ -146,15 +146,15 @@ class NoteWidget {
 
     update() {
         // console.log('NoteWidget', 'update', this.chord, this.delta, this.octave, this.enabled, this.payload);
-        const octave_backcolor = chord_colors[this.__chord];
-        this.__octave_dropdown.css('background-color', octave_backcolor.css());
+        const octave_back_color = chord_colors[this.__chord];
+        this.__octave_dropdown.css('background-color', octave_back_color.css());
 
-        const delta_backcolor = delta_brighten(octave_backcolor, this.__delta);
-        const delta_color = this.__delta <= 0 || this.__delta == 4 ? chroma("white") : chroma.mix(octave_backcolor, "black");
-        this.__delta_dropdown.css('background-color', delta_backcolor.css());
-        this.__delta_dropdown.css('color', delta_color.css())
+        const delta_back_color = delta_back_brighten(octave_back_color, this.__delta);
+        const delta_front_color = delta_front_brighten(octave_back_color, this.__delta);
+        this.__delta_dropdown.css('background-color', delta_back_color.css());
+        this.__delta_dropdown.css('color', delta_front_color.css())
 
-        this.__enabled_button.css('background-color', this.__enabled ? octave_backcolor.css() : "black");
+        this.__enabled_button.css('background-color', this.__enabled ? octave_back_color.css() : "black");
 
         if (this.onUpdate) this.onUpdate(this.payload);
     }
