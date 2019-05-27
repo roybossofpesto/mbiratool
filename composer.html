@@ -80,21 +80,6 @@
                 effects.auto_wah = auto_wah;
             }
 
-            { // Auto panner
-                const auto_panner = new Tone.AutoPanner({
-                    frequency: "8n",
-                    type: "sine",
-                    depth: .8,
-                    wet: 0,
-                }).connect(effects.auto_wah).start();
-                $('.effects .auto_panner').click(function() {
-                    const enabled = $(this).toggleClass('active').hasClass('active');
-                    auto_panner.wet.rampTo(enabled ? 1 : 0, .3);
-                })
-                console.info("auto_panner", auto_panner.get());
-                effects.auto_panner = auto_panner;
-            }
-
             { // Buzzer modulation
                 const noise = new Tone.Noise();
                 noise.set({
@@ -118,7 +103,7 @@
                 const modulation_scale = new Tone.WaveShaper((value) => Math.abs(value) > -1 ? value : 0);
                 const modulation_gain = new Tone.Gain();
                 modulation_scale.connect(modulation_gain.gain);
-                noise.chain(modulation_filter, modulation_gain, post_modulation_filter, effects.auto_wah);
+                noise.chain(modulation_filter, modulation_gain, post_modulation_filter, Tone.Master);
                 console.info('buzzer_noise', noise.get());
                 console.info('buzzer_filter', modulation_filter.get());
                 console.info('buzzer_scale', modulation_scale.get());
@@ -157,6 +142,21 @@
 
                     updateLabel();
                 }
+            }
+
+            { // Auto panner
+                const auto_panner = new Tone.AutoPanner({
+                    frequency: "8n",
+                    type: "sine",
+                    depth: .8,
+                    wet: 0,
+                }).fan(effects.auto_wah, effects.buzzer).start();
+                $('.effects .auto_panner').click(function() {
+                    const enabled = $(this).toggleClass('active').hasClass('active');
+                    auto_panner.wet.rampTo(enabled ? 1 : 0, .3);
+                })
+                console.info("auto_panner", auto_panner.get());
+                effects.auto_panner = auto_panner;
             }
 
             const mbira_aa = new MbiraInstrument(effects, storage);
@@ -444,8 +444,8 @@
                     <div class="ui increment button"><i class="plus icon"></i></div>
                 </div>
                 <div class="ui icon effects buttons">
-                    <div class="ui buzzer button" data-tooltip="buzzer" data-position="bottom center"><i class="birthday cake icon"></i></div>
                     <div class="ui auto_panner button" data-tooltip="autopan" data-position="bottom center"><i class="exchange icon"></i></div>
+                    <div class="ui buzzer button" data-tooltip="buzzer" data-position="bottom center"><i class="birthday cake icon"></i></div>
                     <div class="ui auto_wah button" data-tooltip="autowah" data-position="bottom center"><i class="mercury icon"></i></div>
                 </div>
             </div>
