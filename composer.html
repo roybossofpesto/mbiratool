@@ -98,7 +98,7 @@
             { // Buzzer modulation
                 const noise = new Tone.Noise();
                 noise.set({
-                    type: 'brown',
+                    type: 'pink',
                     volume: 6,
                 });
                 const modulation_filter = new Tone.Filter();
@@ -108,10 +108,17 @@
                     rolloff: -24,
                     Q: 0,
                 })
+                const post_modulation_filter = new Tone.Filter();
+                post_modulation_filter.set({
+                    frequency: 1000,
+                    type: "highpass",
+                    rool: 6,
+                    Q: 0,
+                })
                 const modulation_scale = new Tone.WaveShaper((value) => Math.abs(value) > -1 ? value : 0);
                 const modulation_gain = new Tone.Gain();
                 modulation_scale.connect(modulation_gain.gain);
-                noise.chain(modulation_filter, modulation_gain, effects.auto_wah);
+                noise.chain(modulation_filter, modulation_gain, post_modulation_filter, effects.auto_wah);
                 console.info('buzzer_noise', noise.get());
                 console.info('buzzer_filter', modulation_filter.get());
                 console.info('buzzer_scale', modulation_scale.get());
@@ -122,6 +129,35 @@
                     else noise.stop();
                 })
                 effects.buzzer = modulation_scale;
+
+
+                { // cutoff
+                    let cutoff = 100;
+
+                    const label = $('.cutoff.buttons .value span');
+                    const updateLabel = () => {
+                        cutoff = Math.max(Math.min(cutoff, 20000), 20);
+                        label.text(cutoff.toFixed(0).padStart(5, '0'));
+                        post_modulation_filter.set({
+                            frequency: cutoff,
+                        });
+                    };
+                    $('.cutoff.buttons .increment').click(() => {
+                        cutoff *= 2;
+                        updateLabel();
+                    })
+                    $('.cutoff.buttons .decrement').click(() => {
+                        cutoff /= 2;
+                        updateLabel();
+                    })
+                    $('.cutoff.buttons .dropdown').dropdown();
+                    $('.cutoff.buttons .set').click(function() {
+                        cutoff = $(this).data('value');
+                        updateLabel();
+                    });
+
+                    updateLabel();
+                }
             }
 
             const mbira_aa = new MbiraInstrument(effects, storage);
@@ -376,6 +412,20 @@
                     <div class="ui volume up button"><i class="icon volume up"></i></div>
                 </div>
                 <div class="ui decay icon buttons">
+                    <div class="ui decrement button"><i class="minus icon"></i></div>
+                    <div class="ui value button top center pointing dropdown"><span>???</span>
+                        <div class="menu">
+                            <div class="set item" data-value="1">none</div>
+                            <div class="set item" data-value="100">short</div>
+                            <div class="set item" data-value="250">med</div>
+                            <div class="set item" data-value="1000">long</div>
+                            <div class="set item" data-value="4000">default</div>
+                            <div class="set item" data-value="99999">lazy</div>
+                        </div>
+                    </div>
+                    <div class="ui increment button"><i class="plus icon"></i></div>
+                </div>
+                <div class="ui cutoff icon buttons">
                     <div class="ui decrement button"><i class="minus icon"></i></div>
                     <div class="ui value button top center pointing dropdown"><span>???</span>
                         <div class="menu">
