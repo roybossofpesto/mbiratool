@@ -171,7 +171,7 @@
             { // Hosho synth and loop
                 const hosho_synth = new Tone.NoiseSynth({
                     noise: {
-                        type: 'pink',
+                        type: 'white',
                     },
                     envelope: {
                         attack: 1e-2,
@@ -179,7 +179,7 @@
                         sustain: .3,
                         release: .2,
                     },
-                    volume: -17,
+                    volume: -30,
                 }).toMaster();
                 console.info("hosho_synth", hosho_synth.get());
 
