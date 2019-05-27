@@ -30,3 +30,5 @@ const compute_sparse_score = (score) => {
     sparse_score = sparse_score.join(' ');
     return sparse_score;
 }
+
+const format_label = (xx) => xx < 1000 ? xx.toFixed(0).padStart(4, '0') : `${(xx/1000).toFixed(1).padStart(4, '0')}k`;

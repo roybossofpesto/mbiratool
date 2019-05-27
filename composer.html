@@ -130,14 +130,13 @@
                 })
                 effects.buzzer = modulation_scale;
 
-
-                { // cutoff
+                { // Cutoff
                     let cutoff = 100;
 
                     const label = $('.cutoff.buttons .value span');
                     const updateLabel = () => {
                         cutoff = Math.max(Math.min(cutoff, 20000), 20);
-                        label.text(cutoff.toFixed(0).padStart(5, '0'));
+                        label.text(format_label(cutoff));
                         post_modulation_filter.set({
                             frequency: cutoff,
                         });
@@ -429,12 +428,9 @@
                     <div class="ui decrement button"><i class="minus icon"></i></div>
                     <div class="ui value button top center pointing dropdown"><span>???</span>
                         <div class="menu">
-                            <div class="set item" data-value="1">none</div>
-                            <div class="set item" data-value="100">short</div>
-                            <div class="set item" data-value="250">med</div>
-                            <div class="set item" data-value="1000">long</div>
-                            <div class="set item" data-value="4000">default</div>
-                            <div class="set item" data-value="99999">lazy</div>
+                            <div class="set item" data-value="8000">light</div>
+                            <div class="set item" data-value="1500">medium</div>
+                            <div class="set item" data-value="80">heavy</div>
                         </div>
                     </div>
                     <div class="ui increment button"><i class="plus icon"></i></div>
