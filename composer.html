@@ -24,6 +24,8 @@
     <script type="text/javascript">
         "use strict";
 
+        Tone.context.latencyHint = 'balanced';
+
         $().ready(() => {
 
             const storage = new SongStorage();
