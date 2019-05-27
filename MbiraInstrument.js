@@ -29,8 +29,8 @@ class MbiraInstrument {
                 // const transpose = transpose_coarse + transpose_fine / 100.;
                 const next_note = widget.enabled && widget.note ? widget.note.note : null;
                 const next_pitch = next_note ? Tone.Frequency(next_note).transpose(this.transpose) : null;
-                const next_velocity = next_pitch ? .5  - (next_pitch - 520) / 1750 : null;
-                const next_length = next_pitch ? (1500 - next_pitch)/1500 : null;
+                const next_velocity = next_pitch ? Math.max(.5 - (next_pitch - 520) / 1750, .2) : null;
+                const next_length = next_pitch ? Math.max(.02, Math.min(.5,  .5 - (next_pitch - 600) / 1200)) : null;
                 // console.log('hhhhh', next_pitch, next_velocity, next_length, this.transpose);
                 if (next_pitch && next_velocity && next_length) this.mbira_synth.triggerAttackRelease(next_pitch, next_length, time, next_velocity);
             }

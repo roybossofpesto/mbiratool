@@ -276,12 +276,20 @@
                     transpose += 1;
                     updateLabel();
                 })
+                $('.transpose.buttons .increment_octave').click(() => {
+                    transpose += 12;
+                    updateLabel();
+                })
                 $('.transpose.buttons .decrement').click(() => {
                     transpose -= .1;
                     updateLabel();
                 })
                 $('.transpose.buttons .decrement_large').click(() => {
                     transpose -= 1;
+                    updateLabel();
+                })
+                $('.transpose.buttons .decrement_octave').click(() => {
+                    transpose -= 12;
                     updateLabel();
                 })
                 $('.transpose.buttons .dropdown').dropdown();
@@ -390,9 +398,9 @@
                             <div class="decrement_large item">-1</div>
                             <div class="increment_large item">+1</div>
                             <div class="ui divider"></div>
-                            <div class="set item" data-value="12">12</div>
+                            <div class="increment_octave item" data-value="12">+12</div>
                             <div class="set item" data-value="0">0</div>
-                            <div class="set item" data-value="-12">-12</div>
+                            <div class="decrement_octave item" data-value="-12">-12</div>
                             <div class="ui divider"></div>
                             <div class="set item" data-value="-8.6">Andrew</div>
                             <div class="set item" data-value="-7.9">Pierre</div>
