@@ -24,18 +24,22 @@ class MbiraInstrument {
         console.info("mbira_synth", this.mbira_synth.get());
 
         // Mbira loop
-        const mbira_loop = new Tone.Sequence((time, widget) => {
+        const mbira_loop = new Tone.Pattern((time, widget) => {
             if (this.grid.playing) {
                 // const transpose = transpose_coarse + transpose_fine / 100.;
                 const next_note = widget.enabled && widget.note ? widget.note.note : null;
                 const next_pitch = next_note ? Tone.Frequency(next_note).transpose(this.transpose) : null;
                 const next_velocity = next_pitch ? Math.max(.5 - (next_pitch - 520) / 1750, .2) : null;
-                const next_length = next_pitch ? Math.max(.02, Math.min(.5,  .5 - (next_pitch - 600) / 1200)) : null;
+                const next_length = next_pitch ? Math.max(.02, Math.min(.5, .5 - (next_pitch - 600) / 1200)) : null;
                 // console.log('hhhhh', next_pitch, next_velocity, next_length, this.transpose);
                 if (next_pitch && next_velocity && next_length) this.mbira_synth.triggerAttackRelease(next_pitch, next_length, time, next_velocity);
             }
             Tone.Draw.schedule(() => widget.ping(), time);
-        }, this.grid.widgets, "8t").start();
+        }, this.grid.widgets, "up");
+        mbira_loop.interval = "8t";
+        mbira_loop.humanize = true;
+        mbira_loop.start();
+        console.info('mbira_loop', mbira_loop)
     }
 
     set decay(value) {
