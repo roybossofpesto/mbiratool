@@ -216,13 +216,6 @@
                 $('.transport.buttons .pause').click(() => Tone.Transport.pause());
                 $('.transport.buttons .stop').click(() => Tone.Transport.stop());
 
-                /*$(document).keydown((evt) => {
-                    if (evt.keyCode != 32) return;
-                    const state = Tone.Transport.state;
-                    if (state == "paused" || state == "stopped") Tone.Transport.start();
-                    else Tone.Transport.pause();
-                });*/
-
                 Tone.Transport.on('start', () => {
                     $('.transport.buttons .button').removeClass('active');
                     $('.transport.buttons .start').addClass('active');
@@ -342,6 +335,22 @@
                 clear_button.click(() => {
                     clear_modal.modal('show');
                 })
+            }
+
+            { // Space bar
+                let in_modal = false;
+                $(document).keydown((evt) => {
+                    if (evt.keyCode != 32) return;
+                    if (in_modal) return;
+                    const state = Tone.Transport.state;
+                    if (state == "paused" || state == "stopped") Tone.Transport.start();
+                    else Tone.Transport.pause();
+                    evt.preventDefault();
+                });
+                $('.modal').modal({
+                    onShow: () => { in_modal = true; },
+                    onHide: () => { in_modal = false; },
+                });
             }
         });
     </script>
