@@ -21,6 +21,8 @@ class GridWidget {
                     <div class="set_chords_111_333_111_555 item">111 333 111 555</div>
                     <div class="set_chords_111_333_555_333 item">111 333 555 333</div>
                     <div class="set_chords_111_555_333_555 item">111 555 333 555</div>
+                    <div class="set_chords_karimudande item">karimudande</div>
+                    <div class="set_chords_karimudande_true item">karimudande true</div>
                 </div>
             </div>
             <div class="ui dropdown icon item">
@@ -180,6 +182,19 @@ class GridWidget {
             1, 1, 1, 5, 5, 5, 3, 3, 3, 5, 5, 5,
         ];
 
+        const chords_karimudande = [
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2,
+            5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2,
+            4, 4, 4, 4, 4, 4, 4, 4, 4, 2, 2, 2,
+        ];
+        const set_chords_karimudande_true = [
+            3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 2,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2,
+            4, 4, 4, 4, 4, 4, 4, 4, 4, 2, 2, 2,
+            0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2,
+        ];
+
         const chords_1111_3333_5555 = [];
         [0, 2, 4, 0, 2, 5, 0, 3, 5, 1, 3, 5].forEach((value, index) => {
             for (let kk = 0; kk < 4; kk++)
@@ -275,6 +290,8 @@ class GridWidget {
             menus.find('.set_chords_111_333_111_555').click(set_chords_action(chords_111_333_111_555));
             menus.find('.set_chords_111_333_555_333').click(set_chords_action(chords_111_333_555_333));
             menus.find('.set_chords_111_555_333_555').click(set_chords_action(chords_111_555_333_555));
+            menus.find('.set_chords_karimudande').click(set_chords_action(chords_karimudande));
+            menus.find('.set_chords_karimudande_true').click(set_chords_action(set_chords_karimudande_true));
         }
 
         { // octave tools
