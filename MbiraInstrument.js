@@ -22,7 +22,7 @@ class MbiraInstrument {
             oscillator: {
                 type: "sine",
             },
-            volume: -20,
+            volume: 0,
         });
         console.info("mbira_synth", this.__mbira_synth.get());
 
@@ -41,7 +41,7 @@ class MbiraInstrument {
             oscillator: {
                 type: "sine",
             },
-            volume: -50,
+            volume: -30,
         });
         console.info("harmonic_synth", this.__harmonic_synth.get());
 
