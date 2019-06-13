@@ -19,6 +19,7 @@ class NoteWidget {
                         <div class="item" data-value="4">5th</div>
                         <div class="item" data-value="2">3rd</div>
                         <div class="item" data-value="3">4th</div>
+                        <div class="item" data-value="5">6th</div>
                     </div>
                 </div>
                 <div class="ui icon top left pointing dropdown mini black button octave">
