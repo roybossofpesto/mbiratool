@@ -278,20 +278,24 @@ class GridWidget {
 
         const widget_action = cb => () => this.__widgets.forEach(cb);
         const set_action = (key, values) => widget_action((widget, index) => widget[key] = values[index % values.length]);
+        const add_from_beginning_action = (key, values) => () => {
+            const first_key = this.__widgets[0][key];
+            this.__widgets.forEach((widget, index) => widget[key] = wrap(first_key + values[index % values.length]));
+        };
 
         { // chord tools
-            const set_chords_action = chords => set_action('chord', chords);
+            const add_chords_action = chords => add_from_beginning_action('chord', chords);
             menus.find('.increment_chords').click(widget_action((widget, index) => widget.chord++));
             menus.find('.decrement_chords').click(widget_action((widget, index) => widget.chord += 6));
-            menus.find('.set_chords_1111_3333_5555').click(set_chords_action(chords_1111_3333_5555));
-            menus.find('.set_chords_111_111_333_555').click(set_chords_action(chords_111_111_333_555));
-            menus.find('.set_chords_111_333_333_555').click(set_chords_action(chords_111_333_333_555));
-            menus.find('.set_chords_111_333_555_555').click(set_chords_action(chords_111_333_555_555));
-            menus.find('.set_chords_111_333_111_555').click(set_chords_action(chords_111_333_111_555));
-            menus.find('.set_chords_111_333_555_333').click(set_chords_action(chords_111_333_555_333));
-            menus.find('.set_chords_111_555_333_555').click(set_chords_action(chords_111_555_333_555));
-            menus.find('.set_chords_karimudande').click(set_chords_action(chords_karimudande));
-            menus.find('.set_chords_karimudande_true').click(set_chords_action(set_chords_karimudande_true));
+            menus.find('.set_chords_1111_3333_5555').click(add_chords_action(chords_1111_3333_5555));
+            menus.find('.set_chords_111_111_333_555').click(add_chords_action(chords_111_111_333_555));
+            menus.find('.set_chords_111_333_333_555').click(add_chords_action(chords_111_333_333_555));
+            menus.find('.set_chords_111_333_555_555').click(add_chords_action(chords_111_333_555_555));
+            menus.find('.set_chords_111_333_111_555').click(add_chords_action(chords_111_333_111_555));
+            menus.find('.set_chords_111_333_555_333').click(add_chords_action(chords_111_333_555_333));
+            menus.find('.set_chords_111_555_333_555').click(add_chords_action(chords_111_555_333_555));
+            menus.find('.set_chords_karimudande').click(add_chords_action(chords_karimudande));
+            menus.find('.set_chords_karimudande_true').click(add_chords_action(set_chords_karimudande_true));
         }
 
         { // octave tools
