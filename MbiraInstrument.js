@@ -46,7 +46,7 @@ class MbiraInstrument {
         console.info("harmonic_synth", this.__harmonic_synth.get());
 
         // Mbira loop
-        const mbira_loop = new Tone.Pattern((time, widget) => {
+        const mbira_loop = new Tone.Sequence((time, widget) => {
             if (this.grid.playing) {
                 // const transpose = transpose_coarse + transpose_fine / 100.;
                 const next_note = widget.enabled && widget.note ? widget.note.note : null;
@@ -60,8 +60,8 @@ class MbiraInstrument {
                 }
             }
             Tone.Draw.schedule(() => widget.ping(), time);
-        }, this.grid.widgets, "up");
-        mbira_loop.interval = "8t";
+        }, this.grid.widgets, "8t");
+        //mbira_loop.interval = "8t";
         mbira_loop.humanize = true;
         mbira_loop.start();
         console.info('mbira_loop', mbira_loop)
